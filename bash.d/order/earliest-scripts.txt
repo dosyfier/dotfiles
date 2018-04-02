@@ -1,0 +1,5 @@
+colors.sh
+umask.sh
+bash_settings.sh
+bash_history.sh
+bash_prompt.sh
