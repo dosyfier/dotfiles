@@ -26,10 +26,24 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
+# Use a different prompt char depending on the type of user (root or other)
+prompt_char() {
+	[ $UID = 0 ] && echo '#' || echo '$'
+}
+
+# Let other sourced scripts define an "EXTRA_PS1" environment variable that
+# helps adding dynamic data into the prompt without breaking the base prompt
+# structure defined here after.
+extra_ps1() {
+	evaluated_extra_ps1="`eval echo "${EXTRA_PS1}"`"
+	echo "$evaluated_extra_ps1${evaluated_extra_ps1:+ }"
+}
+
+# Set PS1 prompt string
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1="\${debian_chroot:+(\$debian_chroot)}$Green\u@\h$NC:$Yellow\w$NC $Cyan\$(extra_ps1)$NC$Blue\$(prompt_char)$NC "
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w $(extra_ps1)$(prompt_char) '
 fi
 unset color_prompt force_color_prompt
 
