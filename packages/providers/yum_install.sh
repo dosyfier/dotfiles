@@ -7,7 +7,7 @@ packages="rh-git29 \
   tmux \
   tree"
 
-echo "$packages" | xargs sudo yum install
+echo "$packages" | xargs sudo yum install -y
 
 # Enable installed software collections
 scl enable rh-git29 bash
