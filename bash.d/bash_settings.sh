@@ -8,6 +8,11 @@ shopt -s checkwinsize
 # match all files and zero or more directories and subdirectories.
 shopt -s globstar
 
+# If set, Bash replaces directory names with the results of word 
+# expansion when performing filename completion. This changes the 
+# contents of the readline editing buffer.
+shopt -s direxpand
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -27,6 +32,7 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias lh='ll -h'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
