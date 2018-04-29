@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# -- Functions -- #
+
 usage() {
   cat <<EOF
 
@@ -14,7 +16,7 @@ run_in_project() {
   $@
   return_code=$?
   popd > /dev/null
-  return $?
+  [ $return_code -ne 0 ] && exit $return_code
 }
 
 # Initializes.bash configuration
@@ -32,24 +34,42 @@ init() {
     ln -s "$real_dirname" "$HOME/.bash"
     ln -s ~/.bash/bashrc ~/.bashrc
   fi
- 
-  git submodule init
-  git submodule update
-}
 
-# Update all registered.bash plugins at once
-update() {
-  git submodule foreach git pull origin master
+  # Create a .dotbashcfg file holding defined DOTBASH_* variables
+  cat > ~/.dotbashcfg <<-EOC
+#!/bin/bash
+DOTBASHCFG_USER="$DOTBASHCFG_USER"
+DOTBASHCFG_DATA_DIR="$DOTBASHCFG_DATA_DIR"
+EOC
+
+  # Source the bashrc script
+  source ~/.bashrc
 }
 
 
 # -- Main program -- #
 
-if [[ $1 =~ (-h|--help) ]]; then
-  usage; exit 0
-elif [ -n "$1" ]; then
-  usage; exit 1
-else
-  run_in_project init
-fi
+DOTBASHCFG_USER=$USER
+DOTBASHCFG_DATA_DIR=~
+
+while [ $# -ne 0 ]; do
+  case "$1" in
+    "-l"|"--login")
+      shift; DOTBASHCFG_USER=${1:-DOTBASHCFG_USER}
+      ;;
+    "-d"|"--data")
+      shift; DOTBASHCFG_DATA_DIR="${1:-DOTBASHCFG_DATA_DIR}"
+      ;;
+    "-h"|"-?"|"--help")
+      usage; exit 0
+      ;;
+    *)
+      usage; exit 1
+      ;;
+  esac
+  shift
+done
+
+run_in_project init
+run_in_project packages/install.sh
 
