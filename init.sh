@@ -30,10 +30,12 @@ init() {
   # ~/.bash from the actual dotbashconfig project directory
   if ! [ "$real_dirname" = "$HOME/.bash" ] ; then
     rm -rf "$HOME/.bash"
-    rm -f ~/.bashrc
     ln -s "$real_dirname" "$HOME/.bash"
-    ln -s ~/.bash/bashrc ~/.bashrc
   fi
+
+  # Erase existing, and (TODO) warn the user about it
+  rm -f ~/.bashrc
+  ln -s ~/.bash/bashrc ~/.bashrc
 
   # Create a .dotbashcfg file holding defined DOTBASH_* variables
   cat > ~/.dotbashcfg <<-EOC
