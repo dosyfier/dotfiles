@@ -3,11 +3,30 @@
 # -- Functions -- #
 
 usage() {
-  cat <<EOF
+  cat <<EOU
 
-  Usage: init.sh (no arguments, no options)
+  Usage: init.sh [options] 
+  where available options are:
 
-EOF
+  -l|--win-login <login>
+	  Login of the actual Windows account, to be used when installing 
+	  dotbashconfig from some Shell environment run from Windows (e.g. Cygwin,
+	  Git Bash, WSL).
+
+  -d|--data <data-dir>
+	  Optional path indicating the root of a directory holding any development
+	  project, 3rd party tool installation, IDE installation, etc. (used e.g. 
+	  on Windows to find Cygwin installation path).
+
+  --no-pkg-install
+	  Skip base development packages installation (i.e. when you don't want
+	  any supplementary package being installed onto your system when running
+	  .bash/init.sh script.
+
+  -h|--help
+	  Displays this message.
+
+EOU
 }
 
 # Run the provided command & arguments into do.bashconfig project's directory
@@ -40,7 +59,7 @@ init() {
   # Create a .dotbashcfg file holding defined DOTBASH_* variables
   cat > ~/.dotbashcfg <<-EOC
 #!/bin/bash
-DOTBASHCFG_USER="$DOTBASHCFG_USER"
+DOTBASHCFG_WIN_USER="$DOTBASHCFG_WIN_USER"
 DOTBASHCFG_DATA_DIR="$DOTBASHCFG_DATA_DIR"
 EOC
 
@@ -51,16 +70,21 @@ EOC
 
 # -- Main program -- #
 
-DOTBASHCFG_USER=$USER
+# Default variables
+DOTBASHCFG_WIN_USER=$USER
 DOTBASHCFG_DATA_DIR=~
 
+# Parse program options
 while [ $# -ne 0 ]; do
   case "$1" in
-    "-l"|"--login")
-      shift; DOTBASHCFG_USER=${1:-DOTBASHCFG_USER}
+    "-l"|"--win-login")
+      shift; DOTBASHCFG_WIN_USER=${1:-DOTBASHCFG_WIN_USER}
       ;;
     "-d"|"--data")
       shift; DOTBASHCFG_DATA_DIR="${1:-DOTBASHCFG_DATA_DIR}"
+      ;;
+    "--no-pkg-install")
+      SKIP_PKG_INSTALL=true
       ;;
     "-h"|"-?"|"--help")
       usage; exit 0
@@ -72,6 +96,16 @@ while [ $# -ne 0 ]; do
   shift
 done
 
+# Run bash env initialization
+echo "Init bash environment..."
 run_in_project init
-run_in_project packages/install.sh
+
+# Unless deactivated, install base dev packages
+if ! [ "$SKIP_PKG_INSTALL" = true ]; then
+  echo "Install base dev packages..."
+  run_in_project packages/install.sh
+fi
+
+# Done!
+echo "Done! Enjoy bashing ;-)"
 
