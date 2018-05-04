@@ -17,26 +17,26 @@ force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
+        # We have color support; assume it's compliant with Ecma-48
+        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+        # a case would tend to support setf rather than setaf.)
+        color_prompt=yes
     else
-	color_prompt=
+        color_prompt=
     fi
 fi
 
 # Use a different prompt char depending on the type of user (root or other)
 prompt_char() {
-	[ $UID = 0 ] && echo '#' || echo '$'
+    [ $UID = 0 ] && echo '#' || echo '$'
 }
 
 # Let other sourced scripts define an "EXTRA_PS1" environment variable that
 # helps adding dynamic data into the prompt without breaking the base prompt
 # structure defined here after.
 extra_ps1() {
-	evaluated_extra_ps1="`eval echo "${EXTRA_PS1}"`"
-	echo "$evaluated_extra_ps1${evaluated_extra_ps1:+ }"
+    evaluated_extra_ps1="`eval echo "${EXTRA_PS1}"`"
+    echo "$evaluated_extra_ps1${evaluated_extra_ps1:+ }"
 }
 
 # Set PS1 prompt string
@@ -49,10 +49,10 @@ unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
+    xterm*|rxvt*)
+        PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+        ;;
+    *)
+        ;;
 esac
 
