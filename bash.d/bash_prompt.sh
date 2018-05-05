@@ -39,18 +39,30 @@ extra_ps1() {
     echo "$evaluated_extra_ps1${evaluated_extra_ps1:+ }"
 }
 
+# Builds the prefix to any PS1 string that will be generated hereafter
+prompt_prefix='${debian_chroot:+($debian_chroot)}'
+
+# Builds a colored prompt string for PS1 variable
+build_colored_prompt() {
+    # Inner function adding escape sequences for colors declared within the PS1
+    p_col() { echo '\['${!1}'\]'; }
+
+    printf "$prompt_prefix`p_col Green`\\\\u@\\h`p_col NC`:`p_col Yellow`\\w`p_col NC` "
+    printf "`p_col Cyan`\$(extra_ps1)`p_col NC``p_col Blue`\$(prompt_char)`p_col NC` "
+}
+
 # Set PS1 prompt string
 if [ "$color_prompt" = yes ]; then
-    PS1="\${debian_chroot:+(\$debian_chroot)}$Green\u@\h$NC:$Yellow\w$NC $Cyan\$(extra_ps1)$NC$Blue\$(prompt_char)$NC "
+    PS1="`build_colored_prompt`"
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w $(extra_ps1)$(prompt_char) '
+    PS1="$prompt_prefix"'\u@\h:\w $(extra_ps1)$(prompt_char) '
 fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
     xterm*|rxvt*)
-        PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+        PS1="\[\e]0;$prompt_prefix\u@\h: \w\a\]$PS1"
         ;;
     *)
         ;;
