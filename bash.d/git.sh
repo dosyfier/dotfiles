@@ -8,10 +8,12 @@ git_fetch_remotes() {
 }
 export git_fetch_remotes
 
-# Display git branch name
-git_branch_name() {
-  git symbolic-ref HEAD --short 2> /dev/null
+# Display git branch state (branch name or tag or commit ID)
+git_branch_state() {
+  git symbolic-ref HEAD --short 2> /dev/null || git show -s --pretty="%D, commit: %h" 2> /dev/null
 }
 
-EXTRA_PS1='$(git_branch_name | sed '"'"'s/\(\S\+\)/\(\1\)/'"'"')'
+# Set EXTRA_PS1 variable (used by dotbashconfig's bash_prompt.sh script)
+# to display the current git branch state (branch name or tag or commit ID)
+EXTRA_PS1='$(command -v git > /dev/null && ( git_branch_state | sed '"'"'s/\(.\+\)/\(\1\)/'"'"') )'
 
