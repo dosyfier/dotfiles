@@ -5,6 +5,9 @@ usage() {
 
   Usage: install.sh (no arguments, no options)
 
+  Warning! It is assumed that this script is launched
+  from dotbashconfig project root directory !
+
 EOF
 }
 

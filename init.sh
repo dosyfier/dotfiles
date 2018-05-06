@@ -18,10 +18,15 @@ usage() {
 	  project, 3rd party tool installation, IDE installation, etc. (used e.g. 
 	  on Windows to find Cygwin installation path).
 
-  --no-pkg-install
-	  Skip base development packages installation (i.e. when you don't want
-	  any supplementary package being installed onto your system when running
-	  .bash/init.sh script.
+  --no-<feature-name>-feature
+  --skip-features=<feature-1>,<feature-2>,...,<feature-n>
+	  Skip the installation of some given dotbashconfig features (identified by 
+	  their "feature-name"). Here is the list of those features:
+	      `find . -maxdepth 2 -name install.sh -printf "%h, " | sed -e 's#./##g' -e 's#, $##g'`
+
+  --no-features|--skip-all-features
+	  Skip the installation of every dotbashconfig features (i.e. only bashrc
+	  environment will be configured).
 
   -h|--help
 	  Displays this message.
@@ -67,6 +72,19 @@ EOC
   source ~/.bashrc
 }
 
+# Locate and execute every dotbashconfig feature installation script, with
+# skipping of the features that are deactivated based on this script's options.
+install_features() {
+  for install_script in */install.sh; do
+    feature=$(basename $(dirname $install_script))
+    skip_feature_var_name=SKIP_${feature^^}_FEATURE
+    if ! [ "${!skip_feature_var_name}" = true ]; then
+      echo "Install / Configure $feature feature..."
+      run_in_project $install_script
+    fi
+  done
+}
+
 
 # -- Main program -- #
 
@@ -83,14 +101,23 @@ while [ $# -ne 0 ]; do
     "-d"|"--data")
       shift; DOTBASHCFG_DATA_DIR="${1:-DOTBASHCFG_DATA_DIR}"
       ;;
-    "--no-pkg-install")
-      SKIP_PKG_INSTALL=true
+    --no-*-feature)
+      feature=`expr $1 : '--no-\(.*\)-feature'`
+      declare "SKIP_${feature^^}_FEATURE=true"
+      ;;
+    --skip-features=*)
+      for feature in `echo ${1// /} | cut -d= -f2 | sed 's/,/ /g'`; do
+	declare "SKIP_${feature^^}_FEATURE=true"
+      done
+      ;;
+    "--no-feature"|"skip-all-features")
+      SKIP_ALL_FEATURES=true
       ;;
     "-h"|"-?"|"--help")
-      usage; exit 0
+      run_in_project usage; exit 0
       ;;
     *)
-      usage; exit 1
+      run_in_project usage; exit 1
       ;;
   esac
   shift
@@ -100,10 +127,9 @@ done
 echo "Init bash environment..."
 run_in_project init
 
-# Unless deactivated, install base dev packages
-if ! [ "$SKIP_PKG_INSTALL" = true ]; then
-  echo "Install base dev packages..."
-  run_in_project packages/install.sh
+# Install each dotbashconfig feature (unless deactivated)
+if ! [ "${SKIP_ALL_FEATURES}" = true ]; then
+  run_in_project install_features
 fi
 
 # Done!
