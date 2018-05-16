@@ -24,7 +24,7 @@ usage() {
 	  their "feature-name"). Here is the list of those features:
 	      `find . -maxdepth 2 -name install.sh -printf "%h, " | sed -e 's#./##g' -e 's#, $##g'`
 
-  --no-features|--skip-all-features
+  --no-feature|--skip-all-features
 	  Skip the installation of every dotbashconfig features (i.e. only bashrc
 	  environment will be configured).
 
@@ -110,7 +110,7 @@ while [ $# -ne 0 ]; do
 	declare "SKIP_${feature^^}_FEATURE=true"
       done
       ;;
-    "--no-feature"|"skip-all-features")
+    "--no-feature"|"--skip-all-features")
       SKIP_ALL_FEATURES=true
       ;;
     "-h"|"-?"|"--help")
