@@ -43,33 +43,52 @@ run_in_project() {
   [ $return_code -ne 0 ] && exit $return_code
 }
 
+# Ask the user for the deletion of the file or directory provided as argument:
+# - If accepted, remove it and go on,
+# - Otherwise, exit in error.
+remove_or_abort() {
+  if [ -e "$1" ]; then
+    echo "Existing $1 detected..."
+    while ! [[ $REPLY =~ ^[yn]$ ]]; do
+      read -p "Override? [y/n] " -r
+    done
+    if [ $REPLY = y ]; then
+      rm -rf "$1"
+    else
+      return 2
+    fi
+  fi
+}
+
 # Initializes.bash configuration
 init() {
   # Build this script's effective parent directory
-  # by resolving links and/or trailing ~
-  real_dirname="`readlink -f $(dirname $0)`"
-  real_dirname="${real_dirname/#\~/$HOME}"
+  # (using pwd since we are necessarily in dotbashconfig dir,
+  # and because, due to run_in_project, '$(dirname $0)' would be wrong)
+  real_dirname="`pwd`"
 
   # If this script isn't launched from ~/.bash dir, then force rebuilding 
   # ~/.bash from the actual dotbashconfig project directory
+  echo "Init $HOME/.bash..."
   if ! [ "$real_dirname" = "$HOME/.bash" ] ; then
     rm -rf "$HOME/.bash"
     ln -s "$real_dirname" "$HOME/.bash"
   fi
 
-  # Erase existing, and (TODO) warn the user about it
-  rm -f ~/.bashrc
-  ln -s ~/.bash/bashrc ~/.bashrc
+  # Erase existing .bashrc, and warn the user about it first
+  echo "Init $HOME/.bashrc..."
+  remove_or_abort "$HOME/.bashrc"
+  ln -s $HOME/.bash/bashrc $HOME/.bashrc
 
   # Create a .dotbashcfg file holding defined DOTBASH_* variables
-  cat > ~/.dotbashcfg <<-EOC
+  cat > $HOME/.dotbashcfg <<-EOC
 #!/bin/bash
 DOTBASHCFG_WIN_USER="$DOTBASHCFG_WIN_USER"
 DOTBASHCFG_DATA_DIR="$DOTBASHCFG_DATA_DIR"
 EOC
 
   # Source the bashrc script
-  source ~/.bashrc
+  source $HOME/.bashrc
 }
 
 # Locate and execute every dotbashconfig feature installation script, with
