@@ -12,7 +12,7 @@ EOF
 }
 
 install() {
-  conemu_exe="$(find /c/data/utils/cmder/ -name 'ConEmu.exe' | head -1)"
+  conemu_exe="$(find $DOTBASHCFG_DATA_DIR/{tools,utils} -name 'ConEmu.exe' | head -1)"
   if [ -f "$conemu_exe" ]; then
     conemu_config_file="`dirname $conemu_exe`/ConEmu.xml"
     echo "Setting ConEmu configuration into $conemu_config_file file..."
