@@ -36,11 +36,10 @@ EOU
 
 # Run the provided command & arguments into do.bashconfig project's directory
 run_in_project() {
+  set -e
   pushd "$(dirname $0)" > /dev/null
+  trap "popd > /dev/null" EXIT
   $@
-  return_code=$?
-  popd > /dev/null
-  [ $return_code -ne 0 ] && exit $return_code
 }
 
 # Ask the user for the deletion of the file or directory provided as argument:
@@ -63,22 +62,27 @@ remove_or_abort() {
 # Initializes.bash configuration
 init() {
   # Build this script's effective parent directory
+  # by resolving links and/or trailing ~
   # (using pwd since we are necessarily in dotbashconfig dir,
   # and because, due to run_in_project, '$(dirname $0)' would be wrong)
-  real_dirname="`pwd`"
+  real_dirname="`readlink -f $(pwd)`"
+  real_dirname="${real_dirname/#\~/$HOME}"
 
   # If this script isn't launched from ~/.bash dir, then force rebuilding 
   # ~/.bash from the actual dotbashconfig project directory
   echo "Init $HOME/.bash..."
-  if ! [ "$real_dirname" = "$HOME/.bash" ] ; then
-    rm -rf "$HOME/.bash"
+  if ! [ "$real_dirname" = "$(readlink -f $HOME/.bash)" ] ; then
+    remove_or_abort "$HOME/.bash"
     ln -s "$real_dirname" "$HOME/.bash"
   fi
 
   # Erase existing .bashrc, and warn the user about it first
   echo "Init $HOME/.bashrc..."
-  remove_or_abort "$HOME/.bashrc"
-  ln -s $HOME/.bash/bashrc $HOME/.bashrc
+  if ! [ -e "$HOME/.bashrc" ] || ! [ -L "$HOME/.bashrc" ] || \
+	! [ "$real_dirname/bashrc" = "$(readlink -f $HOME/.bashrc)" ]; then
+    remove_or_abort "$HOME/.bashrc"
+    ln -s $HOME/.bash/bashrc $HOME/.bashrc
+  fi
 
   # Create a .dotbashcfg file holding defined DOTBASH_* variables
   cat > $HOME/.dotbashcfg <<-EOC
