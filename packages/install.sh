@@ -12,7 +12,7 @@ EOF
 }
 
 install() {
-  distro=`get_distro`
+  distro=`get_distro_type`
   if [ -f "`dirname $0`/${distro}.sh" ]; then
     `dirname $0`/${distro}.sh
   elif [ -n "$distro" ]; then

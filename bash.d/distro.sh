@@ -1,6 +1,6 @@
 #!/bin/bash
 
-get_distro() {
+get_distro_type() {
   if [ -f /etc/centos-release ]; then
     echo "centos"
   elif [ -f /etc/redhat-release ]; then
@@ -37,7 +37,7 @@ create_drive_links() {
   done
 }
 
-case `get_distro` in
+case `get_distro_type` in
   mingw64)
     win_os=true
     ;;
