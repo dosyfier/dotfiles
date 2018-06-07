@@ -47,15 +47,15 @@ build_colored_prompt() {
     # Inner function adding escape sequences for colors declared within the PS1
     p_col() { echo '\['${!1}'\]'; }
 
-    printf "$prompt_prefix`p_col Green`\\\\u@\\h`p_col NC`:`p_col Yellow`\\w`p_col NC` "
-    printf "`p_col Cyan`\$(extra_ps1)`p_col NC``p_col Blue`\$(prompt_char)`p_col NC` "
+    printf "$prompt_prefix`p_col BGreen`\\\\u@\\h`p_col NC`: `p_col BYellow`\\w`p_col NC` "
+    printf "`p_col BCyan`\$(extra_ps1)`p_col NC``p_col BBlue`\$(prompt_char)`p_col NC` "
 }
 
 # Set PS1 prompt string
 if [ "$color_prompt" = yes ]; then
     PS1="`build_colored_prompt`"
 else
-    PS1="$prompt_prefix"'\u@\h:\w $(extra_ps1)$(prompt_char) '
+    PS1="$prompt_prefix"'\u@\h: \w $(extra_ps1)$(prompt_char) '
 fi
 unset color_prompt force_color_prompt
 
