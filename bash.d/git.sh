@@ -10,10 +10,26 @@ export git_fetch_remotes
 
 # Display git branch state (branch name or tag or commit ID)
 git_branch_state() {
-  git symbolic-ref HEAD --short 2> /dev/null || git show -s --pretty="%D, commit: %h" 2> /dev/null
+  git symbolic-ref HEAD --short || git show -s --pretty="%D, commit: %h"
 }
+
+# Trigger this function on each new prompt entry to re-calculate
+# Git branch state for the current working directory
+git_prompt_command() {
+  local new_pwd="$(pwd)"
+  if [ "$new_pwd" != "$DOTBASHCFG_LAST_PWD" ]; then
+    if git rev-parse --is-inside-work-tree 2>/dev/null 1>&2; then
+      DOTBASHCFG_GIT_BRANCH_STATE="$(git_branch_state 2>/dev/null | sed 's/\(.\+\)/\(\1\)/')"
+    else
+      unset DOTBASHCFG_GIT_BRANCH_STATE
+    fi
+  fi
+  DOTBASHCFG_LAST_PWD="$new_pwd"
+}
+PROMPT_COMMAND="git_prompt_command; $PROMPT_COMMAND"
 
 # Set EXTRA_PS1 variable (used by dotbashconfig's bash_prompt.sh script)
 # to display the current git branch state (branch name or tag or commit ID)
-EXTRA_PS1='$(command -v git > /dev/null && ( git_branch_state | sed '"'"'s/\(.\+\)/\(\1\)/'"'"') )'
+EXTRA_PS1='$(command -v git > /dev/null && echo "$DOTBASHCFG_GIT_BRANCH_STATE" )'
+
 
