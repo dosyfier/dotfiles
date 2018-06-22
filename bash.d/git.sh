@@ -32,4 +32,5 @@ PROMPT_COMMAND="git_prompt_command; $PROMPT_COMMAND"
 # to display the current git branch state (branch name or tag or commit ID)
 EXTRA_PS1='$(command -v git > /dev/null && echo "$DOTBASHCFG_GIT_BRANCH_STATE" )'
 
-
+# When using git, the prompt text may change while the cwd remains the same.
+alias git="unset DOTBASHCFG_LAST_PWD; git"
