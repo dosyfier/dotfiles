@@ -29,9 +29,9 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # some more ls aliases
-alias ll='ls -lF'
-alias la='ls -A'
-alias l='ls -CF'
+alias ll='ls -lF --group-directories-first'
+alias la='ls -A --group-directories-first'
+alias l='ls -CF --group-directories-first'
 alias lla='ll -a'
 alias lh='ll -h'
 
