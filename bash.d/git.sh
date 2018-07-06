@@ -26,11 +26,15 @@ git_prompt_command() {
   fi
   DOTBASHCFG_LAST_PWD="$new_pwd"
 }
+# Using this function forces to reset the DOTBASHCFG_LAST_PWD var
+# before each time git gets called. Otherwise, when switching branch
+# without changing cwd (which happens quite often), git prompt would
+# not be updated...
+alias git="unset DOTBASHCFG_LAST_PWD; git"
+
 PROMPT_COMMAND="git_prompt_command; $PROMPT_COMMAND"
 
 # Set EXTRA_PS1 variable (used by dotbashconfig's bash_prompt.sh script)
 # to display the current git branch state (branch name or tag or commit ID)
 EXTRA_PS1='$(command -v git > /dev/null && echo "$DOTBASHCFG_GIT_BRANCH_STATE" )'
 
-# When using git, the prompt text may change while the cwd remains the same.
-alias git="unset DOTBASHCFG_LAST_PWD; git"
