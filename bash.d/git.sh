@@ -6,7 +6,15 @@ git_fetch_remotes() {
   git fetch origin -p
   git branch -r | egrep -v 'master$' | while read remote_b; do git branch -f --track "${remote_b#origin/}" "$remote_b"; done
 }
-export git_fetch_remotes
+
+# Pull remote commits by stashing potential local unstaged modifications.
+git_stash_n_pull() {
+  if git diff --exit-code > /dev/null; then
+    git pull
+  else
+    git stash && git pull && git stash pop
+  fi
+}
 
 # Display git branch state (branch name or tag or commit ID)
 git_branch_state() {
