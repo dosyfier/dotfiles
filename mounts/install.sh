@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Minimum Windows build version required to mount drives
+# using DRVFS type
+_MIN_WIN_BUILD_FOR_DRVFS=16176
+
 usage() {
   cat <<EOF
 
@@ -12,20 +16,24 @@ EOF
 }
 
 install() {
-  distro=`get_distro`
+  distro=`get_distro_type`
   if [ "$distro" = "winbash" ]; then
     # Link C: drive
     [ -L /c ] || sudo ln -s /mnt/c /c
 
     # Attempt to mount and link other drives
     win_build=$(systeminfo.exe /FO CSV | tail -1 | sed 's/"//g' | cut -d, -f3 | cut -d' ' -f4)
-    if [ $win_build -gt 16176 ]; then
+    if [ $win_build -gt $_MIN_WIN_BUILD_FOR_DRVFS ]; then
       for drive in {d..n}; do
 	[ -d /mnt/$drive ] || sudo mkdir -p /mnt/$drive
 	[ -L /$drive ] || sudo ln -s /mnt/$drive /$drive
-	sudo mount -t drvfs ${drive^^}: /mnt/$drive 2>/dev/null
+	mount | grep -q /mnt/$drive || sudo mount -t drvfs ${drive^^}: /mnt/$drive 2>/dev/null
 	[ $? -eq 0 ] && echo "\"${drive^^}:\" drive successfully mounted under /$drive"
       done
+      echo "No more drives to mount."
+    else
+      echo "Your current Windows version ($win_build) is insufficient to perform DRVFS mounts."
+      echo "(min Windows build version required: $_MIN_WIN_BUILD_FOR_DRVFS)."
     fi
   elif [ -n "$distro" ]; then
     echo "No mounts to configure for this distro."
