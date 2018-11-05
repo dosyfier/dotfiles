@@ -617,7 +617,7 @@
 				<value name="WndDragKey" type="dword" data="00121101"/>
 			</key>
 			<key name="Tasks" modified="2018-06-12 12:15:20" build="180528">
-				<value name="Count" type="long" data="11"/>
+				<value name="Count" type="long" data="12"/>
 				<key name="Task1" modified="2018-06-12 12:15:20" build="180528">
 					<value name="Name" type="string" data="{Shells::cmd}"/>
 					<value name="Flags" type="dword" data="00000002"/>
