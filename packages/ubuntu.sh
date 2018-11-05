@@ -8,11 +8,10 @@ repos="git-core/ppa \
 for repo in $repos; do
   if ! [ -f "/etc/apt/sources.list.d/${repo/\//-}-trusty.list" ]; then
     sudo apt-add-repository -y ppa:$repo
-    repo_added=true
   fi
 done
 
-[ "$repoadded" = true ] && sudo apt-get update
+sudo apt-get update
 
 
 # Installing expected packages
@@ -21,6 +20,7 @@ packages="git
   gitk
   rsync
   ruby
+  ruby-dev
   tmux
   tree"
 
