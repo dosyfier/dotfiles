@@ -4,7 +4,9 @@
 # and set each of them to track its remote associated origin.
 git_fetch_remotes() {
   git fetch origin -p
-  git branch -r | egrep -v 'master$' | while read remote_b; do git branch -f --track "${remote_b#origin/}" "$remote_b"; done
+  git branch -r | egrep -v 'master$' | while read remote_b; do 
+    git branch --set-upstream-to=$remote_b "${remote_b#origin/}"
+  done
 }
 
 # Pull remote commits by stashing potential local unstaged modifications.
