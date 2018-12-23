@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# -- Constants -- #
+
+DOTBASH_CFG_FILE=$HOME/.dotbashcfg
+
+
 # -- Functions -- #
 
 usage() {
@@ -85,7 +90,7 @@ init() {
   fi
 
   # Create a .dotbashcfg file holding defined DOTBASH_* variables
-  cat > $HOME/.dotbashcfg <<-EOC
+  cat > "$DOTBASH_CFG_FILE" <<-EOC
 #!/bin/bash
 DOTBASHCFG_WIN_USER="$DOTBASHCFG_WIN_USER"
 DOTBASHCFG_DATA_DIR="$DOTBASHCFG_DATA_DIR"
@@ -112,8 +117,12 @@ install_features() {
 # -- Main program -- #
 
 # Default variables
-DOTBASHCFG_WIN_USER=$USER
-DOTBASHCFG_DATA_DIR=~
+if [ -f "$DOTBASH_CFG_FILE" ]; then
+  source "$DOTBASH_CFG_FILE"
+else
+  DOTBASHCFG_WIN_USER=$USER
+  DOTBASHCFG_DATA_DIR=~
+fi
 
 # Parse program options
 while [ $# -ne 0 ]; do
