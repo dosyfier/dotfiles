@@ -3,7 +3,8 @@
 # Installing additional APT repositories
 
 repos="git-core/ppa \
-  brightbox/ruby-ng"
+  brightbox/ruby-ng \
+  jonathonf/vim"
 
 for repo in $repos; do
   if ! [ -f "/etc/apt/sources.list.d/${repo/\//-}-trusty.list" ]; then
@@ -22,7 +23,8 @@ packages="git
   ruby
   ruby-dev
   tmux
-  tree"
+  tree
+  vim"
 
 printf "$packages" | xargs sudo apt-get install -y
 
