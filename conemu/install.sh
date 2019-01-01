@@ -1,15 +1,6 @@
 #!/bin/bash
 
-usage() {
-  cat <<EOF
-
-  Usage: install.sh (no arguments, no options)
-  
-  Warning! It is assumed that this script is launched
-  from dotbashconfig project root directory !
-
-EOF
-}
+source "$(dirname "$0")/../internal/install-base.sh"
 
 find_tools_dir() {
   if [ -d "$DOTBASHCFG_DATA_DIR/tools" ]; then
@@ -54,15 +45,6 @@ install() {
   fi
 }
 
-
-# -- Main program -- #
-
-if [[ $1 =~ (-h|--help) ]]; then
-  usage; exit 0
-elif [ -n "$1" ]; then
-  usage; exit 1
-else
-  source ~/.dotbashcfg
-  install
-fi
-
+# shellcheck disable=SC2068
+# Unquoted array expansion is here expected
+main $@

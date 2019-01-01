@@ -10,7 +10,7 @@ DOTBASH_CFG_DIR="$(readlink -f "$(dirname "$0")")"
 DOTBASH_CFG_DIR="${DOTBASH_CFG_DIR/#\~/$HOME}"
 
 
-# -- Functions -- #
+# -- Utility functions -- #
 
 usage() {
   cat <<EOU
@@ -71,7 +71,7 @@ remove_or_abort() {
 # $1 - Preamble message (optional)
 # $2 - Main prompt message
 ok_to() {
-  [ $# -eq 2 ] && ( echo "$1"; shift )
+  [ $# -eq 2 ] && echo "$1" && shift 
   REPLY=""
   while ! [[ $REPLY =~ ^[yn]$ ]]; do
     read -p "$1 [y/n] " -r
@@ -79,6 +79,30 @@ ok_to() {
   [ "$REPLY" = y ]
   return $?
 }
+
+# Process the standard input by keeping only one occurrence for every line.
+uniq_occurrences() {
+  # This command is telling awk which lines to print. The variable $0 holds 
+  # the entire contents of a line and square brackets are array access. So,
+  # for each line of the file, the node of the array x is incremented and the
+  # line printed if the content of that node was not (!) previously set.
+  tr ' ' '\n' | awk '!x[$0]++'
+}
+
+# Process the standard input by excluding the lines matching elements of some
+# provided array.
+# $1 - The array containing elements to exclude from the stream.
+without_excluded() {
+  exclude_array_name="$1[*]"
+  tr ' ' '\n' | while read element; do
+    if ! [[ " ${!exclude_array_name} " == *" $element "* ]]; then
+      echo "$element"
+    fi
+  done
+}
+
+
+# --- Installation algorithm -- #
 
 # Initializes.bash configuration
 init() {
@@ -109,7 +133,54 @@ EOC
   source "$HOME/.bashrc"
 }
 
-# Check whether some feature shall be installed or not.
+# Locate and execute every dotbashconfig feature installation script that has
+# been activated (based on this script's options).
+install_features() {
+  # Create a temporary named pipe
+  # This pipe will be used to catch features output by 'analyze_feature' 
+  # function on its file descriptor no. 3
+  feature_pipe=$(mktemp -u)
+  mkfifo "$feature_pipe"
+
+  # Attach it to file descriptor 3, and unlink the file (not needed afterwards)
+  exec 3<>"$feature_pipe"
+  rm "$feature_pipe"
+
+  # Establish the full list of features to install
+  for install_script in */install.sh; do
+    # Check if the feature detected shall be installed
+    feature=$(basename "$(dirname "$install_script")")
+    if check_feature "$feature"; then
+      # If so, look for any dependent feature(s)
+      requested_features+=("$feature")
+      analyze_feature "$feature"
+      # Dependent features are output by 'analyze_feature' on FD no. 3
+      while read -t 0 -u 3; do
+	read -u 3 -a new_features_to_install
+	features_to_install+=("${new_features_to_install[*]}")
+      done
+      features_to_install+=("$feature")
+    fi
+  done
+
+  # Close the file descriptor once finished
+  exec 3>&-
+
+  # If the user validates the full list, then proceed with the actual
+  # installation
+  additional_features_to_install=("$(echo "${features_to_install[*]}" | \
+    uniq_occurrences | without_excluded requested_features)")
+  if [ -z "${additional_features_to_install[0]}" ] || ok_to \
+    "Following features must be installed as dependencies: $(printf '\n- %s' "${additional_features_to_install[@]}")" \
+    "Ok to install?"; then
+    for feature in $(echo "${features_to_install[*]}" | uniq_occurrences); do
+      install_feature "$feature"
+    done
+  fi
+}
+
+# Check whether some feature shall be installed or not, based on the options 
+# used when calling this init.sh script.
 # $1 - The feature to check
 check_feature() {
   feature="$1"
@@ -125,16 +196,31 @@ check_feature() {
   fi
 }
 
-# Locate and execute every dotbashconfig feature installation script that has
-# been activated (based on this script's options).
-install_features() {
-  for install_script in */install.sh; do
-    feature=$(basename "$(dirname "$install_script")")
-    if check_feature "$feature"; then
-      echo "Install / Configure $feature feature..."
-      run_in_project "$install_script"
-    fi
+# Analyze features to install in order to check whether they depend on other 
+# features.
+# $1 - The feature to analyze
+# 
+# N.B. Dependent features detected are output onto file descriptor no. 3 to 
+# avoid polluting either the stdout or stderr (since some messages are printed 
+# by this function on those outputs)
+analyze_feature() {
+  local feature="$1"
+
+  echo "Analyzing $feature feature..."
+  dependencies="$(run_in_project "$feature/install.sh" get-dependencies)"
+  for dependency in $dependencies; do 
+    analyze_feature "$dependency"
+    echo "$dependency" >&3
   done
+}
+
+# Run the installation function of some dotbashconfig feature.
+# $1 - The feature to install
+install_feature() {
+  local feature="$1"
+
+  echo "Installing / Configuring $feature feature..."
+  run_in_project "$feature/install.sh" install
 }
 
 
