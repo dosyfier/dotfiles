@@ -30,11 +30,14 @@ usage() {
 
   --with-<feature-name>-feature
   --with-features=<feature-1>,<feature-2>,...,<feature-n>
-	  Skip the installation of some given dotbashconfig features (identified by 
-	  their "feature-name"). Here is the list of those features:
+	  Automatically install only a subset of the dotbashconfig features (identified
+	  by their "feature-name"). Here is the list of those features:
 	      $(find . -maxdepth 2 -name install.sh -printf "%h, " | sed -e 's#./##g' -e 's#, $##g')
 
   -y|--all-features
+	  Automatically accept the installation of every dotbashconfig features.
+
+  -n|--no-installation
 	  Skip the installation of every dotbashconfig features (i.e. only bashrc
 	  environment will be configured).
 
@@ -261,6 +264,9 @@ while [ $# -ne 0 ]; do
       RUN_ALL_FEATURES=true
       AUTO_DOTBASH_CFG=true
       ;;
+    "-n"|"--no-installation")
+      SKIP_FEATURES_INSTALLATION=true
+      ;;
     "-h"|"-?"|"--help")
       run_in_project usage; exit 0
       ;;
@@ -276,7 +282,9 @@ echo "Init bash environment..."
 run_in_project init
 
 # Install each dotbashconfig feature
-run_in_project install_features
+if ! [ "$SKIP_FEATURES_INSTALLATION" = true ]; then
+  run_in_project install_features
+fi
 
 # Done!
 echo "Done! Enjoy bashing ;-)"
