@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"
 
 install_centos() {
@@ -19,7 +20,5 @@ install_winbash() {
   install_ubuntu
 }
   
-# shellcheck disable=SC2068
-# Unquoted array expansion is here expected
-main $@
+main "$@"
 

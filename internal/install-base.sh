@@ -1,10 +1,12 @@
 #!/bin/bash
+# shellcheck disable=SC1090
+# SC1090: This script sources scripts with variable file names
 
 # This is a base script meant to be sourced by any dotbashconfig feature
 # installation script.
 
 
-DOTBASH_CFG_INTERNAL_ROOT="$(dirname "$BASH_SOURCE")"
+DOTBASH_CFG_INTERNAL_ROOT="$(dirname "${BASH_SOURCE[0]}")"
 
 usage() {
   cat <<EOF
@@ -28,7 +30,7 @@ get_dependencies() {
 install() {
   distro=$(get_distro_type)
   if type "install_${distro}" 1>/dev/null 2>&1; then
-    if [ "$DOTBASH_CFG_INTERNAL_ROOT/providers/${distro}.sh" ]; then
+    if [ -f "$DOTBASH_CFG_INTERNAL_ROOT/providers/${distro}.sh" ]; then
       source "$DOTBASH_CFG_INTERNAL_ROOT/providers/${distro}.sh"
     fi
     "install_${distro}"
@@ -64,3 +66,4 @@ main() {
     usage; exit 1
   fi
 }
+

@@ -1,4 +1,7 @@
 #!/bin/bash
+# shellcheck disable=SC2034
+# SC2034: This script is meant to be sourced through .bashrc. Thus, there is no
+#   need to export any global variable.
 
 get_distro_type() {
   if [ -f /etc/centos-release ]; then
@@ -6,7 +9,7 @@ get_distro_type() {
   elif [ -f /etc/redhat-release ]; then
     echo "redhat"
   else
-    proc_name=$(cat /proc/version | awk '{ print $1 }')
+    proc_name=$(awk '{ print $1 }' < /proc/version)
     case $proc_name in
       MINGW*)
         echo "mingw"
@@ -31,19 +34,21 @@ get_distro_type() {
 }
 
 create_drive_links() {
-  for dir in $drive_mount_root/*; do
-    dir_basename=$(basename $dir)
-    [ -L /$dir_basename ] || ln -s $dir /$dir_basename
+  for dir in "$drive_mount_root"/*; do
+    dir_basename=$(basename "$dir")
+    [ -L "/$dir_basename" ] || ln -s "$dir" "/$dir_basename"
   done
 }
 
-case `get_distro_type` in
+case $(get_distro_type) in
   mingw64)
     win_os=true
     ;;
   cygwin)
     win_os=true
     drive_mount_root=/cygdrive
+    # shellcheck disable=SC2139
+    # SC2139: Ok to expand when defined, not when used
     alias cygwin_setup="$DOTBASHCFG_DATA_DIR/utils/cygwin64/setup-x86_64.exe"
     ;;
   winbash)

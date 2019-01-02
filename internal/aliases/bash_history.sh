@@ -16,9 +16,7 @@ HISTFILESIZE=2000
 # The '&' is a special pattern which suppresses duplicate entries.
 HISTIGNORE=$'[ \t]*:&:[fb]g:exit'
 HISTIGNORE=$'[ \t]*:&:[fb]g:exit:ls' # Ignore the ls command as well
-#
+
 # Whenever displaying the prompt, write the previous line to disk
-# and save the current dir into ConEmuC (to update tab's title)
-PROMPT_COMMAND="`command -v ConEmuC.exe 2>&1 > /dev/null && echo "ConEmuC.exe -StoreCWD 2> /dev/null && "`\
-    history -a"
+PROMPT_COMMAND="history -a"
 

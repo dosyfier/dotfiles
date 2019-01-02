@@ -94,7 +94,7 @@ uniq_occurrences() {
 # $1 - The array containing elements to exclude from the stream.
 without_excluded() {
   exclude_array_name="$1[*]"
-  tr ' ' '\n' | while read element; do
+  tr ' ' '\n' | while read -r element; do
     if ! [[ " ${!exclude_array_name} " == *" $element "* ]]; then
       echo "$element"
     fi
@@ -130,6 +130,7 @@ DOTBASHCFG_DATA_DIR="$DOTBASHCFG_DATA_DIR"
 EOC
 
   # Source the bashrc script
+  # shellcheck source=bashrc
   source "$HOME/.bashrc"
 }
 
@@ -155,8 +156,8 @@ install_features() {
       requested_features+=("$feature")
       analyze_feature "$feature"
       # Dependent features are output by 'analyze_feature' on FD no. 3
-      while read -t 0 -u 3; do
-	read -u 3 -a new_features_to_install
+      while read -r -t 0 -u 3; do
+	read -r -u 3 -a new_features_to_install
 	features_to_install+=("${new_features_to_install[*]}")
       done
       features_to_install+=("$feature")
@@ -228,6 +229,8 @@ install_feature() {
 
 # Default variables
 if [ -f "$DOTBASH_CFG_FILE" ]; then
+  # shellcheck disable=SC1090
+  # SC1090: the sourced file is built by this script
   source "$DOTBASH_CFG_FILE"
 else
   DOTBASHCFG_WIN_USER=$USER

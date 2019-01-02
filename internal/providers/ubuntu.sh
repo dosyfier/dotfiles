@@ -10,5 +10,5 @@ install_repo() {
 }
 
 install_packages() {
-  sudo apt-get install -y $@
+  sudo apt-get install -y "$@"
 }

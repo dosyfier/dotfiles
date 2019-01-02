@@ -1,3 +1,4 @@
 #!/bin/bash
 
-source "$(dirname "$BASH_SOURCE")"/ubuntu.sh
+# shellcheck source=ubuntu.sh
+source "$(dirname "${BASH_SOURCE[0]}")"/ubuntu.sh

@@ -1,4 +1,6 @@
 #!/bin/bash
+# shellcheck disable=SC1090
+# SC1090: This is script is about dynamically sourcing every script under ~/.bash
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
@@ -11,7 +13,7 @@
 # --- Functions
 
 read_ordered_scripts() {
-  while read def_script && [ -n "$def_script" ]; do
+  while read -r def_script && [ -n "$def_script" ]; do
     script_basename="$(basename "$def_script")"
     if [[ $read_scripts != *"$script_basename"* ]]; then
       source "$def_script"
@@ -26,7 +28,7 @@ read_ordered_scripts() {
 # First, evaluate any global scripts packaged with OS distribution
 dist_sourced_scripts="/etc/bashrc /etc/bash.bashrc /etc/bash_completion"
 for source in $dist_sourced_scripts; do
-  ( [ -f "$source" ] || [ -L "$source" ] ) && source "$source"
+  { [ -f "$source" ] || [ -L "$source" ]; } && source "$source"
 done
 
 # Then, evaluate dotbashconfig project's configuration script
@@ -39,8 +41,8 @@ fi
 # Once base scripts and configuration variables have been evaluated,
 # run other scripts in the appropriated order
 read_ordered_scripts "$(xargs -I % echo "$HOME/.bash/internal/aliases/%" < ~/.bash/internal/aliases/order/earliest-scripts.txt)"
-read_ordered_scripts "$(find ~/.bash/internal/aliases/*.sh | egrep -v '/$' | grep -vFf ~/.bash/internal/aliases/order/latest-scripts.txt)"
-read_ordered_scripts "$(find  ~/.bash/**/aliases/*.sh | egrep -v internal/)"
+read_ordered_scripts "$(find ~/.bash/internal/aliases/*.sh | grep -Ev '/$' | grep -vFf ~/.bash/internal/aliases/order/latest-scripts.txt)"
+read_ordered_scripts "$(find  ~/.bash/**/aliases/*.sh | grep -v internal/)"
 read_ordered_scripts "$(xargs -I % echo "$HOME/.bash/internal/aliases/%" < ~/.bash/internal/aliases/order/latest-scripts.txt)"
 
 # Allow users to define supplementary aliases within ~/.bash_aliases (file or directory)

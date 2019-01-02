@@ -8,9 +8,9 @@ git_fetch_remotes() {
 
   # Create new local branches accordingly
   local_branches="$(git branch -l | sed 's:\s*\(\*\)\?\s*::')"
-  git branch -r | egrep -v 'master$' | while read remote_b; do 
+  git branch -r | grep -Ev 'master$' | while read -r remote_b; do 
     local_b=${remote_b#origin/}
-    if ! ( echo "$local_branches" | egrep -q "^${local_b}$" ); then
+    if ! ( echo "$local_branches" | grep -Eq "^${local_b}$" ); then
       git branch "${local_b}" "${remote_b}"
     fi
   done

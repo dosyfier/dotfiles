@@ -5,6 +5,6 @@ install_repo() {
 }
 
 install_packages() {
-  sudo yum install -y $@
+  sudo yum install -y "$@"
 }
 

@@ -1,4 +1,7 @@
 #!/bin/bash
+# shellcheck disable=SC2034
+# SC2034: This script is meant to be sourced through .bashrc. Thus, there is no
+#   need to export any global variable.
 
 # Color definitions (taken from Color Bash Prompt HowTo).
 # Some colors might look different of some terminals.

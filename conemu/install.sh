@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"
 
 find_tools_dir() {
@@ -29,7 +30,7 @@ replace() {
 
 install() {
   tools_dir="$(find_tools_dir)"
-  [ $? -eq 0 ] && conemu_exe="$(find "$tools_dir" -name 'ConEmu.exe' | head -1)"
+  [ -d "$tools_dir" ] && conemu_exe="$(find "$tools_dir" -name 'ConEmu.exe' | head -1)"
 
   if [ -f "$conemu_exe" ]; then
     conemu_config_file="$(dirname "$conemu_exe")/ConEmu.xml"
@@ -45,6 +46,4 @@ install() {
   fi
 }
 
-# shellcheck disable=SC2068
-# Unquoted array expansion is here expected
-main $@
+main "$@"
