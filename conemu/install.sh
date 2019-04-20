@@ -3,19 +3,6 @@
 # shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"
 
-find_tools_dir() {
-  if [ -d "$DOTBASHCFG_DATA_DIR/tools" ]; then
-    echo "$DOTBASHCFG_DATA_DIR/tools"
-  elif [ -d "$DOTBASHCFG_DATA_DIR/utils" ]; then
-    echo "$DOTBASHCFG_DATA_DIR/utils"
-  else
-    (>&2 echo "None of the following directories exist:")
-    (>&2 echo "- $DOTBASHCFG_DATA_DIR/tools")
-    (>&2 echo "- $DOTBASHCFG_DATA_DIR/utils")
-    return 1;
-  fi
-}
-
 find_as_windows_path() {
   find "$1" -iname "$2" | head -1 | sed 's#^/\([a-z]\)#\U\1:#'
 }
@@ -28,21 +15,31 @@ replace() {
   sed -i "s/$pattern/$replacement/g" "$config_file"
 }
 
+abort() {
+  (>&2 echo "$1")
+  (>&2 echo "Aborting ConEmu feature configuration.")
+  exit 1
+}
+
 install() {
-  tools_dir="$(find_tools_dir)"
-  [ -d "$tools_dir" ] && conemu_exe="$(find "$tools_dir" -name 'ConEmu.exe' | head -1)"
-
-  if [ -f "$conemu_exe" ]; then
-    conemu_config_file="$(dirname "$conemu_exe")/ConEmu.xml"
-
-    echo "Setting ConEmu configuration into $conemu_config_file file..."
-    cp conemu/ConEmu.xml "$conemu_config_file"
-
-    echo "Configuring $conemu_config_file file..."
-    replace "%CygwinHome%" "$(find_as_windows_path "$tools_dir" Cygwin64)" "$conemu_config_file"
+  if ! [ -d "$DOTBASHCFG_TOOLS_DIR" ]; then
+    abort "Tools directory does not exist ($DOTBASHCFG_TOOLS_DIR)."
 
   else
-    echo "No ConEmu installation directory found. Aborting ConEmu feature configuration."
+    conemu_exe="$(find "$DOTBASHCFG_TOOLS_DIR" -name 'ConEmu.exe' | head -1)"
+
+    if [ -f "$conemu_exe" ]; then
+      conemu_config_file="$(dirname "$conemu_exe")/ConEmu.xml"
+
+      echo "Setting ConEmu configuration into $conemu_config_file file..."
+      cp conemu/ConEmu.xml "$conemu_config_file"
+
+      echo "Configuring $conemu_config_file file..."
+      replace "%CygwinHome%" "$(find_as_windows_path "$DOTBASHCFG_TOOLS_DIR" Cygwin64)" "$conemu_config_file"
+
+    else
+      abort "No ConEmu installation directory found."
+    fi
   fi
 }
 

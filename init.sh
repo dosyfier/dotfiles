@@ -128,8 +128,9 @@ init() {
   # Create a .dotbashcfg file holding defined DOTBASH_* variables
   cat > "$DOTBASH_CFG_FILE" <<-EOC
 #!/bin/bash
-DOTBASHCFG_WIN_USER="$DOTBASHCFG_WIN_USER"
-DOTBASHCFG_DATA_DIR="$DOTBASHCFG_DATA_DIR"
+export DOTBASHCFG_WIN_USER="$DOTBASHCFG_WIN_USER"
+export DOTBASHCFG_DATA_DIR="$DOTBASHCFG_DATA_DIR"
+export DOTBASHCFG_TOOLS_DIR="$DOTBASHCFG_DATA_DIR/tools"
 EOC
 
   # Source the bashrc script
