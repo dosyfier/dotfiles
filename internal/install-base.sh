@@ -11,7 +11,7 @@ DOTBASH_CFG_INTERNAL_ROOT="$(dirname "${BASH_SOURCE[0]}")"
 usage() {
   cat <<EOF
 
-  Usage: install.sh [options] <action>
+  Usage: feature_mgr.sh [options] <action>
 
   Possible options are:
   * -h|-?|--help    Displays this message.

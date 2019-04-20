@@ -36,7 +36,7 @@ usage() {
   --with-features=<feature-1>,<feature-2>,...,<feature-n>
 	  Automatically install only a subset of the dotbashconfig features (identified
 	  by their "feature-name"). Here is the list of those features:
-	      $(find . -maxdepth 2 -name install.sh -printf "%h, " | sed -e 's#./##g' -e 's#, $##g')
+	      $(find . -maxdepth 2 -name feature_mgr.sh -printf "%h, " | sed -e 's#./##g' -e 's#, $##g')
 
   -y|--all-features
 	  Automatically accept the installation of every dotbashconfig features.
@@ -157,7 +157,7 @@ install_features() {
   rm "$feature_pipe"
 
   # Establish the full list of features to install
-  for install_script in */install.sh; do
+  for install_script in */feature_mgr.sh; do
     # Check if the feature detected shall be installed
     feature=$(basename "$(dirname "$install_script")")
     if check_feature "$feature"; then
@@ -217,7 +217,7 @@ analyze_feature() {
   local feature="$1"
 
   echo "Analyzing $feature feature..."
-  dependencies="$(run_in_project "$feature/install.sh" get-dependencies)"
+  dependencies="$(run_in_project "$feature/feature_mgr.sh" get-dependencies)"
   for dependency in $dependencies; do 
     analyze_feature "$dependency"
     echo "$dependency" >&3
@@ -230,7 +230,7 @@ install_feature() {
   local feature="$1"
 
   echo "Installing / Configuring $feature feature..."
-  run_in_project "$feature/install.sh" install
+  run_in_project "$feature/feature_mgr.sh" install
 }
 
 
