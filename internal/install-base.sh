@@ -34,6 +34,7 @@ install() {
       source "$DOTBASH_CFG_INTERNAL_ROOT/providers/${distro}.sh"
     fi
     "install_${distro}"
+    echo "Feature successfully installed."
   elif [ -n "$distro" ]; then
     echo "Nothing to install for this distro."
   else

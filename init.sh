@@ -23,6 +23,10 @@ usage() {
 	  dotbashconfig from some Shell environment run from Windows (e.g. Cygwin,
 	  Git Bash, WSL).
 
+  -m|--email <mail-address>
+	  Mail address to consider for the current user (used e.g. to configure 
+	  Git).
+
   -d|--data <data-dir>
 	  Optional path indicating the root of a directory holding any development
 	  project, 3rd party tool installation, IDE installation, etc. (used e.g. 
@@ -131,6 +135,7 @@ init() {
 export DOTBASHCFG_WIN_USER="$DOTBASHCFG_WIN_USER"
 export DOTBASHCFG_DATA_DIR="$DOTBASHCFG_DATA_DIR"
 export DOTBASHCFG_TOOLS_DIR="$DOTBASHCFG_DATA_DIR/tools"
+export DOTBASHCFG_MAIL="$DOTBASHCFG_MAIL"
 EOC
 
   # Source the bashrc script
@@ -246,6 +251,9 @@ while [ $# -ne 0 ]; do
   case "$1" in
     "-l"|"--win-login")
       shift; DOTBASHCFG_WIN_USER=${1:-DOTBASHCFG_WIN_USER}
+      ;;
+    "-m"|"--email")
+      shift; DOTBASHCFG_MAIL=${1}
       ;;
     "-d"|"--data")
       shift; DOTBASHCFG_DATA_DIR="${1:-DOTBASHCFG_DATA_DIR}"
