@@ -79,3 +79,6 @@ if [[ -n "${ConEmuPID}" ]]; then
   PS1="$PS1\[\e]9;9;\"\w\"\007\e]9;12\007\]"
 fi
 
+# Restrict Bash directory prompt to only the last 4 directory names
+PROMPT_DIRTRIM=4
+
