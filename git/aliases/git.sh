@@ -27,7 +27,8 @@ git_stash_n_pull() {
 
 # Display git branch state (branch name or tag or commit ID)
 git_branch_state() {
-  git symbolic-ref HEAD --short || git show -s --pretty="%D, commit: %h"
+  git symbolic-ref HEAD --short || ( git show -s --pretty="%D, commit: %h" | \
+    sed 's|^[^,]\+, \(tag: [^,]\+, \)\(tag: [^,]\+, \)*|\1|' )
 }
 
 # Trigger this function on each new prompt entry to re-calculate
