@@ -5,7 +5,8 @@ source "$(dirname "$0")/../internal/install-base.sh"
 
 install_ubuntu() {
   install_repo jonathonf/vim
-  install_packages vim
+  # N.B. vim-gtk is a compiled vim version providing support for system clipboard
+  install_packages vim vim-gtk
 }
 
 install_winbash() {
