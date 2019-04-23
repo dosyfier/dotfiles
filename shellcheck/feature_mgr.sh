@@ -24,7 +24,7 @@ _install() {
     echo "ShellCheck is already installed. Skipping."
   else
     install_packages cabal-install
-    cabal update
+    sudo cabal update
     # shellcheck disable=SC2033
     # SC2033: We are not passing the 'install' command to cabal, just an argument
     sudo cabal install --global ShellCheck 
