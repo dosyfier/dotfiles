@@ -4,6 +4,11 @@
 FEATURE_ROOT="$(realpath "$(dirname "$0")")"
 source "$(dirname "$0")/../internal/install-base.sh"
 
+install_centos() {
+  install_packages terminator
+  _configure
+}
+
 install_winbash() {
   if ! [ -e "/usr/share/fonts/windows" ]; then
     sudo ln -s /mnt/c/Windows/Fonts /usr/share/fonts/windows
@@ -23,7 +28,10 @@ install_winbash() {
   pushd "$terminator_quick_launch_dir" > /dev/null
   trap "popd > /dev/null" EXIT
   cscript.exe "setup_terminator_shortcut.vbs" "$(_to_windows_path "$terminator_quick_launch_dir")"
+  _configure
+}
 
+_configure() {
   mkdir -p "$HOME/.config/terminator"
   terminator_config_file="$HOME/.config/terminator/config"
   if [ -e "$terminator_config_file" ]; then
