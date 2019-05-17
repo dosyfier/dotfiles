@@ -4,11 +4,13 @@
 source "$(dirname "$0")/../internal/install-base.sh"
 
 get_dependencies() {
-  echo "git"
+  if ! command -v git > /dev/null; then
+    echo "git"
+  fi
 }
 
 install_centos() {
-  install_packages make
+  install_packages make ncurses ncurses-devel
   _compile
 }
 
@@ -23,11 +25,15 @@ install_winbash() {
 }
 
 _compile() {
-  sudo git clone https://github.com/vim/vim /usr/local/src/vim
+  if [ ! -d /usr/local/src/vim ]; then
+    sudo git clone https://github.com/vim/vim /usr/local/src/vim
+  fi
   pushd "/usr/local/src/vim" > /dev/null
   trap "popd > /dev/null" EXIT
-  sudo git checkout v8.1.1198
-  sudo rm -rf .git
+  if [ -d .git ]; then
+    sudo git checkout v8.1.1198
+    sudo rm -rf .git
+  fi
   sudo make
   sudo make install
 }
