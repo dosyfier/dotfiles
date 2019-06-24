@@ -7,6 +7,7 @@
 
 
 DOTBASH_CFG_INTERNAL_ROOT="$(dirname "${BASH_SOURCE[0]}")"
+DOTBASH_CFG_FEATURE=$(basename "$(dirname "$0")")
 
 usage() {
   cat <<EOF
@@ -34,11 +35,17 @@ install() {
       source "$DOTBASH_CFG_INTERNAL_ROOT/providers/${distro}.sh"
     fi
     "install_${distro}"
-    echo "Feature successfully installed."
+    if [ $? -eq 0 ]; then
+      echo "Feature $DOTBASH_CFG_FEATURE successfully installed."
+    else
+      echo "Feature $DOTBASH_CFG_FEATURE could not be installed (see above)."
+      return 2
+    fi
   elif [ -n "$distro" ]; then
-    echo "Nothing to install for this distro."
+    echo "Nothing to install for this distro for the $DOTBASH_CFG_FEATURE feature."
   else
-    echo "Unknown distro, cannot install packages..." >&2
+    echo "Unknown distro, cannot install packages for the $DOTBASH_CFG_FEATURE feature..." >&2
+    return 1
   fi
 }
 
