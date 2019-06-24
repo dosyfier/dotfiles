@@ -14,7 +14,13 @@ _configure_gnome() {
   dconf write /org/gnome/desktop/interface/monospace-font-name "'Monospace 9'"
   dconf write /org/gnome/desktop/wm/preferences/titlebar-font "'Cantarell Bold 10'"
 
-  # Necessary for BN1 Eclipse desktop shortcut to work
+  # GNOME Terminal settings
+  echo "Configuring terminal background..."
+  profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
+  profile=${profile:1:-1} # remove leading and trailing single quotes
+  gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" use-theme-colors false
+
+  # Necessary for desktop shortcuts to work
   echo "Configuring desktop settings..."
   dconf write /org/gnome/nautilus/preferences/executable-text-activation "'launch'"
 
