@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 # shellcheck source=../internal/install-base.sh
-FEATURE_ROOT="$(realpath "$(dirname "$0")")"
+FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 source "$(dirname "$0")/../internal/install-base.sh"
 
 install_centos() {
