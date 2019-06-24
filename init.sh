@@ -53,7 +53,6 @@ EOU
 
 # Run the provided command & arguments into do.bashconfig project's directory
 run_in_project() {
-  set -e
   pushd "$DOTBASH_CFG_DIR" > /dev/null
   trap "popd > /dev/null" EXIT
   # shellcheck disable=SC2068
@@ -185,7 +184,13 @@ install_features() {
     "Ok to install?"; then
     for feature in $(echo "${features_to_install[*]}" | uniq_occurrences); do
       install_feature "$feature"
+      [ $? -ne 0 ] && features_in_error+=("$feature")
     done
+    if [ -n "$features_in_error" ]; then
+      printf "\nWARN: Some features could not be installed (see logs above):\n"
+      for feature in "${features_in_error[@]}"; do echo "- $feature"; done
+      return 2
+    fi
   fi
 }
 
@@ -296,5 +301,7 @@ if ! [ "$SKIP_FEATURES_INSTALLATION" = true ]; then
 fi
 
 # Done!
-echo "Done! Enjoy bashing ;-)"
+if [ $? -eq 0 ]; then
+  echo "Done! Enjoy bashing ;-)"
+fi
 
