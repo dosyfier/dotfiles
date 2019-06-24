@@ -32,7 +32,7 @@ _install_fedora_copr() {
 }
 
 _install() {
-  install_packages cabal-install
+  install_packages cabal-install ghc
   sudo cabal update
 }
 
