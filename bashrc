@@ -13,8 +13,12 @@
 # --- Functions
 
 read_ordered_scripts() {
-  while read -r def_script && [ -n "$def_script" ]; do
+  while read -r def_script_raw && [ -n "$def_script_raw" ]; do
+    # Make sure that any \r character is removed prior to looking for the script file
+    # (necessary within Git Bash environment)
+    def_script="$(echo "$def_script_raw")"
     script_basename="$(basename "$def_script")"
+
     if [[ $read_scripts != *"$script_basename"* ]]; then
       source "$def_script"
       read_scripts+="${read_scripts+ }$script_basename"
