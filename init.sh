@@ -12,44 +12,7 @@ DOTBASH_CFG_DIR="${DOTBASH_CFG_DIR/#\~/$HOME}"
 
 # -- Utility functions -- #
 
-usage() {
-  cat <<EOU
-
-  Usage: init.sh [options] 
-  where available options are:
-
-  -l|--win-login <login>
-	  Login of the actual Windows account, to be used when installing 
-	  dotbashconfig from some Shell environment run from Windows (e.g. Cygwin,
-	  Git Bash, WSL).
-
-  -m|--email <mail-address>
-	  Mail address to consider for the current user (used e.g. to configure 
-	  Git).
-
-  -d|--data <data-dir>
-	  Optional path indicating the root of a directory holding any development
-	  project, 3rd party tool installation, IDE installation, etc. (used e.g. 
-	  on Windows to find Cygwin installation path).
-
-  --with-<feature-name>-feature
-  --with-features=<feature-1>,<feature-2>,...,<feature-n>
-	  Automatically install only a subset of the dotbashconfig features (identified
-	  by their "feature-name"). Here is the list of those features:
-	      $(find . -maxdepth 2 -name feature_mgr.sh -printf "%h, " | sed -e 's#./##g' -e 's#, $##g')
-
-  -y|--all-features
-	  Automatically accept the installation of every dotbashconfig features.
-
-  -n|--no-installation
-	  Skip the installation of every dotbashconfig features (i.e. only bashrc
-	  environment will be configured).
-
-  -h|--help
-	  Displays this message.
-
-EOU
-}
+source "$DOTBASH_CFG_DIR/internal/init-utils.sh"
 
 # Run the provided command & arguments into do.bashconfig project's directory
 run_in_project() {
@@ -101,7 +64,7 @@ uniq_occurrences() {
 without_excluded() {
   exclude_array_name="$1[*]"
   tr ' ' '\n' | while read -r element; do
-    if ! [[ " ${!exclude_array_name} " == *" $element "* ]]; then
+    if ! [[ " ${!exclude_array_name} " =~ " $element " ]]; then
       echo "$element"
     fi
   done
@@ -109,6 +72,51 @@ without_excluded() {
 
 
 # --- Installation algorithm -- #
+
+# Take into account the values of options passed to this init script.
+# N.B. As a prerequisite, those values have been pre-parsed by the "parse_args"
+# function from the init-utils.sh script.
+acknowledge_opts() {
+  # If 'help' option was set, don't do anything more
+  if [ -n "${DOTBASHCFG_VALUES[help]}" ]; then
+    run_in_project usage; exit 0
+  fi
+
+  DOTBASHCFG_WIN_USER=${DOTBASHCFG_VALUES[win_login]:-$DOTBASHCFG_WIN_USER}
+  DOTBASHCFG_MAIL=${DOTBASHCFG_VALUES[email]:-$DOTBASHCFG_MAIL}
+  DOTBASHCFG_DATA_DIR=${DOTBASHCFG_VALUES[data_dir]:-$DOTBASHCFG_DATA_DIR}
+
+  # Check exclusive options: with_features, all_features and skip_install
+  nb_exclusive_opts="$(echo "${DOTBASHCFG_VALUES[with_features]}" \
+    "${DOTBASHCFG_VALUES[all_features]}" \
+    "${DOTBASHCFG_VALUES[skip_install]}" | wc -w)"
+  if [ $nb_exclusive_opts -gt 1 ]; then
+    usage_error "Only one of the following options can be specified at once:" \
+      "¤ ${DOTBASHCFG_SHORT_OPTS[all_features]}|${DOTBASHCFG_LONG_OPTS[all_features]}" \
+      "¤ ${DOTBASHCFG_SHORT_OPTS[skip_install]}|${DOTBASHCFG_LONG_OPTS[skip_install]}" \
+      "¤ ${DOTBASHCFG_SHORT_OPTS[with_features]}|${DOTBASHCFG_LONG_OPTS[with_features]}|${DOTBASHCFG_EXTRA_OPTS[with_features]}"
+  fi
+
+  if [ -n "${DOTBASHCFG_VALUES[with_features]}" ]; then
+    for feature in $(echo "${DOTBASHCFG_VALUES[with_features]}" | sed 's/,/ /g'); do
+      if [ -f $feature/feature_mgr.sh ]; then
+	declare -g "RUN_${feature^^}_FEATURE=true"
+      else
+	usage_error "Requested feature $feature does not exist" \
+	  "Available features are:" \
+	  "$(available_features | fold -w 80 -s)"
+      fi
+    done
+    AUTO_DOTBASH_CFG=true
+
+  elif [ -n "${DOTBASHCFG_VALUES[all_features]}" ]; then
+    RUN_ALL_FEATURES=true
+    AUTO_DOTBASH_CFG=true
+
+  elif [ -n "${DOTBASHCFG_VALUES[skip_install]}" ]; then
+    SKIP_FEATURES_INSTALLATION=true
+  fi
+}
 
 # Initializes.bash configuration
 init() {
@@ -252,44 +260,8 @@ else
 fi
 
 # Parse program options
-while [ $# -ne 0 ]; do
-  case "$1" in
-    "-l"|"--win-login")
-      shift; DOTBASHCFG_WIN_USER=${1:-DOTBASHCFG_WIN_USER}
-      ;;
-    "-m"|"--email")
-      shift; DOTBASHCFG_MAIL=${1}
-      ;;
-    "-d"|"--data")
-      shift; DOTBASHCFG_DATA_DIR="${1:-DOTBASHCFG_DATA_DIR}"
-      ;;
-    --with-*-feature)
-      feature=$(expr "$1" : '--with-\(.*\)-feature')
-      declare "RUN_${feature^^}_FEATURE=true"
-      AUTO_DOTBASH_CFG=true
-      ;;
-    --with-features=*)
-      for feature in $(echo "${1// /}" | cut -d= -f2 | sed 's/,/ /g'); do
-	declare "RUN_${feature^^}_FEATURE=true"
-      done
-      AUTO_DOTBASH_CFG=true
-      ;;
-    "-y"|"--all-features")
-      RUN_ALL_FEATURES=true
-      AUTO_DOTBASH_CFG=true
-      ;;
-    "-n"|"--no-installation")
-      SKIP_FEATURES_INSTALLATION=true
-      ;;
-    "-h"|"-?"|"--help")
-      run_in_project usage; exit 0
-      ;;
-    *)
-      run_in_project usage; exit 1
-      ;;
-  esac
-  shift
-done
+parse_opts "$@"
+run_in_project acknowledge_opts
 
 # Run bash env initialization
 echo "Init bash environment..."
