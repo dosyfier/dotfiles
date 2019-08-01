@@ -69,6 +69,7 @@ main() {
     source ~/.bash/internal/aliases/distro.sh
     install
   elif [ "$1" = "get-dependencies" ]; then
+    source ~/.bash/internal/aliases/distro.sh
     get_dependencies
   else
     usage; exit 1
