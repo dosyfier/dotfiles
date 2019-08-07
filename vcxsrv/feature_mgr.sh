@@ -24,7 +24,7 @@ install_winbash() {
   cp "$FEATURE_ROOT"/config.xlaunch "$vcxsrv_install_dir/"
   echo "(Re)Configuring VcXsrv auto launch..."
   reg.exe add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run \
-    /v VcXsrv /d "\"C:\\Program Files\\VcXsrv\\config.xlaunch\"" /f
+    /v VcXsrv /d "C:\\Program Files\\VcXsrv\\config.xlaunch" /f
 }
 
 main "$@"
