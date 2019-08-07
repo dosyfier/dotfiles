@@ -53,7 +53,13 @@ install_winbash() {
 }
 
 _configure() {
-  mkdir -p "$HOME/.config/terminator"
+  # Create terminator config directory
+  mkdir -p "$HOME/.config/terminator/plugins"
+
+  # Install plugins
+  curl -k -L https://git.io/v5Zww -o "$HOME/.config/terminator/plugins/terminator-themes.py"
+
+  # Install configuration file
   terminator_config_file="$HOME/.config/terminator/config"
   if [ -e "$terminator_config_file" ]; then
     (>&2 echo "Terminator config file already exists ($terminator_config_file). Not overriding.")
