@@ -20,6 +20,7 @@ install_winbash() {
 }
 
 _install() {
+  install_packages unzip
   sudo curl -k -L $HACK_DOWNLOAD_URL -o /var/cache/$HACK_ARCHIVE_NAME
   sudo mkdir -p /usr/local/share/fonts/Hack/
   sudo unzip /var/cache/$HACK_ARCHIVE_NAME -d /usr/local/share/fonts/Hack/
