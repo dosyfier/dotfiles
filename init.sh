@@ -136,7 +136,13 @@ init() {
     ln -s "$HOME/.bash/bashrc" "$HOME/.bashrc"
   fi
 
+  # Create the data and tools directories if they don't exist
+  if ! [ -d "$DOTBASHCFG_DATA_DIR" ] || ! [ -d "$DOTBASHCFG_DATA_DIR/tools" ]; then
+    mkdir -p "$DOTBASHCFG_DATA_DIR/tools"
+  fi
+
   # Create a .dotbashcfg file holding defined DOTBASH_* variables
+  echo "Backup dotbashconfig configuration into $DOTBASH_CFG_FILE..."
   cat > "$DOTBASH_CFG_FILE" <<-EOC
 #!/bin/bash
 export DOTBASHCFG_WIN_USER="$DOTBASHCFG_WIN_USER"

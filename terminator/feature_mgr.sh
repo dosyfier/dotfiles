@@ -16,7 +16,9 @@ install_centos() {
 }
 
 install_winbash() {
-  install_packages terminator
+  # N.B. Python pip is required by the terminator-themes plugin
+  install_packages terminator dbus-x11 python-pip
+  sudo systemd-machine-id-setup
   _configure
 
   # Link to Windows fonts (to make them available to configure terminator)
@@ -31,7 +33,7 @@ install_winbash() {
     return 1
   fi
   terminator_quick_launch_dir="$DOTBASHCFG_TOOLS_DIR"/terminator/quick_launch
-  echo "Installing terminator configuration under $terminator_quick_launch_dir..."
+  echo "Installing terminator launch configuration under $terminator_quick_launch_dir..."
   mkdir -p "$terminator_quick_launch_dir"
   rm -rf "$terminator_quick_launch_dir"/*
   cp -r "$FEATURE_ROOT"/{icons,vbs} "$terminator_quick_launch_dir"
@@ -40,7 +42,7 @@ install_winbash() {
   pushd "$terminator_quick_launch_dir/vbs" > /dev/null
   trap "popd > /dev/null" EXIT
   echo "Creating terminator Windows shortcut..."
-  cscript.exe "setup_terminator_shortcut.vbs" "$(_to_windows_path "$terminator_quick_launch_dir")"
+  cscript.exe "setup_terminator_shortcut.vbs" "$(wslpath -w "$terminator_quick_launch_dir")"
 
   # Linux icon (displayed through VcXsrv)
   echo "Updating terminator Linux icon..."
@@ -55,8 +57,10 @@ install_winbash() {
 _configure() {
   # Create terminator config directory
   mkdir -p "$HOME/.config/terminator/plugins"
-
+  
   # Install plugins
+  echo "Installing terminator 'themes' plugin..."
+  sudo pip install requests
   curl -k -L https://git.io/v5Zww -o "$HOME/.config/terminator/plugins/terminator-themes.py"
 
   # Install configuration file
@@ -64,13 +68,10 @@ _configure() {
   if [ -e "$terminator_config_file" ]; then
     (>&2 echo "Terminator config file already exists ($terminator_config_file). Not overriding.")
   else
+    echo "Installing terminator config file ($terminator_config_file)..."
     rm -f "$terminator_config_file" # in case the link is broken...
     ln -s "$FEATURE_ROOT"/conf/terminator.config "$terminator_config_file"
   fi
-}
-
-_to_windows_path() {
-  echo "$1" | sed -e 's|^\(/mnt/\)|/|' -e 's|^/\([a-z]\)|\U\1:|' -e 's|/|\\|g'
 }
 
 main "$@"
