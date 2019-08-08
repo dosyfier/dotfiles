@@ -12,10 +12,13 @@ install_winbash() {
     echo "VcXsrv is already installed. Nothing to do."
   else
     installer_temp_loc="$WIN_HOME/Downloads/vcxsrv-installer.exe"
-    curl -L https://sourceforge.net/projects/vcxsrv/files/latest/download -o "$installer_temp_loc"
-    trap "rm -f '$installer_temp_loc'" EXIT
+    if ! [ -f "$installer_temp_loc" ]; then
+      curl -L https://sourceforge.net/projects/vcxsrv/files/latest/download -o "$installer_temp_loc"
+    fi
+    trap "rm -f $installer_temp_loc" EXIT
     pushd "$(dirname "$installer_temp_loc")" > /dev/null
     trap 'popd > /dev/null' EXIT
+    echo "Running VcXsrv installer ($installer_temp_loc)..."
     ./$(basename "$installer_temp_loc") /S
   fi
 

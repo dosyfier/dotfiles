@@ -24,6 +24,16 @@ usage() {
 EOF
 }
 
+_init_env() {
+  if [ -f "$HOME/.dotbashcfg" ]; then
+    source "$HOME/.dotbashcfg"
+  else
+    echo "Unable to install the $DOTBASH_CFG_FEATURE feature. Missing config file $HOME/.dotbashcfg"
+    exit 2
+  fi
+  source "$DOTBASH_CFG_INTERNAL_ROOT/aliases/distro.sh"
+}
+
 get_dependencies() {
   return 0
 }
@@ -66,10 +76,10 @@ main() {
   if [ $# -ne 1 ]; then
     usage; exit 1
   elif [ "$1" = "install" ]; then
-    source ~/.bash/internal/aliases/distro.sh
+    _init_env
     install
   elif [ "$1" = "get-dependencies" ]; then
-    source ~/.bash/internal/aliases/distro.sh
+    _init_env
     get_dependencies
   else
     usage; exit 1
