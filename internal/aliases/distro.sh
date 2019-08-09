@@ -70,4 +70,16 @@ if [ "$win_os" = true ]; then
   alias outlook='"$OFFICE_ROOT/OUTLOOK.EXE"'
   alias powerpoint='"$OFFICE_ROOT/POWERPNT.EXE"'
   alias winword='"$OFFICE_ROOT/WINWORD.EXE"'
+
+  reg_query() {
+    if [ -z "$2" ]; then 
+      reg.exe query "${1//\//\\}"
+    else
+      reg.exe query "${1//\//\\}" /v "$2"
+    fi \
+      | awk 'NR==3 { print $NF }'
+  }
+
+  alias get_win_version="reg_query 'HKLM/SOFTWARE/Microsoft/Windows NT/CurrentVersion/' ReleaseId"
+  alias get_win_build_nb="reg_query 'HKLM/SOFTWARE/Microsoft/Windows NT/CurrentVersion/' CurrentBuildNumber"
 fi

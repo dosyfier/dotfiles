@@ -12,7 +12,7 @@ install_winbash() {
   [ -L /c ] || sudo ln -s /mnt/c /c
 
   # Attempt to mount and link other drives
-  win_build=$(systeminfo.exe /FO CSV | tail -1 | sed 's/"//g' | cut -d, -f3 | cut -d' ' -f4)
+  win_build=$(get_win_build_nb)
   if [ "$win_build" -gt $_MIN_WIN_BUILD_FOR_DRVFS ]; then
     for drive in {d..n}; do
       [ -d /mnt/$drive ] || sudo mkdir -p /mnt/$drive
