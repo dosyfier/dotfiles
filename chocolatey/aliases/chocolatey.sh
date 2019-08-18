@@ -16,5 +16,5 @@ dotbashcfg_choco_inst() {
 }
 
 dotbashcfg_choco_up() {
-  choco upgrade "$(wslpath $DOTBASHCFG_CHOCO_CONFIG)"
+  choco upgrade all
 }
