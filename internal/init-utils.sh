@@ -4,7 +4,8 @@ if [ -z "$DOTBASH_CFG_DIR" ]; then DOTBASH_CFG_DIR=$HOME/.bash; fi
 source "$DOTBASH_CFG_DIR/internal/aliases/colors.sh"
 
 available_features() {
-  find . -maxdepth 2 -name feature_mgr.sh -printf "%h, " | sed -e 's#./##g' -e 's#, $##g'
+  find "$DOTBASH_CFG_DIR" -maxdepth 2 -name feature_mgr.sh -printf "%h, " | \
+    sed -e "s#$DOTBASH_CFG_DIR/##g" -e 's#, $##g'
 }
 
 declare -A DOTBASHCFG_SHORT_OPTS

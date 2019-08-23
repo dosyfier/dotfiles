@@ -102,7 +102,7 @@ acknowledge_opts() {
       if [ -f $feature/feature_mgr.sh ]; then
 	declare -g "RUN_${feature^^}_FEATURE=true"
       else
-	usage_error "Requested feature $feature does not exist" \
+	usage_error "Requested feature '$feature' does not exist" \
 	  "Available features are:" \
 	  "$(available_features | fold -w 80 -s)"
       fi
