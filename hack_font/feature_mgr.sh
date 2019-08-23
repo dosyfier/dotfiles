@@ -16,7 +16,8 @@ install_ubuntu() {
 }
 
 install_winbash() {
-  install_ubuntu
+  _install
+  _copy_on_windows
 }
 
 _install() {
@@ -24,6 +25,10 @@ _install() {
   sudo curl -k -L $HACK_DOWNLOAD_URL -o /var/cache/$HACK_ARCHIVE_NAME
   sudo mkdir -p /usr/local/share/fonts/Hack/
   sudo unzip /var/cache/$HACK_ARCHIVE_NAME -d /usr/local/share/fonts/Hack/
+}
+
+_copy_on_windows() {
+  sudo cp /usr/local/share/fonts/Hack/ttf/* /c/Windows/Fonts/
 }
 
 main "$@"
