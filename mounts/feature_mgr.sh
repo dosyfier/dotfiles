@@ -7,7 +7,7 @@ _MIN_WIN_BUILD_FOR_DRVFS=16176
 # shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"
 
-install_winbash() {
+install_wsl() {
   # Link C: drive
   [ -L /c ] || sudo ln -s /mnt/c /c
 

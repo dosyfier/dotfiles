@@ -19,7 +19,7 @@ install_ubuntu() {
   _install
 }
 
-install_winbash() {
+install_wsl() {
   _install
 }
 

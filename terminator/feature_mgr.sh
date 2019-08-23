@@ -5,7 +5,7 @@ FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 source "$(dirname "$0")/../internal/install-base.sh"
 
 get_dependencies() {
-  if [ $(get_distro_type) == 'winbash' ]; then
+  if [ $(get_distro_type) == 'wsl' ]; then
     echo vcxsrv
   fi
 }
@@ -15,7 +15,7 @@ install_centos() {
   _configure
 }
 
-install_winbash() {
+install_wsl() {
   # N.B. Python pip is required by the terminator-themes plugin
   install_packages terminator dbus-x11 python-pip
   sudo systemd-machine-id-setup

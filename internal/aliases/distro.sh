@@ -19,7 +19,7 @@ get_distro_type() {
         ;;
       Linux*)
         if grep -Fq Microsoft /proc/version; then
-          echo "winbash"
+          echo "wsl"
         else
           echo "Unknown distro... /proc/version says: $proc_name" >&2
           return 1
@@ -51,7 +51,7 @@ case $(get_distro_type) in
     # SC2139: Ok to expand when defined, not when used
     alias cygwin_setup="$DOTBASHCFG_TOOLS_DIR/cygwin64/setup-x86_64.exe"
     ;;
-  winbash)
+  wsl)
     win_os=true
     drive_mount_root=/mnt
     ;;

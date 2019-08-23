@@ -4,7 +4,7 @@
 FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 source "$(dirname "$0")/../internal/install-base.sh"
 
-install_winbash() {
+install_wsl() {
   vcxsrv_install_dir='/c/Program Files/VcXsrv'
 
   # Installing VcXsrv Windows application

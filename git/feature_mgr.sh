@@ -35,7 +35,7 @@ install_ubuntu() {
   _configure
 }
 
-install_winbash() {
+install_wsl() {
   install_ubuntu
 }
 

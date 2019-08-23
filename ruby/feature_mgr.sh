@@ -16,7 +16,7 @@ install_ubuntu() {
   install_packages ruby ruby-dev
 }
 
-install_winbash() {
+install_wsl() {
   install_ubuntu
 }
   

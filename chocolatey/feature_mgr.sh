@@ -5,7 +5,7 @@ FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 # shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"
 
-install_winbash() {
+install_wsl() {
   if ! command -v choco.exe > /dev/null 2>&1; then
     # Official install command
     powershell.exe -NoProfile -InputFormat None -ExecutionPolicy Bypass \

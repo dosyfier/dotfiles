@@ -20,7 +20,7 @@ install_ubuntu() {
   install_packages vim vim-gtk
 }
 
-install_winbash() {
+install_wsl() {
   install_ubuntu
 }
 
