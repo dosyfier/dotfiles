@@ -80,6 +80,11 @@ if [ "$win_os" = true ]; then
       | awk 'NR==3 { print $NF }'
   }
 
-  alias get_win_version="reg_query 'HKLM/SOFTWARE/Microsoft/Windows NT/CurrentVersion/' ReleaseId"
-  alias get_win_build_nb="reg_query 'HKLM/SOFTWARE/Microsoft/Windows NT/CurrentVersion/' CurrentBuildNumber"
+  get_win_version() {
+    reg_query 'HKLM/SOFTWARE/Microsoft/Windows NT/CurrentVersion/' ReleaseId
+  }
+  get_win_build_nb() {
+    reg_query 'HKLM/SOFTWARE/Microsoft/Windows NT/CurrentVersion/' CurrentBuildNumber
+  }
 fi
+

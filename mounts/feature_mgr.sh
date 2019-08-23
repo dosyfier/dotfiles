@@ -12,7 +12,7 @@ install_wsl() {
   [ -L /c ] || sudo ln -s /mnt/c /c
 
   # Attempt to mount and link other drives
-  win_build=$(get_win_build_nb)
+  win_build=$(get_win_build_nb | tr -d '[:space:]')
   if [ "$win_build" -gt $_MIN_WIN_BUILD_FOR_DRVFS ]; then
     for drive in {d..n}; do
       [ -d /mnt/$drive ] || sudo mkdir -p /mnt/$drive
