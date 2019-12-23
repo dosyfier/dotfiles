@@ -12,18 +12,15 @@
 
 # --- Functions
 
-read_ordered_scripts() {
-  while read -r def_script_raw && [ -n "$def_script_raw" ]; do
-    # Make sure that any \r character is removed prior to looking for the script file
-    # (necessary within Git Bash environment)
-    def_script="$(echo "$def_script_raw")"
+source_ordered_scripts() {
+  for def_script in "$@"; do
     script_basename="$(basename "$def_script")"
 
-    if [[ $read_scripts != *"$script_basename"* ]]; then
+    if [[ "$sourced_scripts" != *"$script_basename"* ]]; then
       source "$def_script"
-      read_scripts+="${read_scripts+ }$script_basename"
+      sourced_scripts+="${sourced_scripts+ }$script_basename"
     fi
-  done <<< "$1"
+  done
 }
 
 
@@ -43,11 +40,12 @@ else
 fi
 
 # Once base scripts and configuration variables have been evaluated,
-# run other scripts in the appropriated order
-read_ordered_scripts "$(xargs -I % echo "$HOME/.bash/internal/aliases/%" < ~/.bash/internal/aliases/order/earliest-scripts.txt)"
-read_ordered_scripts "$(find ~/.bash/internal/aliases/*.sh | grep -Ev '/$' | grep -vFf ~/.bash/internal/aliases/order/latest-scripts.txt)"
-read_ordered_scripts "$(find  ~/.bash/**/aliases/*.sh | grep -v internal/)"
-read_ordered_scripts "$(xargs -I % echo "$HOME/.bash/internal/aliases/%" < ~/.bash/internal/aliases/order/latest-scripts.txt)"
+# source other scripts in the appropriated order
+source_ordered_scripts $(xargs -I % echo "$HOME/.bash/internal/aliases/%.sh" < ~/.bash/internal/order/earliest-scripts.txt)
+source_ordered_scripts $(find ~/.bash/internal/aliases/ -name '*.sh' | grep -vFf ~/.bash/internal/order/latest-scripts.txt)
+source_ordered_scripts $(find ~/.bash/**/aliases/ -name '*.sh' | grep -v internal/)
+source_ordered_scripts $(find ~/.bash/ -type d -name completions -exec find {} -type f -name "*.sh" \;)
+source_ordered_scripts $(xargs -I % echo "$HOME/.bash/internal/aliases/%.sh" < ~/.bash/internal/order/latest-scripts.txt)
 
 # Allow users to define supplementary aliases within ~/.bash_aliases (file or directory)
 # These are evaluated as overriding scripts (i.e. once all other scripts have been processed)
