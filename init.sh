@@ -12,6 +12,7 @@ DOTBASH_CFG_DIR="${DOTBASH_CFG_DIR/#\~/$HOME}"
 
 # -- Utility functions -- #
 
+# shellcheck source=internal/init-utils.sh
 source "$DOTBASH_CFG_DIR/internal/init-utils.sh"
 
 # Run the provided command & arguments into do.bashconfig project's directory

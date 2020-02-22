@@ -1,4 +1,3 @@
-#!/bin/bash
 # shellcheck disable=SC1090
 # SC1090: This is script is about dynamically sourcing every script under ~/.bash
 
