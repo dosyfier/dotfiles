@@ -10,7 +10,7 @@ install_centos() {
 }
 
 install_ubuntu() {
-  install_packages dircolors
+  install_packages coreutils
   _configure
 }
 
@@ -19,7 +19,8 @@ install_wsl() {
 }
 
 _configure() {
-  ln -s "$FEATURE_ROOT"/config.dircolors "$HOME"/.dircolors
+  [ -e "$HOME"/.dircolors ] && rm -vf "$HOME"/.dircolors
+  ln -vs "$FEATURE_ROOT"/config.dircolors "$HOME"/.dircolors
 }
 
 main "$@"
