@@ -3,6 +3,8 @@
 # SC2034: This script is meant to be sourced through .bashrc. Thus, there is no
 #   need to export any global variable.
 
+source ~/.dotbashcfg
+
 get_distro_type() {
   if [ -f /etc/centos-release ]; then
     echo "centos"
@@ -18,7 +20,7 @@ get_distro_type() {
         echo "cygwin"
         ;;
       Linux*)
-        if grep -Fq Microsoft /proc/version; then
+        if grep -qi Microsoft /proc/version; then
           echo "wsl"
         else
           echo "Unknown distro... /proc/version says: $proc_name" >&2
@@ -54,6 +56,17 @@ case $(get_distro_type) in
   wsl)
     win_os=true
     drive_mount_root=/mnt
+    if [ "$(grep -oE 'gcc version ([0-9]+)' /proc/version | awk '{print $3}')" -gt 5 ]; then
+      WSL_VERSION="2" 
+      HYPERV_ADAPTER_IP="$(powershell.exe "(Get-NetIPConfiguration | \
+        Where-Object { \$_.InterfaceAlias -eq \"vEthernet (WSL)\" }).IPv4Address.IPAddress" | \
+        sed 's/\s//g')"
+      LINUX_IP="$(ifconfig | grep -Pzo 'eth0: [^\n]+\n\s*inet \K([\.0-9]+)' | sed 's/\x0//g')"
+      DISPLAY="$HYPERV_ADAPTER_IP:0"
+    else
+      WSL_VERSION="1"
+      DISPLAY="127.0.0.1:0"
+    fi
     ;;
   *)
     ;;
