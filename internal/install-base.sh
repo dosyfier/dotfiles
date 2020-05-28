@@ -7,7 +7,7 @@
 
 
 DOTBASH_CFG_INTERNAL_ROOT="$(dirname "${BASH_SOURCE[0]}")"
-DOTBASH_CFG_FEATURE=$(basename "$(dirname "$0")")
+DOTBASH_CFG_FEATURE=$(basename "$(readlink -f "$(dirname "$0")")")
 
 usage() {
   cat <<EOF
