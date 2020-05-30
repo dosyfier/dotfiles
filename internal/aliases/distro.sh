@@ -58,9 +58,7 @@ case $(get_distro_type) in
     drive_mount_root=/mnt
     if [ "$(grep -oE 'gcc version ([0-9]+)' /proc/version | awk '{print $3}')" -gt 5 ]; then
       WSL_VERSION="2" 
-      HYPERV_ADAPTER_IP="$(powershell.exe "(Get-NetIPConfiguration | \
-        Where-Object { \$_.InterfaceAlias -eq \"vEthernet (WSL)\" }).IPv4Address.IPAddress" | \
-        sed 's/\s//g')"
+      HYPERV_ADAPTER_IP="$(grep nameserver /etc/resolv.conf | awk '{print $2; exit;}')"
       LINUX_IP="$(ifconfig | grep -Pzo 'eth0: [^\n]+\n\s*inet \K([\.0-9]+)' | sed 's/\x0//g')"
       DISPLAY="$HYPERV_ADAPTER_IP:0"
     else
