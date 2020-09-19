@@ -27,8 +27,11 @@ git_stash_n_pull() {
 
 # Display git branch state (branch name or tag or commit ID)
 git_branch_state() {
-  git symbolic-ref HEAD --short || ( git show -s --pretty="%D, commit: %h" | \
-    sed 's|^[^,]\+, \(tag: [^,]\+, \)\(tag: [^,]\+, \)*|\1|' )
+  # Doing this way since `git` command seems to ignore bash logical operators || or &&...
+  state=$(git symbolic-ref HEAD --short 2>/dev/null)
+  if [ -z "$state" ]; then state=$(git show -s --pretty='%D' 2>/dev/null | grep -Po 'tag: \K[^\s,]+'); fi
+  if [ -z "$state" ]; then state=$(git show -s --pretty='%h' 2>/dev/null); fi
+  echo "$state"
 }
 
 # Trigger this function on each new prompt entry to re-calculate
