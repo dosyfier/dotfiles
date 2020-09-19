@@ -2,7 +2,8 @@
 
 install_repo() {
   repo="$1"
-  if [ -f "/etc/apt/sources.list.d/${repo/\//-}-trusty.list" ]; then
+  source /etc/os-release
+  if [ -f "/etc/apt/sources.list.d/${repo/\//-}-$UBUNTU_CODENAME.list" ]; then
     echo "Repo $repo already installed."
   else
     sudo apt-add-repository -y "ppa:$repo"

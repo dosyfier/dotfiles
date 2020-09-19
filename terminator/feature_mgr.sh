@@ -1,7 +1,8 @@
 #!/bin/bash -e
 
-# shellcheck source=../internal/install-base.sh
 FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
+
+# shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"
 
 get_dependencies() {

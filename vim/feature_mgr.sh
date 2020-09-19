@@ -3,6 +3,8 @@
 # shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"
 
+COMPILE_VERSION=8.1.1198
+
 get_dependencies() {
   if ! command -v git > /dev/null; then
     echo "git"
@@ -28,14 +30,14 @@ _compile() {
   if [ ! -d /usr/local/src/vim ]; then
     sudo git clone https://github.com/vim/vim /usr/local/src/vim
   fi
-  pushd "/usr/local/src/vim" > /dev/null
+  pushd "/usr/local/src/vim" > /dev/null || exit 1
   trap "popd > /dev/null" EXIT
   if [ -d .git ]; then
-    sudo git checkout v8.1.1198
+    sudo git checkout "v${COMPILE_VERSION}"
     sudo rm -rf .git
   fi
   sudo make
-  sudo make install
+  sudo make "install"
 }
 
 main "$@"

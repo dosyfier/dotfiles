@@ -26,9 +26,9 @@ source_ordered_scripts() {
 # --- Script core
 
 # First, evaluate any global scripts packaged with OS distribution
-dist_sourced_scripts="/etc/bashrc /etc/bash.bashrc /etc/bash_completion"
-for source in $dist_sourced_scripts; do
-  { [ -f "$source" ] || [ -L "$source" ]; } && source "$source"
+_dotbashcfg_dist_sourced_scripts="/etc/bashrc /etc/bash.bashrc /etc/bash_completion"
+for script in $_dotbashcfg_dist_sourced_scripts; do
+  { [ -f "$script" ] || [ -L "$script" ]; } && source "$script"
 done
 
 # Then, evaluate dotbashconfig project's configuration script

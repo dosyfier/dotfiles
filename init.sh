@@ -17,7 +17,7 @@ source "$DOTBASH_CFG_DIR/internal/init-utils.sh"
 
 # Run the provided command & arguments into do.bashconfig project's directory
 run_in_project() {
-  pushd "$DOTBASH_CFG_DIR" > /dev/null
+  pushd "$DOTBASH_CFG_DIR" > /dev/null || exit 1
   trap "popd > /dev/null" EXIT
   # shellcheck disable=SC2068
   # Array expansion is intended this way
@@ -91,7 +91,7 @@ acknowledge_opts() {
   nb_exclusive_opts="$(echo "${DOTBASHCFG_VALUES[with_features]}" \
     "${DOTBASHCFG_VALUES[all_features]}" \
     "${DOTBASHCFG_VALUES[skip_install]}" | wc -w)"
-  if [ $nb_exclusive_opts -gt 1 ]; then
+  if [ "$nb_exclusive_opts" -gt 1 ]; then
     usage_error "Only one of the following options can be specified at once:" \
       "¤ ${DOTBASHCFG_SHORT_OPTS[all_features]}|${DOTBASHCFG_LONG_OPTS[all_features]}" \
       "¤ ${DOTBASHCFG_SHORT_OPTS[skip_install]}|${DOTBASHCFG_LONG_OPTS[skip_install]}" \
@@ -100,7 +100,7 @@ acknowledge_opts() {
 
   if [ -n "${DOTBASHCFG_VALUES[with_features]}" ]; then
     for feature in $(echo "${DOTBASHCFG_VALUES[with_features]}" | sed 's/,/ /g'); do
-      if [ -f $feature/feature_mgr.sh ]; then
+      if [ -f "$feature"/feature_mgr.sh ]; then
 	declare -g "RUN_${feature^^}_FEATURE=true"
       else
 	usage_error "Requested feature '$feature' does not exist" \
