@@ -54,3 +54,9 @@ elif [ -d ~/.bash_aliases ]; then
   for script in ~/.bash_aliases/*; do source "$script"; done
 fi
 
+# In the same way, allow users to define supplementary bash completions
+_dotbashcfg_local_completion_dir="$HOME/.local/share/bash-completion/completions"
+if [ -d "$_dotbashcfg_local_completion_dir" ]; then
+  for script in "$_dotbashcfg_local_completion_dir"/*; do source "$script"; done
+fi
+
