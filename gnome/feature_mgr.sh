@@ -20,6 +20,11 @@ _configure_gnome() {
   profile=${profile:1:-1} # remove leading and trailing single quotes
   gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" use-theme-colors false
 
+  # Prevent screen locking (useful for vagrant)
+  if id vagrant &>/dev/null; then
+    gsettings set org.gnome.desktop.lockdown disable-lock-screen 'true'
+  fi
+
   # Necessary for desktop shortcuts to work
   echo "Configuring desktop settings..."
   dconf write /org/gnome/nautilus/preferences/executable-text-activation "'launch'"
