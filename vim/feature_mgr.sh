@@ -3,7 +3,7 @@
 # shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"
 
-COMPILE_VERSION=8.1.1198
+COMPILE_VERSION=8.2.1712
 
 get_dependencies() {
   if ! command -v git > /dev/null; then
@@ -29,6 +29,8 @@ install_wsl() {
 _compile() {
   if [ ! -d /usr/local/src/vim ]; then
     sudo git clone https://github.com/vim/vim /usr/local/src/vim
+  else
+    sudo git fetch origin -p
   fi
   pushd "/usr/local/src/vim" > /dev/null || exit 1
   trap "popd > /dev/null" EXIT
