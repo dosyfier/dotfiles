@@ -6,7 +6,8 @@
 # installation script.
 
 
-DOTBASH_CFG_INTERNAL_ROOT="$(dirname "${BASH_SOURCE[0]}")"
+DOTBASH_CFG_ROOT="$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
+DOTBASH_CFG_INTERNAL_ROOT="$DOTBASH_CFG_ROOT/internal"
 DOTBASH_CFG_FEATURE=$(basename "$(readlink -f "$(dirname "$0")")")
 
 usage() {

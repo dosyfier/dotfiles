@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# If a bash prompt is defined by a theme external to dotbashconfig (e.g. Bash-It's Powerline),
+# then this alias script is ignored
+if [ "$EXTERNAL_PROMPT_ENABLED" = true ]; then
+  return
+fi
+
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
   debian_chroot=$(cat /etc/debian_chroot)
