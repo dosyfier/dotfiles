@@ -42,6 +42,10 @@ create_drive_links() {
   done
 }
 
+version_lte() {
+  [  "$1" = "$(echo -e "$1\n$2" | sort -V | head -n1)" ]
+}
+
 case $(get_distro_type) in
   mingw64)
     win_os=true

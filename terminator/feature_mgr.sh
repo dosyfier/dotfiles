@@ -17,8 +17,16 @@ install_centos() {
 }
 
 install_wsl() {
+  install_packages terminator dbus-x11 
+
   # N.B. Python pip is required by the terminator-themes plugin
-  install_packages terminator dbus-x11 python-pip
+  if version_lte "$(lsb_release -sr)" '19.99'; then
+    install_packages python-pip
+  else
+    install_packages python3-pip
+    ! [ -e "/usr/bin/pip" ] && sudo ln -s /usr/bin/pip3 /usr/bin/pip
+  fi
+
   sudo systemd-machine-id-setup
   _configure
 
