@@ -85,7 +85,7 @@ acknowledge_opts() {
 
   DOTBASHCFG_WIN_USER=${DOTBASHCFG_VALUES[win_login]:-$DOTBASHCFG_WIN_USER}
   DOTBASHCFG_MAIL=${DOTBASHCFG_VALUES[email]:-$DOTBASHCFG_MAIL}
-  DOTBASHCFG_DATA_DIR=${DOTBASHCFG_VALUES[data_dir]:-$DOTBASHCFG_DATA_DIR}
+  DOTBASHCFG_TOOLS_DIR=${DOTBASHCFG_VALUES[tools_dir]:-$DOTBASHCFG_TOOLS_DIR}
 
   # Check exclusive options: with_features, all_features and skip_install
   nb_exclusive_opts="$(echo "${DOTBASHCFG_VALUES[with_features]}" \
@@ -138,8 +138,8 @@ init() {
   fi
 
   # Create the data and tools directories if they don't exist
-  if ! [ -d "$DOTBASHCFG_DATA_DIR" ] || ! [ -d "$DOTBASHCFG_DATA_DIR/tools" ]; then
-    mkdir -p "$DOTBASHCFG_DATA_DIR/tools"
+  if ! [ -d "$DOTBASHCFG_TOOLS_DIR" ]; then
+    mkdir -p "$DOTBASHCFG_TOOLS_DIR"
   fi
 
   # Create a .dotbashcfg file holding defined DOTBASH_* variables
@@ -147,8 +147,7 @@ init() {
   cat > "$DOTBASH_CFG_FILE" <<-EOC
 #!/bin/bash
 export DOTBASHCFG_WIN_USER="$DOTBASHCFG_WIN_USER"
-export DOTBASHCFG_DATA_DIR="$DOTBASHCFG_DATA_DIR"
-export DOTBASHCFG_TOOLS_DIR="$DOTBASHCFG_DATA_DIR/tools"
+export DOTBASHCFG_TOOLS_DIR="$DOTBASHCFG_TOOLS_DIR"
 export DOTBASHCFG_MAIL="$DOTBASHCFG_MAIL"
 EOC
 
@@ -263,7 +262,7 @@ if [ -f "$DOTBASH_CFG_FILE" ]; then
   source "$DOTBASH_CFG_FILE"
 else
   DOTBASHCFG_WIN_USER=$USER
-  DOTBASHCFG_DATA_DIR=~
+  DOTBASHCFG_TOOLS_DIR=~/tools
 fi
 
 # Parse program options

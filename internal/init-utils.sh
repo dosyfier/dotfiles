@@ -1,6 +1,8 @@
 #!/bin/bash
 
 if [ -z "$DOTBASH_CFG_DIR" ]; then DOTBASH_CFG_DIR=$HOME/.bash; fi
+
+# shellcheck source=aliases/colors.sh
 source "$DOTBASH_CFG_DIR/internal/aliases/colors.sh"
 
 available_features() {
@@ -28,12 +30,11 @@ DOTBASHCFG_ARG_NAMES[email]="<mail-address>"
 DOTBASHCFG_DESCS[email]="Mail address to consider for the current "\
 "user (used e.g. to configure Git)."
 
-DOTBASHCFG_SHORT_OPTS[data_dir]="-d"
-DOTBASHCFG_LONG_OPTS[data_dir]="--data"
-DOTBASHCFG_ARG_NAMES[data_dir]="<data-dir>"
-DOTBASHCFG_DESCS[data_dir]="Optional path indicating the root of "\
-"a directory holding any development project, 3rd party tool installation, IDE "\
-"installation, etc. (used e.g. on Windows to find Cygwin installation path)."
+DOTBASHCFG_SHORT_OPTS[tools_dir]="-t"
+DOTBASHCFG_LONG_OPTS[tools_dir]="--tools"
+DOTBASHCFG_ARG_NAMES[tools_dir]="<tools-dir>"
+DOTBASHCFG_DESCS[tools_dir]="Path where any 3rd party tool required "\
+"by Dotbashconfig will be installed."
 
 DOTBASHCFG_SHORT_OPTS[with_features]="-f"
 DOTBASHCFG_LONG_OPTS[with_features]="--with-features"
