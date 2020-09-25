@@ -6,7 +6,7 @@ FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 source "$(dirname "$0")/../internal/install-base.sh"
 
 get_dependencies() {
-  if [ $(get_distro_type) == 'wsl' ]; then
+  if [ "$(get_distro_type)" == 'wsl' ]; then
     echo vcxsrv
   fi
 }
@@ -44,8 +44,13 @@ install_wsl() {
   terminator_quick_launch_dir="$DOTBASHCFG_TOOLS_DIR"/terminator/quick_launch
   echo "Installing terminator launch configuration under $terminator_quick_launch_dir..."
   mkdir -p "$terminator_quick_launch_dir"
-  rm -rf "$terminator_quick_launch_dir"/*
+  rm -rf "${terminator_quick_launch_dir:?}"/*
   cp -r "$FEATURE_ROOT"/{icons,vbs} "$terminator_quick_launch_dir"
+
+  # Apparently, older Windows versions require dollar escaping for Terminator VBS start script to work...
+  if [ "$(get_win_build_nb)" -lt 19041 ]; then
+    sed -i 's/\$/\\$/g' "$terminator_quick_launch_dir/vbs/start_terminator.vbs"
+  fi
 
   # Windows shortcut
   pushd "$terminator_quick_launch_dir/vbs" > /dev/null
