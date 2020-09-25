@@ -23,7 +23,7 @@ _install_or_update_git_repo() {
   if [ -e "$git_repo_dir" ]; then
     git_stash_n_pull "$git_repo_dir" pull
   else
-    sudo git clone "$git_repo_url" 
+    sudo git clone "$git_repo_url" "$git_repo_dir"
     sudo chown -R "$USER" "$git_repo_dir"
   fi
 }
