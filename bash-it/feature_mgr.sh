@@ -7,7 +7,7 @@ get_dependencies() {
   echo git
 }
 
-install() {
+install_common() {
   # shellcheck source=../git/aliases/git.sh
   source "$DOTBASH_CFG_ROOT/git/aliases/git.sh"
 

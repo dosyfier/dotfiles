@@ -42,21 +42,30 @@ get_dependencies() {
 install() {
   distro=$(get_distro_type)
   if type "install_${distro}" 1>/dev/null 2>&1; then
-    if [ -f "$DOTBASH_CFG_INTERNAL_ROOT/providers/${distro}.sh" ]; then
-      source "$DOTBASH_CFG_INTERNAL_ROOT/providers/${distro}.sh"
-    fi
-    "install_${distro}"
-    if [ $? -eq 0 ]; then
-      echo "Feature $DOTBASH_CFG_FEATURE successfully installed."
-    else
-      echo "Feature $DOTBASH_CFG_FEATURE could not be installed (see above)."
-      return 2
-    fi
+    run_install "install_${distro}" "$distro"
+  elif type "install_common" 1>/dev/null 2>&1; then
+    run_install "install_common" "$distro"
   elif [ -n "$distro" ]; then
     echo "Nothing to install for this distro for the $DOTBASH_CFG_FEATURE feature."
   else
     echo "Unknown distro, cannot install packages for the $DOTBASH_CFG_FEATURE feature..." >&2
     return 1
+  fi
+}
+
+run_install() {
+  install_function="$1"
+  distro="$2"
+
+  if [ -f "$DOTBASH_CFG_INTERNAL_ROOT/providers/${distro}.sh" ]; then
+    source "$DOTBASH_CFG_INTERNAL_ROOT/providers/${distro}.sh"
+  fi
+  "${install_function}"
+  if [ $? -eq 0 ]; then
+    echo "Feature $DOTBASH_CFG_FEATURE successfully installed."
+  else
+    echo "Feature $DOTBASH_CFG_FEATURE could not be installed (see above)."
+    return 2
   fi
 }
 
