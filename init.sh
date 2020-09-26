@@ -205,6 +205,8 @@ install_features() {
       for feature in "${features_in_error[@]}"; do echo "- $feature"; done
       return 2
     fi
+  else
+    return 2
   fi
 }
 
