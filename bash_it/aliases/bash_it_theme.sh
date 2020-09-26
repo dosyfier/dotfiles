@@ -17,6 +17,16 @@ _command_exists() {
   type "$1" &> /dev/null;
 }
 
+POWERLINE_PROMPT="
+  hostname
+  clock
+  user_info
+  scm
+  ruby
+  cwd
+"
+CLOCK_THEME_PROMPT_COLOR=${POWERLINE_CLOCK_COLOR:=36}
+
 source "$BASH_IT/themes/base.theme.bash"
 source "$BASH_IT/themes/colors.theme.bash"
 source "$BASH_IT/themes/githelpers.theme.bash"
