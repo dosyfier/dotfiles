@@ -4,7 +4,9 @@
 source "$(dirname "$0")/../internal/install-base.sh"
 
 get_dependencies() {
-  echo git
+  if ! command -v git &> /dev/null; then
+    echo git
+  fi
 }
 
 install_common() {
