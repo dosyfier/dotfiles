@@ -1,7 +1,11 @@
 #!/bin/bash
 
-EXTERNAL_PROMPT_ENABLED=true
 BASH_IT=/opt/bash-it
+if ! [ -d "$BASH_IT" ]; then
+  return
+fi
+
+EXTERNAL_PROMPT_ENABLED=true
 
 if [ -d /opt/gitstatus ]; then
   SCM_GIT_USE_GITSTATUS=true
