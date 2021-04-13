@@ -32,9 +32,6 @@ source "$BASH_IT/themes/colors.theme.bash"
 source "$BASH_IT/themes/githelpers.theme.bash"
 source "$BASH_IT/themes/powerline/powerline.theme.bash"
 
-# Restrict Bash directory prompt to only the last 4 directory names
-PROMPT_DIRTRIM=4
-
 function __powerline_cwd_prompt {
   echo "\\w|${CWD_THEME_PROMPT_COLOR}"
 }

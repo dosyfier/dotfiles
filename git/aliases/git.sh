@@ -53,6 +53,13 @@ git_prompt_command() {
   fi
   DOTBASHCFG_LAST_PWD="$new_pwd"
 }
+
+# If a bash prompt is defined by a theme external to dotbashconfig (e.g. Bash-It's Powerline),
+# then this alias script is ignored
+if [ "$EXTERNAL_PROMPT_ENABLED" = true ]; then
+  return
+fi
+
 # Using this function forces to reset the DOTBASHCFG_LAST_PWD var
 # before each time git gets called. Otherwise, when switching branch
 # without changing cwd (which happens quite often), git prompt would
