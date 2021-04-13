@@ -78,6 +78,7 @@ if [ "$win_os" = true ]; then
   WIN_HOSTS="/c/Windows/System32/drivers/etc/hosts"
   WIN_HOME="/c/Users/$DOTBASHCFG_WIN_USER"
   WIN_DOWNLOADS="$WIN_HOME/Downloads"
+  WIN_DESKTOP="$WIN_HOME/Desktop"
   OFFICE_ROOT="/c/Program Files (x86)/Microsoft Office/Office15"
 
   alias excel='"$OFFICE_ROOT/EXCEL.EXE"'
