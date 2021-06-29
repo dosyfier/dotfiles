@@ -22,9 +22,14 @@ dotbashcfg_choco_inst() {
   fi
 
   type="${1:-$DOTBASHCFG_CHOCO_CONFIG_DEFAULT}"
-  choco install "$(wslpath -w "$DOTBASHCFG_CHOCO_CONFIG_DIR\\packages-${type}.config")"
+  choco install "$(wslpath -w "$DOTBASHCFG_CHOCO_CONFIG_DIR/packages-${type}.config")"
 }
 
 dotbashcfg_choco_up() {
+  if [ $# -eq 1 ] && [[ "$1" =~ ^(-h|--help|-?)$ ]]; then
+    echo "Upgrades all Chocolatey packages installed (lit.: choco upgrade all)"
+    printf "\n"
+    return
+  fi
   choco upgrade all
 }

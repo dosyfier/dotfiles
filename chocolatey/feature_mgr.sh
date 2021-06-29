@@ -10,28 +10,24 @@ install_wsl() {
     # Official install command
     powershell.exe -NoProfile -InputFormat None -ExecutionPolicy Bypass \
       -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
-
-    # Make choco .exe commands available in $PATH
-    choco_bin_dir=/mnt/c/ProgramData/chocolatey/bin
-    PATH="$PATH:$choco_bin_dir"
-
-    # Create aliases for each Chocolatey program beginning with a 'c'
-    # (choco, cinst, clist, ...)
-    # and make them available in PATH and as sudo
-    for choco_bin in "$choco_bin_dir"/c*; do
-      choco_name=$(basename "$choco_bin")
-      choco_link="/usr/local/sbin/${choco_name/.exe/}"
-      if [ ! -e "$choco_link" ]; then
-	ln -s "$choco_bin" "$choco_link"
-      fi
-    done
-
-    # shellcheck source=aliases/chocolatey.sh
-    source "$FEATURE_ROOT/aliases/chocolatey.sh"
-
-  else
-    choco upgrade chocolatey
   fi
+
+  # Create aliases for each Chocolatey program beginning with a 'c'
+  # (choco, cinst, clist, ...)
+  # and make them available in PATH and as sudo
+  choco_bin_dir=/mnt/c/ProgramData/chocolatey/bin
+  for choco_bin in "$choco_bin_dir"/c*; do
+    choco_name=$(basename "$choco_bin")
+    choco_link="/usr/local/sbin/${choco_name/.exe/}"
+    if [ ! -e "$choco_link" ]; then
+      sudo ln -vs "$choco_bin" "$choco_link"
+    fi
+  done
+
+  choco upgrade chocolatey
+
+  # shellcheck source=aliases/chocolatey.sh
+  source "$FEATURE_ROOT/aliases/chocolatey.sh"
 }
 
 main "$@"
