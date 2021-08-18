@@ -60,7 +60,11 @@ case $(get_distro_type) in
   wsl)
     win_os=true
     drive_mount_root=/mnt
-    if [ "$(grep -oE 'gcc version ([0-9]+)' /proc/version | awk '{print $3}')" -gt 5 ]; then
+    kernel_release_major="$(grep -Po '^[0-9]+' <(uname -r))"
+    kernel_release_minor="$(grep -Po '^[0-9]+\.\K[0-9]+' <(uname -r))"
+    if [ $((kernel_release_major*1000 + kernel_release_minor)) -ge 4019 ]; then
+      # WSL 2 shows a Linux kernel with version higher than 4.19
+      # Source: https://devblogs.microsoft.com/commandline/shipping-a-linux-kernel-with-windows/
       WSL_VERSION="2" 
       HYPERV_ADAPTER_IP="$(grep nameserver /etc/resolv.conf | awk '{print $2; exit;}')"
       LINUX_IP="$(ifconfig | grep -Pzo 'eth0: [^\n]+\n\s*inet \K([\.0-9]+)' | sed 's/\x0//g')"
@@ -102,5 +106,8 @@ if [ "$win_os" = true ]; then
   get_win_build_nb() {
     reg_query 'HKLM/SOFTWARE/Microsoft/Windows NT/CurrentVersion/' CurrentBuildNumber
   }
+
+  # Export environment variables required to launch Terminator via a VBS script
+  export WIN_HOME DISPLAY
 fi
 
