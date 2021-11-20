@@ -1,7 +1,8 @@
 #!/bin/bash
 
 BASH_IT=/opt/bash-it
-if ! [ -d "$BASH_IT" ]; then
+if { ! [ -d "$BASH_IT" ]; } || \
+  { [ -n "$ENABLE_FEATURES" ] && ! [[ " ${ENABLE_FEATURES[*]} " =~ " bash_it " ]]; }; then
   return
 fi
 
@@ -10,7 +11,7 @@ EXTERNAL_PROMPT_ENABLED=true
 if [ -d /opt/gitstatus ]; then
   SCM_GIT_USE_GITSTATUS=true
   source /opt/gitstatus/gitstatus.plugin.sh
-  gitstatus_start
+  gitstatus_stop && gitstatus_start
 fi
 
 _command_exists() {
