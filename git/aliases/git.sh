@@ -19,11 +19,11 @@ git_fetch_remotes() {
 # Pull remote commits by stashing potential local unstaged modifications.
 git_stash_n_pull() {
   repo_dir="$1"
-  if [ -n "$repo_dir" ]; then opts="-C $repo_dir"; else opts=''; fi
-  if git $opts diff --exit-code > /dev/null; then
-    git $opts pull
+  if [ -n "$repo_dir" ]; then opts=(-C "$repo_dir"); else opts=(); fi
+  if git "${opts[@]}" diff --exit-code > /dev/null; then
+    git "${opts[@]}" pull
   else
-    git $opts stash && git $opts pull && git $opts stash pop
+    git "${opts[@]}" stash && git "${opts[@]}" pull && git "${opts[@]}" stash pop
   fi
 }
 

@@ -42,8 +42,8 @@ fi
 # source other scripts in the appropriated order
 source_ordered_scripts $(xargs -I % echo "$HOME/.bash/internal/aliases/%.sh" < ~/.bash/internal/order/earliest-scripts.txt)
 source_ordered_scripts $(find ~/.bash/internal/aliases/ -name '*.sh' | grep -vFf ~/.bash/internal/order/latest-scripts.txt)
-source_ordered_scripts $(find ~/.bash/**/aliases/ -name '*.sh' | grep -v internal/)
-source_ordered_scripts $(find ~/.bash/ -type d -name completions -exec find {} -type f -name "*.sh" \;)
+source_ordered_scripts $(find ~/.bash/**/aliases/ -name '*.sh' -not -path '*/internal/*')
+source_ordered_scripts $(find ~/.bash/ -type f -path '*/completions/*' -name "*.sh")
 source_ordered_scripts $(xargs -I % echo "$HOME/.bash/internal/aliases/%.sh" < ~/.bash/internal/order/latest-scripts.txt)
 
 # Allow users to define supplementary aliases within ~/.bash_aliases (file or directory)
@@ -57,6 +57,7 @@ fi
 # In the same way, allow users to define supplementary bash completions
 _dotbashcfg_local_completion_dir="$HOME/.local/share/bash-completion/completions"
 if [ -d "$_dotbashcfg_local_completion_dir" ]; then
+  # N.B. Doing this way since the "source" built-in function can't be called via a "find ... -exec ..." construct
   for script in "$_dotbashcfg_local_completion_dir"/*; do source "$script"; done
 fi
 

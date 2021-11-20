@@ -19,7 +19,7 @@ unbak() {
     echo "Deletes a backup <file> to restore the original one"
   else
     [[ "$1" =~ $BACKUP_SUFFIX$ ]] && bak_file=$1 || bak_file=$1$BACKUP_SUFFIX
-    main_file=$(echo "$bak_file" | sed "s:$BACKUP_SUFFIX\$::")
+    main_file="${bak_file%$BACKUP_SUFFIX}"
     if ! [ -f "$bak_file" ]; then
       echo "Backup file $bak_file doesn't exist. Nothing to do."
     elif [ -f "$main_file" ]; then
@@ -35,5 +35,4 @@ unbak() {
     fi
   fi
 }
-
 
