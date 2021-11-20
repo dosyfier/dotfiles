@@ -5,14 +5,16 @@
 
 source ~/.dotbashcfg
 
+# Read /proc/version, once and for all (due to performance issues on WSL 1)
+PROC_VERSION=$(cat /proc/version)
+
 get_distro_type() {
   if [ -f /etc/centos-release ]; then
     echo "centos"
   elif [ -f /etc/redhat-release ]; then
     echo "redhat"
   else
-    proc_name=$(awk '{ print $1 }' < /proc/version)
-    case $proc_name in
+    case "$PROC_VERSION" in
       MINGW*)
         echo "mingw"
         ;;
@@ -20,15 +22,15 @@ get_distro_type() {
         echo "cygwin"
         ;;
       Linux*)
-        if grep -qi Microsoft /proc/version; then
+        if [[ "$PROC_VERSION" =~ [Mm]icrosoft ]]; then
           echo "wsl"
         else
-          echo "Unknown distro... /proc/version says: $proc_name" >&2
+          echo "Unknown distro... /proc/version says: $PROC_VERSION" >&2
           return 1
         fi
         ;;
       *)
-        echo "Unknown distro... /proc/version says: $proc_name" >&2
+        echo "Unknown distro... /proc/version says: $PROC_VERSION" >&2
         return 1
         ;;
     esac
@@ -46,6 +48,9 @@ version_lte() {
   [  "$1" = "$(echo -e "$1\n$2" | sort -V | head -n1)" ]
 }
 
+# N.B. Env variables used by Windows shortcut to launch Terminator need to be exported,
+# hence some "export XX=YY" commands
+
 case $(get_distro_type) in
   mingw64)
     win_os=true
@@ -60,18 +65,16 @@ case $(get_distro_type) in
   wsl)
     win_os=true
     drive_mount_root=/mnt
-    kernel_release_major="$(grep -Po '^[0-9]+' <(uname -r))"
-    kernel_release_minor="$(grep -Po '^[0-9]+\.\K[0-9]+' <(uname -r))"
-    if [ $((kernel_release_major*1000 + kernel_release_minor)) -ge 4019 ]; then
-      # WSL 2 shows a Linux kernel with version higher than 4.19
-      # Source: https://devblogs.microsoft.com/commandline/shipping-a-linux-kernel-with-windows/
+    # We differentiate WSL2 from WSL1 via gcc version used (gcc v5.x for WSL1 vs. gcc v8 or higher for WSL2)
+    # See: https://github.com/microsoft/WSL/issues/4555
+    if [ "$(grep -oE 'gcc version ([0-9]+)' <<< "$PROC_VERSION" | awk '{print $3}')" -gt 5 ]; then
       WSL_VERSION="2" 
-      HYPERV_ADAPTER_IP="$(grep nameserver /etc/resolv.conf | awk '{print $2; exit;}')"
+      HYPERV_ADAPTER_IP="$(ip route | awk '/^default/{print $3; exit}')"
       LINUX_IP="$(ifconfig | grep -Pzo 'eth0: [^\n]+\n\s*inet \K([\.0-9]+)' | sed 's/\x0//g')"
-      DISPLAY="$HYPERV_ADAPTER_IP:0"
+      export DISPLAY="$HYPERV_ADAPTER_IP:0"
     else
       WSL_VERSION="1"
-      DISPLAY="127.0.0.1:0"
+      export DISPLAY="127.0.0.1:0"
     fi
     ;;
   *)
@@ -80,16 +83,43 @@ esac
 
 if [ "$win_os" = true ]; then
   WIN_HOSTS="/c/Windows/System32/drivers/etc/hosts"
-  WIN_HOME="/c/Users/$DOTBASHCFG_WIN_USER"
+  export WIN_HOME="/c/Users/$DOTBASHCFG_WIN_USER"
   WIN_DOWNLOADS="$WIN_HOME/Downloads"
   WIN_DESKTOP="$WIN_HOME/Desktop"
   OFFICE_ROOT="/c/Program Files (x86)/Microsoft Office/Office15"
 
-  alias excel='"$OFFICE_ROOT/EXCEL.EXE"'
-  alias onenote='"$OFFICE_ROOT/ONENOTE.EXE"'
-  alias outlook='"$OFFICE_ROOT/OUTLOOK.EXE"'
-  alias powerpoint='"$OFFICE_ROOT/POWERPNT.EXE"'
-  alias winword='"$OFFICE_ROOT/WINWORD.EXE"'
+  explorer() {
+    # 2>/dev/null on "tr" command to avoid warnings about trailing '\' that
+    # may break path portability
+    explorer.exe "$(wslpath -m "$(readlink -f "$1")" | tr '/' '\' 2>/dev/null)"
+  }
+
+  msoffice() {
+    prog="$1"
+    file="$2"
+    
+    case "$prog" in
+      excel)
+        msbinary="$OFFICE_ROOT/EXCEL.EXE";;
+      onenote)
+        msbinary="$OFFICE_ROOT/ONENOTE.EXE";;
+      outlook)
+        msbinary="$OFFICE_ROOT/OUTLOOK.EXE";;
+      powerpoint)
+        msbinary="$OFFICE_ROOT/POWERPNT.EXE";;
+      word)
+        msbinary="$OFFICE_ROOT/WINWORD.EXE";;
+      *)
+        echo "Unknown MS Office program $prog" >&2
+        return 1;;
+    esac
+
+    if [ -n "$file" ]; then
+      "$msbinary" /t "$file" &
+    else
+      "$msbinary" &
+    fi
+  }
 
   reg_query() {
     if [ -z "$2" ]; then 
@@ -106,8 +136,5 @@ if [ "$win_os" = true ]; then
   get_win_build_nb() {
     reg_query 'HKLM/SOFTWARE/Microsoft/Windows NT/CurrentVersion/' CurrentBuildNumber
   }
-
-  # Export environment variables required to launch Terminator via a VBS script
-  export WIN_HOME DISPLAY
 fi
 
