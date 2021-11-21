@@ -215,15 +215,14 @@ install_features() {
 # $1 - The feature to check
 check_feature() {
   feature="$1"
+  is_a_default_feature=$(run_in_project "$feature/feature_mgr.sh" by-default; echo $?)
   if [ "$RUN_ALL_FEATURES" = true ]; then
-    return 0
+    return "$is_a_default_feature"
   elif [ "$AUTO_DOTBASH_CFG" = true ]; then
     run_feature_var_name=RUN_${feature^^}_FEATURE
     [ "${!run_feature_var_name}" = true ]
-    return $?
   else
-    ok_to "Install $feature feature?"
-    return $?
+    [ "$is_a_default_feature" -eq 0 ] && ok_to "Install $feature feature?"
   fi
 }
 

@@ -19,7 +19,9 @@ usage() {
   * -h|-?|--help    Displays this message.
 
   Possible actions are:
-  * get_dependencies	Displays the list of features this feature depends on.
+  * get-dependencies	Displays the list of features this feature depends on.
+  * by-default		Indicates (by its exit code) whether the feature shall be installed or not by
+			default on the current machine (depending on its config, OS version, etc.)
   * install		Installs this feature.
 
 EOF
@@ -36,6 +38,10 @@ _init_env() {
 }
 
 get_dependencies() {
+  return 0
+}
+
+shall_be_installed_by_default() {
   return 0
 }
 
@@ -93,6 +99,9 @@ main() {
   elif [ "$1" = "get-dependencies" ]; then
     _init_env
     get_dependencies
+  elif [ "$1" = "by-default" ]; then
+    _init_env
+    shall_be_installed_by_default
   else
     usage; exit 1
   fi

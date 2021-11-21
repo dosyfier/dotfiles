@@ -1,7 +1,8 @@
 #!/bin/bash
 # shellcheck disable=SC2034
 # SC2034: This script is meant to be sourced through .bashrc. Thus, there is no
-#   need to export any global variable.
+#   need to export any global variable (except for Terminator Windows shortcut,
+#   as explained below).
 
 source ~/.dotbashcfg
 
@@ -67,11 +68,13 @@ case $(get_distro_type) in
     drive_mount_root=/mnt
     # We differentiate WSL2 from WSL1 via gcc version used (gcc v5.x for WSL1 vs. gcc v8 or higher for WSL2)
     # See: https://github.com/microsoft/WSL/issues/4555
-    if [ "$(grep -oE 'gcc version ([0-9]+)' <<< "$PROC_VERSION" | awk '{print $3}')" -gt 5 ]; then
+    if [ "$(grep -oE 'gcc (version|\(GCC\)) ([0-9]+)' <<< "$PROC_VERSION" | awk '{print $3}')" -gt 5 ]; then
       WSL_VERSION="2" 
-      HYPERV_ADAPTER_IP="$(ip route | awk '/^default/{print $3; exit}')"
-      LINUX_IP="$(ifconfig | grep -Pzo 'eth0: [^\n]+\n\s*inet \K([\.0-9]+)' | sed 's/\x0//g')"
-      export DISPLAY="$HYPERV_ADAPTER_IP:0"
+      if ! [ -v DISPLAY ]; then
+        HYPERV_ADAPTER_IP="$(ip route | awk '/^default/{print $3; exit}')"
+        LINUX_IP="$(ifconfig | grep -Pzo 'eth0: [^\n]+\n\s*inet \K([\.0-9]+)' | sed 's/\x0//g')"
+        export DISPLAY="$HYPERV_ADAPTER_IP:0"
+      fi
     else
       WSL_VERSION="1"
       export DISPLAY="127.0.0.1:0"
@@ -136,5 +139,10 @@ if [ "$win_os" = true ]; then
   get_win_build_nb() {
     reg_query 'HKLM/SOFTWARE/Microsoft/Windows NT/CurrentVersion/' CurrentBuildNumber
   }
+
+  is_wslg_active() {
+    ! { [ -d /mnt/wslg ] && [ -v DISPLAY ] && [ -v WAYLAND_DISPLAY ] && [ -v PULSE_SERVER ] ; }
+  }
+
 fi
 

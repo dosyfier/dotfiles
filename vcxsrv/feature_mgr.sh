@@ -4,6 +4,11 @@
 FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 source "$(dirname "$0")/../internal/install-base.sh"
 
+shall_be_installed_by_default() {
+  # No need to install an additional X-server when WSLg is activated
+  is_wslg_active
+}
+
 install_wsl() {
   vcxsrv_install_dir='/c/Program Files/VcXsrv'
 
