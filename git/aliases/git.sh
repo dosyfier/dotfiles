@@ -74,6 +74,8 @@ git_erase_from_history() {
 }
 
 # List most sizeable files within the current git repository
+# shellcheck disable=SC2046,SC2089,SC2090
+#   No need to use arrays to handle quoting, since *_cmd variables are passed to the "eval" command
 git_ls_big_files() {
   for arg in "$@"; do
     if [[ "$arg" =~ ^--min-size= ]]; then

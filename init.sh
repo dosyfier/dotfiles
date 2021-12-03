@@ -99,7 +99,7 @@ acknowledge_opts() {
   fi
 
   if [ -n "${DOTBASHCFG_VALUES[with_features]}" ]; then
-    for feature in $(echo "${DOTBASHCFG_VALUES[with_features]}" | sed 's/,/ /g'); do
+    for feature in ${DOTBASHCFG_VALUES[with_features]//,/ }; do
       if [ -f "$feature"/feature_mgr.sh ]; then
 	declare -g "RUN_${feature^^}_FEATURE=true"
       else
@@ -200,7 +200,7 @@ install_features() {
       install_feature "$feature"
       [ $? -ne 0 ] && features_in_error+=("$feature")
     done
-    if [ -n "$features_in_error" ]; then
+    if [ -n "${features_in_error[0]}" ]; then
       printf "\nWARN: Some features could not be installed (see logs above):\n"
       for feature in "${features_in_error[@]}"; do echo "- $feature"; done
       return 2

@@ -20,11 +20,13 @@ install_wsl() {
     if ! [ -f "$installer_temp_loc" ]; then
       curl -L https://sourceforge.net/projects/vcxsrv/files/latest/download -o "$installer_temp_loc"
     fi
+    # shellcheck disable=2064
+    #   Expanding now rather than when signalled is intended
     trap "rm -f $installer_temp_loc" EXIT
     pushd "$(dirname "$installer_temp_loc")" > /dev/null
     trap 'popd > /dev/null' EXIT
     echo "Running VcXsrv installer ($installer_temp_loc)..."
-    ./$(basename "$installer_temp_loc") /S
+    ./"$(basename "$installer_temp_loc")" /S
   fi
 
   # Setting configuration and auto launch

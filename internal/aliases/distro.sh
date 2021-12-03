@@ -94,6 +94,8 @@ if [ "$win_os" = true ]; then
   explorer() {
     # 2>/dev/null on "tr" command to avoid warnings about trailing '\' that
     # may break path portability
+    # shellcheck disable=SC1003
+    #   We are not trying to escape a ' quote, we just want to replace / by \
     explorer.exe "$(wslpath -m "$(readlink -f "$1")" | tr '/' '\' 2>/dev/null)"
   }
 

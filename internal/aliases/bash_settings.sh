@@ -24,8 +24,8 @@ if command -v dircolors > /dev/null; then
     eval "$(dircolors -b)"
   fi
   alias ls='ls --color=auto'
-  #alias dir='dir --color=auto'
-  #alias vdir='vdir --color=auto'
+  alias dir='dir --color=auto'
+  alias vdir='vdir --color=auto'
 
   alias grep='grep --color=auto'
   alias fgrep='fgrep --color=auto'
