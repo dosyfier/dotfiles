@@ -1,0 +1,83 @@
+# All SpaceVim option below [option] section
+[options]
+
+# Disable guicolors in basic mode, many terminal do not support 24bit
+# true colors
+enable_guicolors = true
+colorscheme = "bubblegum"
+
+# Set the statusline separators of statusline, default is "arrow"
+statusline_separator = "arrow"
+# Set the statusline separators of inactive statusline
+statusline_iseparator = "arrow"
+
+enable_tabline_filetype_icon = true
+
+windows_leader = "²"
+
+filetree_direction = "left"
+
+lint_engine = "ale"
+
+[[layers]]
+name = 'core'
+enable_smooth_scrolling = false
+
+[[layers]]
+name = "core#banner"
+
+[[layers]]
+name = "colorscheme"
+
+[[layers]]
+name = 'autocomplete'
+auto_completion_return_key_behavior = "complete"
+auto_completion_tab_key_behavior = "smart"
+
+[[layers]]
+name = 'shell'
+default_position = 'top'
+default_height = 30
+
+[[layers]]
+name ='gtags'
+
+[[layers]]
+name = "leaderf"
+
+[[layers]]
+name = 'lang#java'
+
+[[layers]]
+name = "lang#toml"
+
+[[layers]]
+name = "lang#plantuml"
+
+[[layers]]
+name = "lang#python"
+enabled_linters = ['pylint']
+
+# [[layers]]
+# name = 'lsp'
+# enabled_clients = ['pyright']
+
+[[layers]]
+name = "lang#dockerfile"
+
+[[custom_plugins]]
+repo = "martinda/Jenkinsfile-vim-syntax"
+merged = false
+
+[[layers]]
+name = "git"
+git_plugin = "fugitive"
+
+[[custom_plugins]]
+repo = "tpope/vim-sleuth"
+merged = false
+
+[[custom_plugins]]
+repo = "robbles/logstash.vim"
+merged = false
+
