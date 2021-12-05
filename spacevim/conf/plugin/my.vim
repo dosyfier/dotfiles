@@ -24,13 +24,6 @@ nnoremap <C-L> :nohl<CR><C-L>
 " '%s' Vim command to substitute it.
 vnoremap <C-r> "hy:%s/<C-r>h/<C-r>h/gc<left><left><left>
 
-" Thanks @alan-thompson
-" Fix the difficult-to-read default setting for diff text highlighting. The
-" bang (!) is required since we are overwriting the DiffText setting. The
-" highlighting for "Todo" also looks nice (yellow) if you don't like the 
-" "MatchParen" colors.
-highlight! link DiffText Todo
-
 " Always wrap long lines for display
 set wrap
 
