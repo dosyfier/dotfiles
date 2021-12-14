@@ -16,20 +16,10 @@ git_fetch_remotes() {
   done
 }
 
-# Pull remote commits by stashing potential local unstaged modifications.
-git_stash_n_pull() {
-  repo_dir="$1"
-  if [ -n "$repo_dir" ]; then opts=(-C "$repo_dir"); else opts=(); fi
-  if git "${opts[@]}" diff --exit-code > /dev/null; then
-    git "${opts[@]}" pull
-  else
-    git "${opts[@]}" stash && git "${opts[@]}" pull && git "${opts[@]}" stash pop
-  fi
-}
-
 # Display git branch state (branch name or tag or commit ID)
 git_branch_state() {
-  # Doing this way since `git` command seems to ignore bash logical operators || or &&...
+  # TODO Doing this way since `git` command seems to ignore bash logical operators || or &&...
+  # Actually, this is due to git command aliasing...
   state=$(git symbolic-ref HEAD --short 2>/dev/null)
   if [ -z "$state" ]; then state=$(git show -s --pretty='%D' 2>/dev/null | grep -Po 'tag: \K[^\s,]+'); fi
   if [ -z "$state" ]; then state=$(git show -s --pretty='%h' 2>/dev/null); fi
@@ -114,7 +104,8 @@ fi
 # before each time git gets called. Otherwise, when switching branch
 # without changing cwd (which happens quite often), git prompt would
 # not be updated...
-alias git="unset DOTBASHCFG_LAST_PWD; git"
+# FIXME This breaks structures like: echo <sthg> | git <sthg>
+# alias git="unset DOTBASHCFG_LAST_PWD; git"
 
 PROMPT_COMMAND="git_prompt_command; $PROMPT_COMMAND"
 

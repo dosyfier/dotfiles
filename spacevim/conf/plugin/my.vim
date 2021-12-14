@@ -36,3 +36,8 @@ let g:spacevim_enable_statusline_bfpath=1
 
 " Default to not read-only in vimdiff
 set noro
+
+" Allow modeline headers to activate declaratively specific vim syntax,
+" regardless of rules defined for vim
+set modeline
+set modelines=5

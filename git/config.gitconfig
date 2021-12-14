@@ -1,4 +1,4 @@
-# vim: syntax=gitconfig:
+# vim: set filetype=gitconfig:
 [user]
 	name = %DOTBASHCFG_USER%
 	email = %DOTBASHCFG_MAIL%
@@ -19,3 +19,42 @@
 	helper = cache
 [mergetool]
 	keepBackup = false
+[alias]
+	co = checkout
+	cob = checkout -b
+	br = branch
+	brd = branch -d
+	brD = branch -D
+	merged = branch --merged
+	st = status
+	aa = add -A .
+	cm = commit -m
+	aac = !git add -A . && git commit
+	aacm = !git add -A . && git commit -m
+	cp = cherry-pick
+	amend = commit --amend -m
+	amendf = commit --amend --no-edit
+	po = push origin
+	pu = !git push origin `git branch --show-current`
+	puf = !git push --force origin `git branch --show-current`
+	pod = push origin develop
+	pom = push origin master
+	poh = push origin HEAD
+	plo = pull origin
+	plod = pull origin develop
+	plom = pull origin master
+	ploh = pull origin HEAD
+	rewind = reset --soft HEAD^${1}
+	unstage = reset HEAD
+	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+	f = "!git ls-files | grep -i"
+	gr = grep -Ii
+	la = "!git config -l | grep alias | cut -c 7-"
+	oldest-ancestor = !zsh -c 'diff --old-line-format='' --new-line-format='' <(git rev-list --first-parent "${1:-develop}") <(git rev-list --first-parent "${2:-HEAD}") | head -1' -
+	branchdiff = '!sh -c "git diff `git oldest-ancestor`.."'
+	branchlog = '!sh -c "git log `git oldest-ancestor`.."'
+	aliases = "!git config --get-regexp '^alias\\.' | sed -r 's/^alias\\.([^[:space:]]+) /\\1\\t= /'"
+	stash-n-pull = "!sh -c 'if git diff --exit-code > /dev/null; then git pull; else git stash && git pull && git stash pop; fi'"
+	rb = rebase
+	rbi = !sh -c 'git rebase -i "${1:-origin/$(git branch --show-current)}"' -
