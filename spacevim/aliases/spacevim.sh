@@ -1,10 +1,18 @@
 #!/bin/bash
 
 _SPACEVIM_USAGE="
-Usage: spacevim <backup|restore|help> [<backup_file>]
+Usage: spacevim <backup|restore|update|help> [<backup_file>]
 
 Helper command that facilitates exporting / reimporting SpaceVim configuration
-from one workstation to another.
+from one workstation to another, as well as updating an existing SpaceVim
+installation.
+"
+
+_SPACEVIM_PATCH_USAGE="
+Usage: spacevim-patch <bundle-url>
+
+Helper command to replace a Vim bundle integrated into SpaceVim by its up-to-date
+version cloned from its source GitHub repository.
 "
 
 spacevim() {
@@ -32,7 +40,7 @@ spacevim() {
     trap "popd $HOME > /dev/null" RETURN
     tar cvzf "$ark" .local/share/fonts .SpaceVim/* .SpaceVim.d/* \
       .cache/vimfiles .cache/SpaceVim/{,conf/}*.json
-    echo "Backup done!"
+    echo "Backup complete!"
 
   elif [ "$1" = restore ]; then
     if [ -z "$2" ]; then
@@ -51,9 +59,38 @@ spacevim() {
     tar xvzf "$ark"
     echo "Restoration complete!"
 
+  elif [ "$1" = update ]; then
+    vim +SPUpdate +qall
+    find "$HOME"/.SpaceVim/bundle -name .git -print0 | \
+      xargs -0 -I% bash -c "echo 'Updating %'; git -C $(dirname %) pull"
+    echo "Update complete!"
+
   else
     echo "Unknown spacevim command $1" >&2
     echo "$_SPACEVIM_USAGE" >&2
     return 1
   fi
 }
+
+spacevim-update-bundle() {
+  if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+    echo "Wrong syntax for spacevim command." >&2
+    echo "$_SPACEVIM_PATCH_USAGE" >&2
+
+  else
+    bundle_url="$1"
+    mapfile -t url_parts < <(echo "$bundle_url" | grep -Po '[^\/]+')
+    bundle_name="${url_parts[-1]/%.git/}"
+
+    if [ -d "$HOME/.SpaceVim/bundle/$bundle_name/.git" ]; then
+      echo "The $bundle_name bundle is already managed under bundle/ as a Git repository."
+      echo "Running an update instead..."
+      git -C "$HOME/.SpaceVim/bundle/$bundle_name" pull
+    else
+      rm -rf "$HOME/.SpaceVim/bundle/$bundle_name"
+      git clone "$bundle_url" "$HOME/.SpaceVim/bundle/$bundle_name"
+    fi
+    echo "Done! Bundle $bundle_name is up-to-date!"
+  fi 
+}
+
