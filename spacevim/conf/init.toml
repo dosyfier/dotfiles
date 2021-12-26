@@ -92,3 +92,10 @@ merged = false
 repo = "robbles/logstash.vim"
 merged = false
 
+[[custom_plugins]]
+repo = "pearofducks/ansible-vim"
+merged = false
+
+[[custom_plugins]]
+repo = "chr4/nginx.vim"
+merged = false
