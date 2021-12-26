@@ -41,3 +41,7 @@ set noro
 " regardless of rules defined for vim
 set modeline
 set modelines=5
+
+" Make searches case-insensitive by default
+set ignorecase
+set smartcase
