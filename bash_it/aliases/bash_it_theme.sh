@@ -18,11 +18,13 @@ _command_exists() {
   type "$1" &> /dev/null;
 }
 
+# For setup details, check https://bash-it.readthedocs.io/en/latest/themes-list/powerline-base/
 POWERLINE_PROMPT="
   hostname
   clock
   user_info
   scm
+  python_venv
   ruby
   cwd
 "
