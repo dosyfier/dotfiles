@@ -21,8 +21,9 @@
 	rebase = true
 [alias]
 	# add
-	a = !sh -c 'git add "${1:-.}"' -
-	aa = !sh -c 'git add -A "${1:-.}"' -
+	a = !sh -c 'git add "${@:-.}"' -
+	aa = !sh -c 'git add -A "${@:-.}"' -
+	au = !sh -c 'git add -u "${@:-.}"' -
 	# branch
 	br = branch
 	bra = branch -a
@@ -39,6 +40,8 @@
 	cm = commit -m
 	aac = !git add -A . && git commit
 	aacm = !git add -A . && git commit -m
+	ac = "!ac() { git add \"$@\" && git commit; }; ac"
+	acm = "!acm() { git add \"${@:1:$#-1}\" && git commit -m \"${@: -1}\"; }; acm"
 	amend = commit --amend
 	amendm = commit --amend -m
 	amendf = commit --amend --no-edit
@@ -46,22 +49,26 @@
 	aliases = "!git config --get-regexp '^alias\\.' | sed -r 's/^alias\\.([^[:space:]]+) /\\1\\t= /'"
 	# diff
 	d = diff
+	dc = diff --cached
 	dt = difftool
+	dtc = difftool --cached
 	oldest-ancestor = !zsh -c 'diff --old-line-format='' --new-line-format='' <(git rev-list --first-parent "${1:-develop}") <(git rev-list --first-parent "${2:-HEAD}") | head -1' -
 	branchdiff = '!sh -c "git diff `git oldest-ancestor`.."'
+        # fetch
+	fp = fetch -p origin
 	# grep
 	gr = grep -Ii
 	# log
-	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
-	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
-	branchlog = '!sh -c "git log `git oldest-ancestor`.."'
+	lg = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+	lgn = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+	log-branch = '!sh -c "git log `git oldest-ancestor`.."'
 	# ls-files
 	f = "!git ls-files | grep -i"
 	# merge
 	m = merge
 	mt = mergetool
 	# pull
-	plo = pull origin
+	pl = pull
 	pld = pull origin develop
 	plm = pull origin master
 	plh = pull origin HEAD
@@ -75,13 +82,22 @@
 	phh = push origin HEAD
 	# rebase
 	rb = rebase
+	rba = rebase --abort
 	rbc = rebase --continue
+	rbd = rebase origin/develop
+	rbf = !sh -c 'git rebase -i $(git merge-base $(git branch --show-current) origin/develop)'
 	rbi = !sh -c 'git rebase -i "${1:-origin/$(git branch --show-current)}"' -
+	rbm = rebase origin/master
 	rbs = rebase --skip
 	# reset
 	rewind = reset --soft HEAD^${1}
-	unstage = reset --soft HEAD^
+	unstage = reset HEAD
+        # rev-parse
+	show-upstream = rev-parse --abbrev-ref --symbolic-full-name @{u}
+	# show
+	sh = show
 	# stash
 	stash-n-pull = "!sh -c 'if git diff --exit-code > /dev/null; then git pull; else git stash && git pull && git stash pop; fi'"
 	# status
+	s = status -u -s
 	st = status
