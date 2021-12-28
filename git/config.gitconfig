@@ -2,23 +2,23 @@
 [user]
 	name = %DOTBASHCFG_USER%
 	email = %DOTBASHCFG_MAIL%
-[diff]
-	tool = vimdiff
-[merge]
-	tool = vimdiff
+[credential]
+	helper = cache
 [core]
 	autocrlf = input
 	editor = vim
+[diff]
+	tool = vimdiff
 [difftool]
 	prompt = false
+[merge]
+	tool = vimdiff
+[mergetool]
+	keepBackup = false
 [push]
 	default = simple
 [pull]
 	rebase = true
-[credential]
-	helper = cache
-[mergetool]
-	keepBackup = false
 [alias]
 	# add
 	a = !sh -c 'git add "${1:-.}"' -
