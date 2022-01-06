@@ -45,3 +45,6 @@ set modelines=5
 " Make searches case-insensitive by default
 set ignorecase
 set smartcase
+
+" Shortcut to open the current file into firefox
+nnoremap <F12>f :exe ':silent !source ~/.bash/internal/aliases/distro.sh; if command -v wslpath > /dev/null; then firefox "file:///$(wslpath -m "%")"; else firefox "file:///%"; fi'<CR>

@@ -146,5 +146,8 @@ if [ "$win_os" = true ]; then
     ! { [ -d /mnt/wslg ] && [ -v DISPLAY ] && [ -v WAYLAND_DISPLAY ] && [ -v PULSE_SERVER ] ; }
   }
 
+  firefox() {
+    '/mnt/c/Program Files/Mozilla Firefox/firefox.exe' "$@"
+  }
 fi
 
