@@ -1,29 +1,39 @@
 #!/bin/bash
 
+RUBY_VERSION="3.1.0"
+
 # shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"
 
-install_centos() {
-  install_packages ruby
+get_dependencies() {
+  if ! command -v git &>/dev/null; then
+    echo git
+  fi
+}
+
+install_common() {
+  _install_build_dependencies
+  _install_ruby
   _install_gems
 }
 
-install_redhat() {
-  install_centos
+_install_build_dependencies() {
+  install_packages curl libssl-dev libreadline-dev zlib1g-dev \
+    autoconf bison build-essential libyaml-dev libreadline-dev \
+    libncurses5-dev libffi-dev libgdbm-dev
 }
 
-install_ubuntu() {
-  install_repo brightbox/ruby-ng
-  install_packages ruby ruby-dev
-  _install_gems
-}
-
-install_wsl() {
-  install_ubuntu
+_install_ruby() {
+  curl -fsSL https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-installer | bash
+  eval "$("$HOME/.rbenv/bin/rbenv" init - bash)"
+  if ! [ -d "$HOME/.rbenv/versions/$RUBY_VERSION" ]; then
+    "$HOME/.rbenv/bin/rbenv" install "$RUBY_VERSION"
+  fi
+  "$HOME/.rbenv/bin/rbenv" global "$RUBY_VERSION"
 }
 
 _install_gems() {
-  sudo gem install \
+  gem install \
     solargraph \
     chef \
     knife \
