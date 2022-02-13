@@ -56,7 +56,7 @@ elif [ -d ~/.bash_aliases ]; then
 fi
 
 # In the same way, allow users to define supplementary bash completions
-_dotbashcfg_local_completion_dir="$HOME/.local/share/bash-completion/completions"
+_dotbashcfg_local_completion_dir="$HOME/.local/share/$CURRENT_SHELL-completion/completions"
 if [ -d "$_dotbashcfg_local_completion_dir" ]; then
   # N.B. Doing this way since the "source" built-in function can't be called via a "find ... -exec ..." construct
   for script in "$_dotbashcfg_local_completion_dir"/*; do source "$script"; done

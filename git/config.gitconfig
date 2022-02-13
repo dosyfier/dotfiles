@@ -7,6 +7,7 @@
 [core]
 	autocrlf = input
 	editor = vim
+	pager = less -F -X
 [diff]
 	tool = vimdiff
 [difftool]
@@ -33,6 +34,8 @@
 	# checkout
 	co = checkout
 	cob = checkout -b
+	cod = checkout develop
+	com = checkout master
 	# cherry-pick
 	cp = cherry-pick
 	# commit
@@ -98,6 +101,12 @@
 	sh = show
 	# stash
 	stash-n-pull = "!sh -c 'if git diff --exit-code > /dev/null; then git pull; else git stash && git pull && git stash pop; fi'"
+	sth = stash
+	stha = stash apply
+	sthd = stash drop
+	sthl = stash list
+	sthp = stash pop
+	sths = stash show
 	# status
 	s = status -u -s
 	st = status

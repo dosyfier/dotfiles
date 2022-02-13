@@ -1,4 +1,4 @@
-#!/bin/bash
+# Chocolatey related shell aliases
 
 DOTBASHCFG_CHOCO_CONFIG_DIR=~/.bash/chocolatey/conf
 DOTBASHCFG_CHOCO_CONFIG_DEFAULT="$(cat $DOTBASHCFG_CHOCO_CONFIG_DIR/default-config.txt)"

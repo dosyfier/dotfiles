@@ -1,4 +1,4 @@
-#!/bin/bash
+# Docker shell aliases
 
 run_docker_wsl1() {
   # See https://github.com/Microsoft/WSL/issues/2291#issuecomment-477632663

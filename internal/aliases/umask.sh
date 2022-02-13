@@ -1,6 +1,4 @@
-#!/bin/bash
-
-# Umask
+# Umask settings
 
 # By default, we want umask to get set. This sets it for non-login shell.
 # Current threshold for system reserved uid/gids is 200

@@ -1,4 +1,4 @@
-#!/bin/bash
+# Git related aliases
 
 # Make sure that all remote branches have some local equivalent one
 # and set each of them to track its remote associated origin.
@@ -93,10 +93,12 @@ git_ls_big_files() {
 
 # Grep files within a git repository, without looking into the .git directory (which may take some time...)
 alias grep_git="grep --exclude-dir=.git"
+alias gg="grep_git"
+alias ggr="grep_git -rn"
 
 # If a bash prompt is defined by a theme external to dotbashconfig (e.g. Bash-It's Powerline),
 # then this alias script is ignored
-if [ "$EXTERNAL_PROMPT_ENABLED" = true ]; then
+if [ "$DOTBASHCFG_ENABLE_EXTERNAL_PROMPT" = true ]; then
   return
 fi
 

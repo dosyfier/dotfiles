@@ -1,4 +1,4 @@
 colors
 umask
-bash_settings
-bash_history
+shell_settings
+shell_history

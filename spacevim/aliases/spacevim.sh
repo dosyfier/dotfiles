@@ -1,4 +1,4 @@
-#!/bin/bash
+# SpaceVim related shell aliases
 
 _SPACEVIM_USAGE="
 Usage: spacevim <backup|restore|update|help> [<backup_file>]
