@@ -42,7 +42,8 @@ fi
 # source other scripts in the appropriated order
 source_ordered_scripts $(xargs -I % echo "$HOME/.bash/internal/aliases/%.sh" < ~/.bash/internal/order/earliest-scripts.txt)
 source_ordered_scripts $(find ~/.bash/internal/aliases/ -name '*.sh' | grep -vFf ~/.bash/internal/order/latest-scripts.txt)
-source_ordered_scripts $(find ~/.bash/**/aliases/ -name '*.sh' -not -path '*/internal/*')
+source_ordered_scripts $(find ~/.bash/**/aliases/ -name '*.sh' -not -path '*/internal/*' | \
+  grep -E "/($(perl -le 'print join "|",@ARGV' "${DOTBASHCFG_ENABLED_FEATURES[@]}"))/")
 source_ordered_scripts $(find ~/.bash/ -type f -path '*/completions/*' -name "*.sh")
 source_ordered_scripts $(xargs -I % echo "$HOME/.bash/internal/aliases/%.sh" < ~/.bash/internal/order/latest-scripts.txt)
 
