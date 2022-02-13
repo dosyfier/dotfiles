@@ -39,6 +39,10 @@ install_ubuntu() {
 install_wsl() {
   if [ "$WSL_VERSION" -ge 2 ]; then
     install_ubuntu
+
+    # See https://github.com/microsoft/WSL/discussions/4872#discussioncomment-99164
+    for s in ip{,6}tables; do sudo update-alternatives --set "$s" "/usr/sbin/$s-legacy"; done
+
   else
     _cleanup_ubuntu
     docker_ce_pkg_name="docker-ce_$WSL1_DOCKER_VERSION~ce-0~ubuntu_amd64.deb"
