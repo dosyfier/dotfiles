@@ -6,6 +6,7 @@ source "$(dirname "$0")/../internal/install-base.sh"
 # Docker CE version tested with WSL
 # See: https://github.com/Microsoft/WSL/issues/2291#issuecomment-383698720
 WSL1_DOCKER_VERSION=17.09.0
+DOCKER_COMPOSE_VERSION=1.29.2
 
 _cleanup_ubuntu() {
   # Remove any previous version of Docker
@@ -15,6 +16,12 @@ _cleanup_ubuntu() {
 
   # Ensure that you have the binaries needed to fetch repo listing
   sudo apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common cgroupfs-mount
+}
+
+_install_docker_compose() {
+   sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" \
+     -o /usr/local/bin/docker-compose
+   sudo chmod +x /usr/local/bin/docker-compose
 }
 
 _finalize() {
@@ -33,6 +40,7 @@ install_ubuntu() {
   # Install Docker 
   sudo apt-get install docker-ce docker-ce-cli containerd.io
 
+  _install_docker_compose
   _finalize
 }
 
@@ -50,6 +58,7 @@ install_wsl() {
     trap 'rm -f /tmp/docker-ce*.deb' EXIT
     sudo dpkg -i /tmp/docker-ce_$WSL1_DOCKER_VERSION~ce-0~ubuntu_amd64.deb
     sudo apt -y -f install
+  _install_docker_compose
   _finalize
   fi
 }
