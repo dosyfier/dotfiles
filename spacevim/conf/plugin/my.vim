@@ -48,3 +48,18 @@ set smartcase
 
 " Shortcut to open the current file into firefox
 nnoremap <F12>f :exe ':silent !source ~/.bash/internal/aliases/distro.sh; if command -v wslpath > /dev/null; then firefox "file:///$(wslpath -m "%")"; else firefox "file:///%"; fi'<CR>
+
+" If buffer modified, update any 'Last modified: ' in the first 20 lines.
+" 'Last modified: Fri 04 Mar 2022 12:18:12 AM CET
+" Restores cursor and window position using save_cursor variable.
+function! UpdateLastModified()
+  if &modified
+    let save_cursor = getpos(".")
+    let n = min([20, line("$")])
+    keepjumps exe '1,' . n . 's#^\(.\{,10}Last modified: \).*#\1' .
+          \ strftime('%a, %d %b %Y %H:%M:%S %z') . '#e'
+    call histdel('search', -1)
+    call setpos('.', save_cursor)
+  endif
+endfun
+autocmd BufWritePre * call UpdateLastModified()
