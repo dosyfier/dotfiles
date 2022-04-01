@@ -21,7 +21,7 @@ git_branch_state() {
   # TODO Doing this way since `git` command seems to ignore bash logical operators || or &&...
   # Actually, this is due to git command aliasing...
   state=$(git symbolic-ref HEAD --short 2>/dev/null)
-  if [ -z "$state" ]; then state=$(git show -s --pretty='%D' 2>/dev/null | grep -Po 'tag: \K[^\s,]+'); fi
+  if [ -z "$state" ]; then state=$(git show -s --pretty='%D' 2>/dev/null | grep -Po 'tag: \K[^\s,]+' | tr '\n' ','); fi
   if [ -z "$state" ]; then state=$(git show -s --pretty='%h' 2>/dev/null); fi
   echo "$state"
 }
