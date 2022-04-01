@@ -1,10 +1,6 @@
 #!/bin/bash
 
 BASH_IT=/opt/bash-it
-if { ! [ -d "$BASH_IT" ]; } || \
-  { [ -n "$ENABLE_FEATURES" ] && ! [[ " ${ENABLE_FEATURES[*]} " =~ " bash_it " ]]; }; then
-  return
-fi
 
 if [ -d /opt/gitstatus ]; then
   SCM_GIT_USE_GITSTATUS=true
