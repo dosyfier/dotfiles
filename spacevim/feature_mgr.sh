@@ -6,7 +6,7 @@ FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 source "$(dirname "$0")/../internal/install-base.sh"
 
 get_dependencies() {
-  if [ "$(vim --version | grep -E '[0-9]+' -o -m 1 | head -n 1)" -lt 8 ]; then
+  if version_lte "$(vim --version)" 8; then
     echo "vim"
   fi
   if ! command -v npm > /dev/null; then
