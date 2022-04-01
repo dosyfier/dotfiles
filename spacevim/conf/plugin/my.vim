@@ -63,3 +63,6 @@ function! UpdateLastModified()
   endif
 endfun
 autocmd BufWritePre * call UpdateLastModified()
+
+" Customize ALE linters warnings format (e.g. for shellcheck)
+let g:ale_echo_msg_format='%severity%: %linter%: [%code] %%s'
