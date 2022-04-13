@@ -76,6 +76,9 @@ enabled_linters = ['pylint']
 [[layers]]
 name = "lang#dockerfile"
 
+[[layers]]
+name = "lang#powershell"
+
 [[custom_plugins]]
 repo = "martinda/Jenkinsfile-vim-syntax"
 merged = false
