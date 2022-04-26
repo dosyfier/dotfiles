@@ -30,5 +30,5 @@ chattr +i /etc/resolv.conf"
 
 wsl.exe -d Ubuntu-20.04 bash -c "
 set -e;
-mkdir -p ~/.bash_aliases;
-echo 'export DISPLAY=${mainInterfaceIp}:0' > ~/.bash_aliases/wsl_x11.sh"
+mkdir -p ~/.bash_aliases.d;
+echo 'export DISPLAY=${mainInterfaceIp}:0' > ~/.bash_aliases.d/wsl_x11.sh"

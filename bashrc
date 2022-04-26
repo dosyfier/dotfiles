@@ -47,12 +47,13 @@ source_ordered_scripts $(find ~/.bash/**/aliases/ -name '*.sh' -not -path '*/int
 source_ordered_scripts $(find ~/.bash/ -type f -path '*/completions/*' -name "*.sh")
 source_ordered_scripts $(xargs -I % echo "$HOME/.bash/internal/aliases/%.sh" < ~/.bash/internal/order/latest-scripts.txt)
 
-# Allow users to define supplementary aliases within ~/.bash_aliases (file or directory)
+# Allow users to define supplementary aliases within ~/.bash_aliases file or ~/.bash_aliases.d directory
 # These are evaluated as overriding scripts (i.e. once all other scripts have been processed)
 if [ -f ~/.bash_aliases ]; then
   source ~/.bash_aliases
-elif [ -d ~/.bash_aliases ]; then
-  for script in ~/.bash_aliases/*; do source "$script"; done
+fi
+if [ -d ~/.bash_aliases.d/ ]; then
+  for script in ~/.bash_aliases.d/*; do source "$script"; done
 fi
 
 # In the same way, allow users to define supplementary bash completions
