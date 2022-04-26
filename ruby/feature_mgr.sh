@@ -42,7 +42,10 @@ _install_gems() {
     rake \
     rdoc \
     pry
+
+  # Deploy Rubocop config file
+  [ -e "$HOME"/.rubocop.yml ] && rm -vf "$HOME"/.rubocop.yml
+  ln -vs "$FEATURE_ROOT"/conf/rubocop.yml "$HOME"/.rubocop.yml
 }
 
 main "$@"
-
