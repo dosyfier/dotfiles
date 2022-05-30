@@ -37,10 +37,10 @@ spacevim() {
     fi
     echo "Backuping SpaceVim into $ark"
     pushd "$HOME" > /dev/null || return 1
-    trap "popd $HOME > /dev/null" RETURN
+    trap "popd > /dev/null" RETURN
     tar cvzf "$ark" .local/share/fonts .SpaceVim/* .SpaceVim.d/* \
       .cache/vimfiles .cache/SpaceVim/{,conf/}*.json
-    echo "Backup complete!"
+    echo "Backup complete! Archive has been created here: $ark"
 
   elif [ "$1" = restore ]; then
     if [ -z "$2" ]; then
@@ -54,7 +54,7 @@ spacevim() {
     fi
     echo "Restoring SpaceVim from $2"
     pushd "$HOME" > /dev/null || return 1
-    trap "popd $HOME > /dev/null" RETURN
+    trap "popd > /dev/null" RETURN
     rm -rf .SpaceVim/* .SpaceVim.d/* .cache/vimfiles
     tar xvzf "$ark"
     echo "Restoration complete!"
