@@ -79,6 +79,9 @@ name = "lang#dockerfile"
 [[layers]]
 name = "lang#powershell"
 
+[[layers]]
+name = "lang#xml"
+
 [[custom_plugins]]
 repo = "martinda/Jenkinsfile-vim-syntax"
 merged = false

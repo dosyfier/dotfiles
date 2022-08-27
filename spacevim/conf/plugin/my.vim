@@ -66,3 +66,7 @@ autocmd BufWritePre * call UpdateLastModified()
 
 " Customize ALE linters warnings format (e.g. for shellcheck)
 let g:ale_echo_msg_format='%severity%: %linter%: [%code] %%s'
+
+" Necessary for the xmledit plugin
+" (otherwise, the default '>' key mapping isn't working)
+let g:xml_tag_completion_map = "<C-e>"
