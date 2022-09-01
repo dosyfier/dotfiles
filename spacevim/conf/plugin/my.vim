@@ -34,6 +34,9 @@ set cmdheight=2
 " Enable showing full path of current buffer on statusline
 let g:spacevim_enable_statusline_bfpath=1
 
+" Enable 'YouCompleteMe' as autocompletion plugin
+let g:spacevim_enable_ycm=1
+
 " Default to not read-only in vimdiff
 set noro
 
@@ -70,3 +73,6 @@ let g:ale_echo_msg_format='%severity%: %linter%: [%code] %%s'
 " Necessary for the xmledit plugin
 " (otherwise, the default '>' key mapping isn't working)
 let g:xml_tag_completion_map = "<C-e>"
+
+" Allow block folding in Vim editors
+set foldmethod=indent

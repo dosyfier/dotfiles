@@ -30,6 +30,8 @@ filetree_direction = "left"
 
 lint_engine = "ale"
 
+autocomplete_method = "ycm"
+
 [[layers]]
 name = 'core'
 enable_smooth_scrolling = false
