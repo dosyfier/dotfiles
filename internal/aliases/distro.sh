@@ -1,5 +1,7 @@
 # Distro-related shell aliases
 
+# vim: set ft=bash
+
 # shellcheck disable=SC2034
 # SC2034: This script is meant to be sourced through .bashrc. Thus, there is no
 #   need to export any global variable (except for Terminator Windows shortcut,
@@ -90,7 +92,6 @@ if [ "$win_os" = true ]; then
   export WIN_HOME="/c/Users/$DOTBASHCFG_WIN_USER"
   WIN_DOWNLOADS="$WIN_HOME/Downloads"
   WIN_DESKTOP="$WIN_HOME/Desktop"
-  OFFICE_ROOT="/c/Program Files (x86)/Microsoft Office/Office15"
 
   explorer() {
     # 2>/dev/null on "tr" command to avoid warnings about trailing '\' that
@@ -98,33 +99,6 @@ if [ "$win_os" = true ]; then
     # shellcheck disable=SC1003
     #   We are not trying to escape a ' quote, we just want to replace / by \
     explorer.exe "$(wslpath -m "$(readlink -f "$1")" | tr '/' '\' 2>/dev/null)"
-  }
-
-  msoffice() {
-    prog="$1"
-    file="$2"
-    
-    case "$prog" in
-      excel)
-        msbinary="$OFFICE_ROOT/EXCEL.EXE";;
-      onenote)
-        msbinary="$OFFICE_ROOT/ONENOTE.EXE";;
-      outlook)
-        msbinary="$OFFICE_ROOT/OUTLOOK.EXE";;
-      powerpoint)
-        msbinary="$OFFICE_ROOT/POWERPNT.EXE";;
-      word)
-        msbinary="$OFFICE_ROOT/WINWORD.EXE";;
-      *)
-        echo "Unknown MS Office program $prog" >&2
-        return 1;;
-    esac
-
-    if [ -n "$file" ]; then
-      "$msbinary" /t "$file" &
-    else
-      "$msbinary" &
-    fi
   }
 
   reg_query() {
