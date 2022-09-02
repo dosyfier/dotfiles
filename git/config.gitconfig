@@ -31,8 +31,7 @@
 	brd = branch -d
 	brD = branch -D
 	brm = branch --merged
-	# TODO not working
-	br-stats = !sh -c "git for-each-ref --format='%(refname:short)%09%(upstream:track)%09%(upstream:remotename)' refs/heads" -
+	br-stats = for-each-ref --format='%(refname:short)%09%(upstream:track)%09%(upstream:remotename)' refs/heads
 	# checkout
 	co = checkout
 	cob = checkout -b
@@ -46,9 +45,9 @@
 	aac = !git add -A . && git commit
 	aacf = !git add -A . && git commit --amend --no-edit
 	aacm = !git add -A . && git commit -m
-	ac = "!ac() { git add \"$@\" && git commit; }; ac"
-	acf = "!acf() { git add \"$@\" && git commit --amend --no-edit; }; acf"
-	acm = "!acm() { git add \"${@:1:$#-1}\" && git commit -m \"${@: -1}\"; }; acm"
+	ac = "!bash -c 'ac() { git add \"$@\" && git commit; }; ac \"$@\"' -- "
+	acf = "!bash -c 'acf() { git add \"$@\" && git commit --amend --no-edit; }; acf \"$@\"' -- "
+	acm = "!bash -c 'acm() { git add \"${@:1:$#-1}\" && git commit -m \"${@: -1}\"; }; acm \"$@\"' -- "
 	amend = commit --amend
 	amendm = commit --amend -m
 	amendf = commit --amend --no-edit
