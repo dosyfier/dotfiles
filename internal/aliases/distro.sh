@@ -28,6 +28,8 @@ get_distro_type() {
       Linux*)
         if [[ "$PROC_VERSION" =~ [Mm]icrosoft ]]; then
           echo "wsl"
+        elif [[ "$PROC_VERSION" =~ [Uu]buntu ]]; then
+          echo "ubuntu"
         else
           echo "Unknown distro... /proc/version says: $PROC_VERSION" >&2
           return 1
