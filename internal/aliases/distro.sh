@@ -100,7 +100,13 @@ if [ "$win_os" = true ]; then
     # may break path portability
     # shellcheck disable=SC1003
     #   We are not trying to escape a ' quote, we just want to replace / by \
-    explorer.exe "$(wslpath -m "$(readlink -f "$1")" | tr '/' '\' 2>/dev/null)"
+    if [ $# -eq 0 ]; then
+      explorer.exe
+    elif [ $# -eq 1 ]; then
+      explorer.exe "$(wslpath -m "$(readlink -f "$1")" | tr '/' '\' 2>/dev/null)"
+    else
+      echo "Usage: explorer [<PATH>]" >&2; return 1
+    fi
   }
 
   reg_query() {
