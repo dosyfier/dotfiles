@@ -87,6 +87,10 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+# Unsetting the following ZSH option activated by Oh My ZSH
+# (see ~/.oh-my-zsh/lib/history.zsh)
+unsetopt hist_verify
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
