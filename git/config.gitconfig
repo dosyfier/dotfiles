@@ -30,7 +30,9 @@
 	bra = branch -a
 	brd = branch -d
 	brD = branch -D
-	merged = branch --merged
+	brm = branch --merged
+	# TODO not working
+	br-stats = !sh -c "git for-each-ref --format='%(refname:short)%09%(upstream:track)%09%(upstream:remotename)' refs/heads" -
 	# checkout
 	co = checkout
 	cob = checkout -b
@@ -42,8 +44,10 @@
 	c = commit
 	cm = commit -m
 	aac = !git add -A . && git commit
+	aacf = !git add -A . && git commit --amend --no-edit
 	aacm = !git add -A . && git commit -m
 	ac = "!ac() { git add \"$@\" && git commit; }; ac"
+	acf = "!acf() { git add \"$@\" && git commit --amend --no-edit; }; acf"
 	acm = "!acm() { git add \"${@:1:$#-1}\" && git commit -m \"${@: -1}\"; }; acm"
 	amend = commit --amend
 	amendm = commit --amend -m
@@ -62,8 +66,8 @@
 	# grep
 	gr = grep -Ii
 	# log
-	lg = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
-	lgn = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+	lg = log --pretty=format:"%C(yellow)%h\\ %Cgreen%cs%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate
+	lgn = log --pretty=format:"%C(yellow)%h\\ %Cgreen%as%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --numstat
 	log-branch = '!sh -c "git log `git oldest-ancestor`.."'
 	# ls-files
 	f = "!git ls-files | grep -i"
@@ -78,11 +82,11 @@
 	# push
 	ph = push
 	phf = push --force
-	phc = !git push origin `git branch --show-current`
-	phcf = !git push --force origin `git branch --show-current`
 	phd = push origin develop
 	phm = push origin master
 	phh = push origin HEAD
+	pht = push --tags
+	phu = !git push origin `git branch --show-current`
 	# rebase
 	rb = rebase
 	rba = rebase --abort
@@ -99,14 +103,17 @@
 	show-upstream = rev-parse --abbrev-ref --symbolic-full-name @{u}
 	# show
 	sh = show
+	shn = show --name-only
+	shp = show -p
 	# stash
 	stash-n-pull = "!sh -c 'if git diff --exit-code > /dev/null; then git pull; else git stash && git pull && git stash pop; fi'"
+	sth-n-pl = stash-n-pull
 	sth = stash
 	stha = stash apply
 	sthd = stash drop
 	sthl = stash list
 	sthp = stash pop
-	sths = stash show
+	sths = stash show -p
 	# status
 	s = status -u -s
 	st = status

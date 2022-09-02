@@ -56,6 +56,8 @@ _configure() {
     cp "$FEATURE_ROOT"/config.gitconfig "$HOME/.gitconfig"
     sed -i "s|%DOTBASHCFG_USER%|$USER|g" "$HOME/.gitconfig"
     sed -i "s|%DOTBASHCFG_MAIL%|$DOTBASHCFG_MAIL|g" "$HOME/.gitconfig"
+
+    # TODO This configuration requires that /usr/bin/sh points to bash (and not dash, which is the default on Ubuntu)
   fi
 }
 
