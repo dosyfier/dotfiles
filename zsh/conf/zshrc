@@ -91,6 +91,9 @@ source $ZSH/oh-my-zsh.sh
 # (see ~/.oh-my-zsh/lib/history.zsh)
 unsetopt hist_verify
 
+# Keep trailing slash (which is practical for commands like rsync)
+setopt no_auto_remove_slash
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
