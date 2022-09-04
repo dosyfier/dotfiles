@@ -8,3 +8,5 @@ run_docker_wsl1() {
   # Start Docker service
   sudo service docker start
 }
+
+alias dk_run_blank="docker run -ti --rm --entrypoint /bin/sh"
