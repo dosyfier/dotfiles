@@ -53,9 +53,7 @@ _configure() {
   if [ -e "$HOME/.gitconfig" ]; then
     (>&2 echo "Git config file already exists ($HOME/.gitconfig). Not overriding.")
   else
-    cp "$FEATURE_ROOT"/config.gitconfig "$HOME/.gitconfig"
-    sed -i "s|%DOTBASHCFG_USER%|$USER|g" "$HOME/.gitconfig"
-    sed -i "s|%DOTBASHCFG_MAIL%|$DOTBASHCFG_MAIL|g" "$HOME/.gitconfig"
+    ln -s "$FEATURE_ROOT"/config.gitconfig "$HOME/.gitconfig"
   fi
 }
 

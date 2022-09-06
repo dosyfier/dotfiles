@@ -1,5 +1,13 @@
 # Git related aliases
 
+# Environnement variables used to replace the user-dependent "core"
+# settings from .gitconfig
+export GIT_AUTHOR_NAME="$DOTBASHCFG_USER_DISPLAY_NAME"
+export GIT_AUTHOR_EMAIL="$DOTBASHCFG_USER_MAIL"
+export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+
+
 # Make sure that all remote branches have some local equivalent one
 # and set each of them to track its remote associated origin.
 git_fetch_remotes() {
