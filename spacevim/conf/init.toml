@@ -84,16 +84,19 @@ name = "lang#powershell"
 [[layers]]
 name = "lang#xml"
 
-[[custom_plugins]]
-repo = "martinda/Jenkinsfile-vim-syntax"
-merged = false
-
 [[layers]]
 name = "git"
 git_plugin = "fugitive"
 
+[[layers]]
+name = "ctrlp"
+
 [[custom_plugins]]
 repo = "tpope/vim-sleuth"
+merged = false
+
+[[custom_plugins]]
+repo = "martinda/Jenkinsfile-vim-syntax"
 merged = false
 
 [[custom_plugins]]
@@ -106,4 +109,8 @@ merged = false
 
 [[custom_plugins]]
 repo = "chr4/nginx.vim"
+merged = false
+
+[[custom_plugins]]
+repo = "tmhedberg/SimpylFold"
 merged = false
