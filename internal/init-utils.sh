@@ -17,18 +17,17 @@ declare -A DOTBASHCFG_ARG_NAMES
 declare -A DOTBASHCFG_DESCS
 declare -A DOTBASHCFG_VALUES
 
-DOTBASHCFG_SHORT_OPTS[win_login]="-l"
-DOTBASHCFG_LONG_OPTS[win_login]="--win-login"
-DOTBASHCFG_ARG_NAMES[win_login]="<login>"
-DOTBASHCFG_DESCS[win_login]="Login of the actual Windows account, "\
-"to be used when installing dotbashconfig from some Shell environment run from "\
-"Windows (e.g. Cygwin, Git Bash, WSL)."
+DOTBASHCFG_SHORT_OPTS[user_display_name]="-n"
+DOTBASHCFG_LONG_OPTS[user_display_name]="--display-name"
+DOTBASHCFG_ARG_NAMES[user_display_name]="<login>"
+DOTBASHCFG_DESCS[user_display_name]="Display name (first & last name) "\
+"to consider for the current user (used for \"git\" feature)."
 
-DOTBASHCFG_SHORT_OPTS[email]="-m"
-DOTBASHCFG_LONG_OPTS[email]="--email"
-DOTBASHCFG_ARG_NAMES[email]="<mail-address>"
-DOTBASHCFG_DESCS[email]="Mail address to consider for the current "\
-"user (used e.g. to configure Git)."
+DOTBASHCFG_SHORT_OPTS[user_mail]="-m"
+DOTBASHCFG_LONG_OPTS[user_mail]="--mail"
+DOTBASHCFG_ARG_NAMES[user_mail]="<mail-address>"
+DOTBASHCFG_DESCS[user_mail]="Mail address to consider for the current "\
+"user (used for \"git\" feature)."
 
 DOTBASHCFG_SHORT_OPTS[tools_dir]="-t"
 DOTBASHCFG_LONG_OPTS[tools_dir]="--tools"

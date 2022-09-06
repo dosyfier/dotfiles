@@ -83,8 +83,8 @@ acknowledge_opts() {
     run_in_project usage; exit 0
   fi
 
-  DOTBASHCFG_WIN_USER=${DOTBASHCFG_VALUES[win_login]:-$DOTBASHCFG_WIN_USER}
-  DOTBASHCFG_MAIL=${DOTBASHCFG_VALUES[email]:-$DOTBASHCFG_MAIL}
+  DOTBASHCFG_USER_DISPLAY_NAME=${DOTBASHCFG_VALUES[user_display_name]:-$DOTBASHCFG_USER_DISPLAY_NAME}
+  DOTBASHCFG_USER_MAIL=${DOTBASHCFG_VALUES[user_mail]:-$DOTBASHCFG_USER_MAIL}
   DOTBASHCFG_TOOLS_DIR=${DOTBASHCFG_VALUES[tools_dir]:-$DOTBASHCFG_TOOLS_DIR}
 
   # Check exclusive options: with_features, all_features and skip_install
@@ -101,11 +101,11 @@ acknowledge_opts() {
   if [ -n "${DOTBASHCFG_VALUES[with_features]}" ]; then
     for feature in ${DOTBASHCFG_VALUES[with_features]//,/ }; do
       if [ -f "$feature"/feature_mgr.sh ]; then
-	declare -g "RUN_${feature^^}_FEATURE=true"
+        declare -g "RUN_${feature^^}_FEATURE=true"
       else
-	usage_error "Requested feature '$feature' does not exist" \
-	  "Available features are:" \
-	  "$(available_features | fold -w 80 -s)"
+        usage_error "Requested feature '$feature' does not exist" \
+          "Available features are:" \
+          "$(available_features | fold -w 80 -s)"
       fi
     done
     AUTO_DOTBASH_CFG=true
@@ -132,7 +132,7 @@ init() {
   # Erase existing .bashrc, and warn the user about it first
   echo "Init $HOME/.bashrc..."
   if ! [ -e "$HOME/.bashrc" ] || ! [ -L "$HOME/.bashrc" ] || \
-	! [ "$DOTBASH_CFG_DIR/bashrc" = "$(readlink -f "$HOME/.bashrc")" ]; then
+        ! [ "$DOTBASH_CFG_DIR/bashrc" = "$(readlink -f "$HOME/.bashrc")" ]; then
     remove_or_abort "$HOME/.bashrc"
     ln -s "$HOME/.bash/bashrc" "$HOME/.bashrc"
   fi
@@ -146,9 +146,14 @@ init() {
   echo "Backup dotbashconfig configuration into $DOTBASH_CFG_FILE..."
   cat > "$DOTBASH_CFG_FILE" <<-EOC
 #!/bin/bash
-export DOTBASHCFG_WIN_USER="$DOTBASHCFG_WIN_USER"
+export DOTBASHCFG_WIN_USER="$(if command -v cmd.exe &>/dev/null; then
+                                cmd.exe /C "echo %USERNAME%" 2>/dev/null | sed 's/[[:space:]]*$//'
+                              else
+                                echo "$USER"
+                              fi)"
 export DOTBASHCFG_TOOLS_DIR="$DOTBASHCFG_TOOLS_DIR"
-export DOTBASHCFG_MAIL="$DOTBASHCFG_MAIL"
+export DOTBASHCFG_USER_DISPLAY_NAME="$DOTBASHCFG_USER_DISPLAY_NAME"
+export DOTBASHCFG_USER_MAIL="$DOTBASHCFG_USER_MAIL"
 EOC
 
   # Source the bashrc script
@@ -179,8 +184,8 @@ install_features() {
       analyze_feature "$feature"
       # Dependent features are output by 'analyze_feature' on FD no. 3
       while read -r -t 0 -u 3; do
-	read -r -u 3 -a new_features_to_install
-	features_to_install+=("${new_features_to_install[*]}")
+        read -r -u 3 -a new_features_to_install
+        features_to_install+=("${new_features_to_install[*]}")
       done
       features_to_install+=("$feature")
     fi
@@ -191,6 +196,7 @@ install_features() {
 
   # If the user validates the full list, then proceed with the actual
   # installation
+  # TODO Update DOTBASHCFG_ENABLED_FEATURES variable
   additional_features_to_install=("$(echo "${features_to_install[*]}" | \
     uniq_occurrences | without_excluded requested_features)")
   if [ -z "${additional_features_to_install[0]}" ] || ok_to \
