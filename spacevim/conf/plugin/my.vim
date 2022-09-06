@@ -8,7 +8,7 @@ set shiftwidth=4
 set tabstop=4
 
 " NERDTree initial width
-let g:NERDTreeWinSize=50
+let g:NERDTreeWinSize=30
 " Let NERDTree show hidden files
 let g:NERDTreeShowHidden=1
 
