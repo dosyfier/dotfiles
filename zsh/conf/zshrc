@@ -79,7 +79,12 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(gitfast)
+plugins=(docker gitfast)
+
+# Required settings to autocomplete docker commands like `docker exec <container_name> [...]``
+# See: https://github.com/moby/moby/commit/402caa94d23ea3ad47f814fc1414a93c5c8e7e58
+zstyle ':completion:*:*:docker:*' option-stacking yes
+zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
 source ~/.bashrc
 
