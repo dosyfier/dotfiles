@@ -115,7 +115,7 @@ if [ "$win_os" = true ]; then
     else
       reg.exe query "${1//\//\\}" /v "$2"
     fi \
-      | awk 'NR==3 { print $NF }'
+      | awk 'BEGIN { RS="\r\n" } (NR==3) { print $NF }'
   }
 
   get_win_version() {
