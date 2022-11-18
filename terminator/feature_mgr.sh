@@ -28,10 +28,7 @@ install_wsl() {
   fi
 
   _configure
-
-  if ! is_wslg_active; then
-    _setup_windows_launcher
-  fi
+  _setup_windows_launcher
 }
 
 _configure() {
@@ -75,16 +72,25 @@ _setup_windows_launcher() {
   rm -rf "${terminator_quick_launch_dir:?}"/*
   cp -r "$FEATURE_ROOT"/{icons,vbs} "$terminator_quick_launch_dir"
 
+  # Decide the Terminator launch script to be used
+  if is_wslg_active; then
+    terminator_start_script="start_terminator_wslg.vbs"
+  else
+    terminator_start_script="start_terminator.vbs"
+  fi
+
   # Apparently, older Windows versions require dollar escaping for Terminator VBS start script to work...
   if [ "$(get_win_build_nb)" -lt 19041 ]; then
-    sed -i 's/\$/\\$/g' "$terminator_quick_launch_dir/vbs/start_terminator.vbs"
+    sed -i 's/\$/\\$/g' "$terminator_quick_launch_dir/vbs/$terminator_start_script"
   fi
 
   # Windows shortcut
   pushd "$terminator_quick_launch_dir/vbs" > /dev/null
   trap "popd > /dev/null" EXIT
   echo "Creating terminator Windows shortcut..."
-  cscript.exe "setup_terminator_shortcut.vbs" "$(wslpath -w "$terminator_quick_launch_dir")"
+  cscript.exe "setup_terminator_shortcut.vbs" \
+    "$(wslpath -w "$terminator_quick_launch_dir")" \
+    "vbs\\$terminator_start_script"
 
   # Linux icon (displayed through VcXsrv)
   echo "Updating terminator Linux icon..."
