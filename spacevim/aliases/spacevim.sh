@@ -60,9 +60,17 @@ spacevim() {
     echo "Restoration complete!"
 
   elif [ "$1" = update ]; then
+    git -C "$HOME"/.SpaceVim clean -xdf
+    git -C "$HOME"/.SpaceVim checkout .
+    git -C "$HOME"/.SpaceVim pull
     vim +SPUpdate +qall
-    find "$HOME"/.SpaceVim/bundle -name .git -print0 | \
-      xargs -0 -I% bash -c "echo 'Updating %'; git -C $(dirname %) pull"
+    find "$HOME"/.SpaceVim/bundle -name .git -print0 | while read -r -d $'\0' bundle_git_dir; do
+      bundle_dir="$(dirname "$bundle_git_dir")"
+      echo "Updating $bundle_dir"
+      git -C "$bundle_dir" clean -xdf
+      git -C "$bundle_dir" checkout .
+      git -C "$bundle_dir" pull
+    done
     echo "Update complete!"
 
   else
