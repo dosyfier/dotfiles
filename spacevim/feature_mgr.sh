@@ -48,4 +48,9 @@ get_resources() {
     "$HOME/".cache/SpaceVim/{,conf/}*.json
 }
 
+update() {
+  source "$FEATURE_ROOT"/aliases/spacevim.sh
+  spacevim update
+}
+
 main "$@"

@@ -92,6 +92,9 @@ run_install() {
   fi
 }
 
+update() {
+  return 0
+}
 
 main() {
   while [ $# -ne 0 ] && [[ "$1" =~ ^- ]]; do
@@ -120,6 +123,9 @@ main() {
   elif [ "$1" = "get-resources" ]; then
     _init_env
     get_resources
+  elif [ "$1" = "update" ]; then
+    _init_env
+    update
   else
     usage; exit 1
   fi

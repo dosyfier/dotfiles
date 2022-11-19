@@ -1,5 +1,5 @@
 _DOTBASHMGR_USAGE="
-Usage: dotbashmgr <backup|restore|help> [<backup_file>]
+Usage: dotbashmgr <backup|restore|update|help> [<backup_file>]
 
 Helper command that facilitates exporting / reimporting DotBashConfig configuration
 from one workstation to another, as well as updating an existing DotBashConfig
@@ -63,5 +63,20 @@ dotbashmgr() {
     # TODO Remove old resources
     tar xvzf "$ark"
     echo "Restoration complete!"
+
+  elif [ "$1" = update ]; then
+    for feature in "${DOTBASHCFG_ENABLED_FEATURES[@]}"; do
+      echo "Updating feature ${feature}..."
+      if ! "$HOME"/.bash/"$feature"/feature_mgr.sh update; then
+        echo "Error when updating feature ${feature}. Aborting" >&2
+        return 1
+      fi
+    done
+    echo "Update complete!"
+
+  else
+    echo "Unknown dotbashmgr command $1" >&2
+    echo "$_DOTBASHMGR_USAGE" >&2
+    return 1
   fi
 }

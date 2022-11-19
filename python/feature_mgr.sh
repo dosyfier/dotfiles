@@ -34,4 +34,8 @@ get_resources() {
     "$HOME/.config/pip/pip.conf"
 }
 
+update() {
+  git -C "$HOME"/.pyenv pull
+}
+
 main "$@"

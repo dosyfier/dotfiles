@@ -52,4 +52,8 @@ get_resources() {
   _get_installed_resource "$HOME/.rubocop.yml"
 }
 
+update() {
+  git -C "$HOME"/.rbenv pull
+}
+
 main "$@"

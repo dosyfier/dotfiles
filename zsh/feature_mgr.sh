@@ -26,4 +26,12 @@ get_resources() {
     "$HOME/.p10k.zsh"
 }
 
+update() {
+  git -C "$HOME"/.oh-my-zsh pull
+  git -C "$HOME"/.oh-my-zsh/custom/themes/powerlevel10k pull
+  source "$HOME"/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/build.info
+  curl -sSfL "https://github.com/romkatv/gitstatus/releases/download/${gitstatus_version}/gitstatusd-linux-x86_64.tar.gz" | \
+    tar xzf - -C "$HOME"/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/usrbin/
+}
+
 main "$@"

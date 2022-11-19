@@ -19,4 +19,8 @@ get_resources() {
   _get_installed_resource "$HOME/.jenv"
 }
 
+update() {
+  git -C "$HOME"/.jenv pull
+}
+
 main "$@"
