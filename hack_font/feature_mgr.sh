@@ -35,5 +35,9 @@ _sync_onto_windows() {
     -exec sudo cp {} /c/Windows/Fonts/ +
 }
 
+get_resources() {
+  _get_installed_resource "$HOME/".local/share/fonts/Hack
+}
+
 main "$@"
 

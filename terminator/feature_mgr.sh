@@ -6,6 +6,7 @@ FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 source "$(dirname "$0")/../internal/install-base.sh"
 
 get_dependencies() {
+  echo hack_font
   if [ "$(get_distro_type)" == 'wsl' ] && is_wslg_active; then
     echo vcxsrv
   fi

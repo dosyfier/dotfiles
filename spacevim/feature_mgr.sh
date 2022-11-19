@@ -42,7 +42,6 @@ _install() {
 
 get_resources() {
   _get_installed_resource \
-    "$HOME/".local/share/fonts \
     "$HOME/".SpaceVim/* \
     "$HOME/".SpaceVim.d/* \
     "$HOME/".cache/vimfiles \
