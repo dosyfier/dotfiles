@@ -76,3 +76,6 @@ let g:xml_tag_completion_map = "<C-e>"
 
 " Allow block folding in Vim editors
 set foldmethod=indent
+
+" Set up in offline mode by default
+let g:spacevim_checkinstall=0
