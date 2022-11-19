@@ -8,6 +8,9 @@
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
 
+# Force the shell to be a ZSH, even if another one is defined by default for the current user
+! [ -v ZSH_NAME ] && [ -e /bin/zsh ] && exec /bin/zsh
+
 
 # --- Functions
 
