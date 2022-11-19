@@ -63,5 +63,9 @@ install_wsl() {
   fi
 }
 
+get_resources() {
+  _get_installed_resource "$HOME/.docker/config.json"
+}
+
 main "$@"
 

@@ -28,4 +28,10 @@ install_common() {
   ln -vs "$FEATURE_ROOT"/conf/pylintrc "$HOME"/.pylintrc
 }
 
+get_resources() {
+  _get_installed_resource \
+    "$HOME/.pylintrc" \
+    "$HOME/.config/pip/pip.conf"
+}
+
 main "$@"

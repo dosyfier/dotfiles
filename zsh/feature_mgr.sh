@@ -20,4 +20,10 @@ install_common() {
   ln -vs "$FEATURE_ROOT"/conf/p10k.zsh "$HOME"/.p10k.zsh
 }
 
+get_resources() {
+  _get_installed_resource "$HOME/.zshrc" \
+    "$HOME/.oh-my-zsh" \
+    "$HOME/.p10k.zsh"
+}
+
 main "$@"

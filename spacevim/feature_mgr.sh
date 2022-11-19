@@ -40,5 +40,13 @@ _install() {
   sudo npm install -g pyright
 }
 
-main "$@"
+get_resources() {
+  _get_installed_resource \
+    "$HOME/".local/share/fonts \
+    "$HOME/".SpaceVim/* \
+    "$HOME/".SpaceVim.d/* \
+    "$HOME/".cache/vimfiles \
+    "$HOME/".cache/SpaceVim/{,conf/}*.json
+}
 
+main "$@"

@@ -22,5 +22,9 @@ _configure() {
   done
 }
 
+get_resources() {
+  _get_installed_resource "$HOME/.vrapperrc"
+}
+
 main "$@"
 

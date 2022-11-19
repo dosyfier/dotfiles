@@ -48,4 +48,8 @@ _install_gems() {
   ln -vs "$FEATURE_ROOT"/conf/rubocop.yml "$HOME"/.rubocop.yml
 }
 
+get_resources() {
+  _get_installed_resource "$HOME/.rubocop.yml"
+}
+
 main "$@"

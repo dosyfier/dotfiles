@@ -57,5 +57,9 @@ _configure() {
   fi
 }
 
+get_resources() {
+  _get_installed_resource "$HOME/.gitconfig"
+}
+
 main "$@"
 

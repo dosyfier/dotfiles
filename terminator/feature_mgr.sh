@@ -102,5 +102,8 @@ _setup_windows_launcher() {
   sudo chmod 644 "$main_icon_dir"/terminator.png
 }
 
-main "$@"
+get_resources() {
+  _get_installed_resource "$HOME/.config/terminator/"{config,plugins}
+}
 
+main "$@"

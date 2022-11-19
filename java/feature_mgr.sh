@@ -15,4 +15,8 @@ install_common() {
   fi
 }
 
+get_resources() {
+  _get_installed_resource "$HOME/.jenv"
+}
+
 main "$@"

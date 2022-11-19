@@ -28,5 +28,9 @@ _configure() {
   ln -vs "$FEATURE_ROOT"/config.dircolors "$HOME"/.dircolors
 }
 
+get_resources() {
+  _get_installed_resource "$HOME/.dircolors"
+}
+
 main "$@"
 

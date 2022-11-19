@@ -45,6 +45,21 @@ shall_be_installed_by_default() {
   return 0
 }
 
+get_resources() {
+  return 0
+}
+
+_get_installed_resource() {
+  if [ $# -eq 0 ]; then
+    echo "Usage: _get_installed_resource <file_or_dir> [<file_or_dir>]*" >&2
+    return 1
+  else
+    for resource in "$@"; do
+      if [ -e "$resource" ]; then echo "$resource"; fi
+    done
+  fi
+}
+
 install() {
   distro=$(get_distro_type)
   if type "install_${distro}" 1>/dev/null 2>&1; then
@@ -102,6 +117,9 @@ main() {
   elif [ "$1" = "by-default" ]; then
     _init_env
     shall_be_installed_by_default
+  elif [ "$1" = "get-resources" ]; then
+    _init_env
+    get_resources
   else
     usage; exit 1
   fi
