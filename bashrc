@@ -49,11 +49,11 @@ source_ordered_scripts $(xargs -I % echo "$HOME/.bash/internal/aliases/%.sh" < ~
 
 # Allow users to define supplementary aliases within ~/.bash_aliases file or ~/.bash_aliases.d directory
 # These are evaluated as overriding scripts (i.e. once all other scripts have been processed)
-if [ -f ~/.bash_aliases ]; then
-  source ~/.bash_aliases
-fi
 if [ -d ~/.bash_aliases.d/ ]; then
   for script in ~/.bash_aliases.d/*; do source "$script"; done
+fi
+if [ -f ~/.bash_aliases ]; then
+  source ~/.bash_aliases
 fi
 
 # In the same way, allow users to define supplementary bash completions
