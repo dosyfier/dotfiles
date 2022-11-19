@@ -125,3 +125,12 @@ setopt no_auto_remove_slash
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Customize ZSH autocomplete
+autoload -Uz compinit
+compinit
+# - Let autocomplete work right away, without having to hit ENTER to get completion result
+setopt completeinword
+# - Set up accepted autocomplete sources
+zstyle ':completion:*' completer \
+  _oldlist _expand _complete _correct _history _ignored _prefix
