@@ -22,15 +22,17 @@ install_wsl() {
 
 _install() {
   install_packages unzip
-  sudo curl -k -L $HACK_DOWNLOAD_URL -o /var/cache/$HACK_ARCHIVE_NAME
-  sudo rm -rf /usr/local/share/fonts/Hack/
-  sudo mkdir -p /usr/local/share/fonts/Hack/
-  sudo unzip /var/cache/$HACK_ARCHIVE_NAME -d /usr/local/share/fonts/Hack/
+  curl -k -L $HACK_DOWNLOAD_URL -o /tmp/$HACK_ARCHIVE_NAME
+  trap "rm /tmp/$HACK_ARCHIVE_NAME" EXIT
+  rm -rf "$HOME"/.local/share/fonts/Hack/
+  mkdir -p "$HOME"/.local/share/fonts/Hack/
+  unzip /tmp/$HACK_ARCHIVE_NAME -d "$HOME"/.local/share/fonts/Hack/
 }
 
 _sync_onto_windows() {
   sudo rm -f /c/Windows/Fonts/Hack*
-  sudo find /usr/local/share/fonts/Hack/ -type f -name '*.ttf' -exec cp {} /c/Windows/Fonts/ +
+  sudo find "$HOME"/.local/share/fonts/Hack/ -type f -name '*.ttf' \
+    -exec sudo cp {} /c/Windows/Fonts/ +
 }
 
 main "$@"
