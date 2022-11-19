@@ -79,3 +79,6 @@ set foldmethod=indent
 
 " Set up in offline mode by default
 let g:spacevim_checkinstall=0
+
+" Correct syntax highlight for Jinja2 template files
+autocmd BufNewFile,BufRead *.jinja,*.j2 set filetype=jinja2
