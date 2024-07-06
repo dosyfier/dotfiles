@@ -82,3 +82,10 @@ let g:spacevim_checkinstall=0
 
 " Correct syntax highlight for Jinja2 template files
 autocmd BufNewFile,BufRead *.jinja,*.j2 set filetype=jinja2
+
+" Displays the syntax highlight group (and link, if there is one)
+" of the word at the current cursor position
+function! SynGroup()
+    let l:s = synID(line('.'), col('.'), 1)
+    echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
+endfunc
