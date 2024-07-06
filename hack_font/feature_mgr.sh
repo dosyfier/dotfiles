@@ -3,8 +3,8 @@
 # shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"
 
-HACK_LATEST_VERSION=v2.1.0
-HACK_ARCHIVE_NAME=Hack.zip
+HACK_LATEST_VERSION=v3.2.1
+HACK_ARCHIVE_NAME=Hack.tar.xz
 HACK_DOWNLOAD_URL=https://github.com/ryanoasis/nerd-fonts/releases/download/$HACK_LATEST_VERSION/$HACK_ARCHIVE_NAME
 
 install_centos() {
@@ -21,12 +21,10 @@ install_wsl() {
 }
 
 _install() {
-  install_packages unzip
-  curl -k -L $HACK_DOWNLOAD_URL -o /tmp/$HACK_ARCHIVE_NAME
-  trap "rm /tmp/$HACK_ARCHIVE_NAME" EXIT
+  install_packages xz-utils
   rm -rf "$HOME"/.local/share/fonts/Hack/
   mkdir -p "$HOME"/.local/share/fonts/Hack/
-  unzip /tmp/$HACK_ARCHIVE_NAME -d "$HOME"/.local/share/fonts/Hack/
+  curl -sSfL "$HACK_DOWNLOAD_URL" | tar -xJ -C "$HOME"/.local/share/fonts/Hack/
 }
 
 _sync_onto_windows() {
