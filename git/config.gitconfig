@@ -8,16 +8,23 @@
 	helper = cache
 [core]
 	autocrlf = input
-	editor = vim
+	editor = nvim
 	pager = less -F -X
 [diff]
-	tool = vimdiff
+	tool = nvimdiff
 [difftool]
 	prompt = false
+[difftool "nvimdiff"]
+	cmd = nvim -d "$LOCAL" "$REMOTE"
+[difftool "diffview.nvim"]
+	cmd = nvim -n -c "DiffviewOpen"
 [merge]
-	tool = vimdiff
+	tool = diffview.nvim
 [mergetool]
+	prompt = false
 	keepBackup = false
+[mergetool "diffview.nvim"]
+	cmd = nvim -n -c "DiffviewOpen" "$MERGE"
 [push]
 	default = simple
 [pull]
@@ -60,6 +67,8 @@
 	dc = diff --cached
 	dt = difftool
 	dtc = difftool --cached
+	dtd = dt --dir-diff --tool=diffview.nvim
+	dtdc = dtc --dir-diff --tool=diffview.nvim
 	oldest-ancestor = !zsh -c 'diff --old-line-format='' --new-line-format='' <(git rev-list --first-parent "${1:-develop}") <(git rev-list --first-parent "${2:-HEAD}") | head -1' -
 	branchdiff = '!sh -c "git diff `git oldest-ancestor`.."'
         # fetch
