@@ -10,6 +10,10 @@ DOTBASH_CFG_ROOT="$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
 DOTBASH_CFG_INTERNAL_ROOT="$DOTBASH_CFG_ROOT/internal"
 DOTBASH_CFG_FEATURE=$(basename "$(readlink -f "$(dirname "$0")")")
 
+if [ "${DEBUG:-false}" = true ]; then
+  set -x
+fi
+
 usage() {
   cat <<EOF
 
@@ -34,6 +38,7 @@ _init_env() {
     echo "Unable to install the $DOTBASH_CFG_FEATURE feature. Missing config file $HOME/.dotbashcfg"
     exit 2
   fi
+  source "$DOTBASH_CFG_INTERNAL_ROOT/common-utils.sh"
   source "$DOTBASH_CFG_INTERNAL_ROOT/aliases/distro.sh"
 }
 

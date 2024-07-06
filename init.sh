@@ -12,71 +12,18 @@ DOTBASH_CFG_DIR="${DOTBASH_CFG_DIR/#\~/$HOME}"
 
 # -- Utility functions -- #
 
-# shellcheck source=internal/init-utils.sh
-source "$DOTBASH_CFG_DIR/internal/init-utils.sh"
+# shellcheck source=internal/common-utils.sh
+source "$DOTBASH_CFG_DIR/internal/common-utils.sh"
+# shellcheck source=internal/options-utils.sh
+source "$DOTBASH_CFG_DIR/internal/options-utils.sh"
 
-# Run the provided command & arguments into do.bashconfig project's directory
-run_in_project() {
-  pushd "$DOTBASH_CFG_DIR" > /dev/null || exit 1
-  trap "popd > /dev/null" EXIT
-  # shellcheck disable=SC2068
-  # Array expansion is intended this way
-  $@
-}
-
-# Ask the user for the deletion of the file or directory provided as argument:
-# - If accepted, remove it and go on,
-# - Otherwise, exit in error.
-remove_or_abort() {
-  if [ -e "$1" ]; then
-    if ok_to "Existing $1 detected..." "Override?"; then
-      rm -rf "$1"
-    else
-      return 2
-    fi
-  fi
-}
-
-# Ask the user a yes/no question and pick up his/her answer.
-# $1 - Preamble message (optional)
-# $2 - Main prompt message
-ok_to() {
-  [ $# -eq 2 ] && echo "$1" && shift 
-  REPLY=""
-  while ! [[ $REPLY =~ ^[yn]$ ]]; do
-    read -p "$1 [y/n] " -r
-  done
-  [ "$REPLY" = y ]
-  return $?
-}
-
-# Process the standard input by keeping only one occurrence for every line.
-uniq_occurrences() {
-  # This command is telling awk which lines to print. The variable $0 holds 
-  # the entire contents of a line and square brackets are array access. So,
-  # for each line of the file, the node of the array x is incremented and the
-  # line printed if the content of that node was not (!) previously set.
-  tr ' ' '\n' | awk '!x[$0]++'
-}
-
-# Process the standard input by excluding the lines matching elements of some
-# provided array.
-# $1 - The array containing elements to exclude from the stream.
-without_excluded() {
-  exclude_array_name="$1[*]"
-  tr ' ' '\n' | while read -r element; do
-    if ! [[ " ${!exclude_array_name} " =~ " $element " ]]; then
-      echo "$element"
-    fi
-  done
-}
 
 
 # --- Installation algorithm -- #
 
 # Take into account the values of options passed to this init script.
 # N.B. As a prerequisite, those values have been pre-parsed by the "parse_args"
-# function from the init-utils.sh script.
+# function from the options-utils.sh script.
 acknowledge_opts() {
   # If 'help' option was set, don't do anything more
   if [ -n "${DOTBASHCFG_VALUES[help]}" ]; then
@@ -121,10 +68,10 @@ acknowledge_opts() {
 
 # Initializes.bash configuration
 init() {
-  # If this script isn't launched from ~/.bash dir, then force rebuilding 
+  # If this script isn't launched from ~/.bash dir, then force rebuilding
   # ~/.bash from the actual dotbashconfig project directory
   echo "Init $HOME/.bash..."
-  if ! [ "$DOTBASH_CFG_DIR" = "$(readlink -f "$HOME/.bash")" ] ; then
+  if ! [ "$DOTBASH_CFG_DIR" = "$(readlink -f "$HOME/.bash")" ]; then
     remove_or_abort "$HOME/.bash"
     ln -s "$DOTBASH_CFG_DIR" "$HOME/.bash"
   fi
@@ -147,10 +94,10 @@ init() {
   cat > "$DOTBASH_CFG_FILE" <<-EOC
 #!/bin/bash
 export DOTBASHCFG_WIN_USER="$(if command -v cmd.exe &>/dev/null; then
-                                cmd.exe /C "echo %USERNAME%" 2>/dev/null | sed 's/[[:space:]]*$//'
-                              else
-                                echo "$USER"
-                              fi)"
+    cmd.exe /C "echo %USERNAME%" 2>/dev/null | sed 's/[[:space:]]*$//'
+  else
+    echo "$USER"
+  fi)"
 export DOTBASHCFG_TOOLS_DIR="$DOTBASHCFG_TOOLS_DIR"
 export DOTBASHCFG_USER_DISPLAY_NAME="$DOTBASHCFG_USER_DISPLAY_NAME"
 export DOTBASHCFG_USER_MAIL="$DOTBASHCFG_USER_MAIL"
@@ -165,7 +112,7 @@ EOC
 # been activated (based on this script's options).
 install_features() {
   # Create a temporary named pipe
-  # This pipe will be used to catch features output by 'analyze_feature' 
+  # This pipe will be used to catch features output by 'analyze_feature'
   # function on its file descriptor no. 3
   feature_pipe=$(mktemp -u)
   mkfifo "$feature_pipe"
@@ -216,7 +163,7 @@ install_features() {
   fi
 }
 
-# Check whether some feature shall be installed or not, based on the options 
+# Check whether some feature shall be installed or not, based on the options
 # used when calling this init.sh script.
 # $1 - The feature to check
 check_feature() {
@@ -232,19 +179,19 @@ check_feature() {
   fi
 }
 
-# Analyze features to install in order to check whether they depend on other 
+# Analyze features to install in order to check whether they depend on other
 # features.
 # $1 - The feature to analyze
-# 
-# N.B. Dependent features detected are output onto file descriptor no. 3 to 
-# avoid polluting either the stdout or stderr (since some messages are printed 
+#
+# N.B. Dependent features detected are output onto file descriptor no. 3 to
+# avoid polluting either the stdout or stderr (since some messages are printed
 # by this function on those outputs)
 analyze_feature() {
   local feature="$1"
 
   echo "Analyzing $feature feature..."
   dependencies="$(run_in_project "$feature/feature_mgr.sh" get-dependencies)"
-  for dependency in $dependencies; do 
+  for dependency in $dependencies; do
     analyze_feature "$dependency"
     echo "$dependency" >&3
   done
