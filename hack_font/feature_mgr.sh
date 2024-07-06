@@ -32,7 +32,7 @@ _install() {
 _sync_onto_windows() {
   sudo rm -f /c/Windows/Fonts/Hack*
   sudo find "$HOME"/.local/share/fonts/Hack/ -type f -name '*.ttf' \
-    -exec sudo cp {} /c/Windows/Fonts/ +
+    -exec sudo cp {} /c/Windows/Fonts/ \;
 }
 
 get_resources() {
