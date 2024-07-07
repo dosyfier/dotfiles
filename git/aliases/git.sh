@@ -85,9 +85,8 @@ git_ls_big_files() {
 }
 
 # Grep files within a git repository, without looking into the .git directory (which may take some time...)
-alias grep_git="grep --exclude-dir=.git"
+alias grep_git='find $(git ls-files) $(git ls-files --others --exclude-standard) -not -type l'
 alias gg="grep_git"
-alias ggr="grep_git -rn"
 
 # If a bash prompt is defined by a theme external to dotbashconfig (e.g. Bash-It's Powerline),
 # then what's left of this alias script is to be ignored (since it focuses on adding git status
