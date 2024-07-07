@@ -126,5 +126,19 @@ setopt no_auto_remove_slash
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# Ctrl-w - delete a full WORD (including colon, dot, comma, quotes...)
+my-backward-kill-word() {
+  # Add colon, comma, single/double quotes to word chars
+  local WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>:,"'"'"
+  zle -f kill # Append to the kill ring on subsequent kills.
+  zle backward-kill-word
+}
+zle -N my-backward-kill-word
+bindkey '^W' my-backward-kill-word
+
+# Reset Ctrl-a & Ctrl-e default behavior
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+
 # Customize ZSH autocomplete
 source ~/.bash/zsh/conf/zsh-completion.zsh
