@@ -1,11 +1,8 @@
 # vim: set filetype=gitconfig:
 ; The user section is defined dynamically via git env variables.
 ; See the aliases file for dotbashcfg "git" feature.
-; [user]
-; 	name = John Doe
-; 	email = john.doe@neverland.xyz
 [credential]
-	helper = cache
+	helper = store
 [core]
 	autocrlf = input
 	editor = nvim
