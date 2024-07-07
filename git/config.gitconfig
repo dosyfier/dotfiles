@@ -45,6 +45,8 @@
 	com = checkout master
 	# cherry-pick
 	cp = cherry-pick
+	cpa = cp --abort
+	cpc = cp --continue
 	# commit
 	c = commit
 	cm = commit -m
@@ -61,9 +63,11 @@
 	aliases = "!git config --get-regexp '^alias\\.' | sed -r 's/^alias\\.([^[:space:]]+) /\\1\\t= /'"
 	# diff
 	d = diff
-	dc = diff --cached
+	dc = d --cached
+	dn = d --name-only
+	dcn = dc --name-only
 	dt = difftool
-	dtc = difftool --cached
+	dtc = dt --cached
 	dtd = dt --dir-diff --tool=diffview.nvim
 	dtdc = dtc --dir-diff --tool=diffview.nvim
 	oldest-ancestor = !zsh -c 'diff --old-line-format='' --new-line-format='' <(git rev-list --first-parent "${1:-develop}") <(git rev-list --first-parent "${2:-HEAD}") | head -1' -
@@ -73,9 +77,9 @@
 	# grep
 	gr = grep -Ii
 	# log
-	lg = log --pretty=format:"%C(yellow)%h\\ %Cgreen%cs%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate
-	lgn = log --pretty=format:"%C(yellow)%h\\ %Cgreen%as%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --numstat
-	log-branch = '!sh -c "git log `git oldest-ancestor`.."'
+	lg = log --pretty=format:"%C(yellow)%h\\ %Cgreen%as\\ %C(cyan)(%cs)%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate
+	lgn = lg --numstat
+	log-branch = "!sh -c 'git log `git oldest-ancestor`..'"
 	# ls-files
 	f = "!git ls-files | grep -i"
 	# merge
@@ -93,20 +97,22 @@
 	phm = push origin master
 	phh = push origin HEAD
 	pht = push --tags
-	phu = !git push origin `git branch --show-current`
+	phu = "!sh -c 'br_name=`git branch --show-current` && git push origin $br_name && git branch --set-upstream-to=origin/$br_name'"
 	# rebase
 	rb = rebase
-	rba = rebase --abort
-	rbc = rebase --continue
-	rbd = rebase origin/develop
+	rba = rb --abort
+	rbc = rb --continue
+	rbd = rb origin/develop
 	rbf = !sh -c 'git rebase -i $(git merge-base $(git branch --show-current) origin/develop)'
 	rbi = !sh -c 'git rebase -i "${1:-origin/$(git branch --show-current)}"' -
-	rbm = rebase origin/master
-	rbs = rebase --skip
+	rbm = rb origin/master
+	rbo = rb --onto
+	rbs = rb --skip
 	# reset
 	rewind = reset --soft HEAD^${1}
 	unstage = reset HEAD
-        # rev-parse
+	# rev-list / rev-parse
+	show-biggest-obj = "!git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | sed -n 's/^blob //p' | sort --numeric-sort --key=2 | cut -c 1-12,41- | $(command -v gnumfmt || echo numfmt) --field=2 --to=iec-i --suffix=B --padding=7 --round=nearest"
 	show-upstream = rev-parse --abbrev-ref --symbolic-full-name @{u}
 	# show
 	sh = show
