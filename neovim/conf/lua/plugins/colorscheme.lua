@@ -24,6 +24,8 @@ return {
         colors.salmonpink = "#d7afd7"
         colors.orange = "#d7af87"
         colors.rust = "#d78787"
+        colors.darkblue = "#000875"
+        colors.darkgreen = "#0c8501"
       end,
       -- Set up color-mapping & style of hilights
       on_highlights = function(hl, c)
@@ -104,6 +106,11 @@ return {
 
         -- YAML
         hl.yamlFlowString = { fg = c.lightgreen }
+
+        -- Folke / Flash
+        -- hl.FlashLabel  = { bg = c.magenta, fg = c.black }
+        hl.FlashLabel  = { bg = c.cyan, fg = c.black }
+        hl.FlashCursor = { bg = c.black, fg = c.lightgold }
       end,
     }
   }
