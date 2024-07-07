@@ -89,3 +89,6 @@ function! SynGroup()
     let l:s = synID(line('.'), col('.'), 1)
     echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
 endfunc
+
+" Remove ^G characters from Nerd Tree view when running vim inside tmux
+let g:NERDTreeNodeDelimiter = "\u00a0"
