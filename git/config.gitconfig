@@ -31,6 +31,8 @@
 	a = !sh -c 'git add "${@:-.}"' -
 	aa = !sh -c 'git add -A "${@:-.}"' -
 	au = !sh -c 'git add -u "${@:-.}"' -
+	# blame
+	bl = blame
 	# branch
 	br = branch
 	bra = branch -a
@@ -92,7 +94,8 @@
 	plh = pull origin HEAD
 	# push
 	ph = push
-	phf = push --force
+	phf = push --force-with-lease
+	phff = push --force
 	phd = push origin develop
 	phm = push origin master
 	phh = push origin HEAD
