@@ -1,5 +1,4 @@
-# shellcheck disable=SC1090
-# SC1090: This is script is about dynamically sourcing every script under ~/.bash
+# shellcheck disable=SC1090 # This is script is about dynamically sourcing every script under ~/.bash
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
@@ -15,12 +14,16 @@
 # --- Functions
 
 source_ordered_scripts() {
-  for def_script in "$@"; do
-    script_basename="$(basename "$def_script")"
+  local sourced_scripts
+  while read -r script; do
+    script_abspath="$(readlink -f "$script")"
 
-    if [[ "$sourced_scripts" != *"$script_basename"* ]]; then
-      source "$def_script"
-      sourced_scripts+="${sourced_scripts+ }$script_basename"
+    if [[ ":$sourced_scripts:" =~ :$script_abspath: ]]; then
+      echo "WARNING: Following script has already been sourced: $script_abspath" >&2
+      echo "WARNING: It won't be sourced once again" >&2
+    else
+      source "$script_abspath"
+      sourced_scripts+="${sourced_scripts+:}$script_abspath"
     fi
   done
 }
@@ -36,19 +39,28 @@ done
 
 # Then, evaluate dotbashconfig project's configuration script
 if ! [ -f ~/.dotbashcfg ]; then
-  echo "ERROR: missing ~/.dotbashcfg file!"
+  echo "ERROR: missing ~/.dotbashcfg file!" >&2
 else
   source ~/.dotbashcfg
 fi
 
 # Once base scripts and configuration variables have been evaluated,
 # source other scripts in the appropriated order
-source_ordered_scripts $(xargs -I % echo "$HOME/.bash/internal/aliases/%.sh" < ~/.bash/internal/order/earliest-scripts.txt)
-source_ordered_scripts $(find ~/.bash/internal/aliases/ -name '*.sh' | grep -vFf ~/.bash/internal/order/latest-scripts.txt)
-source_ordered_scripts $(find ~/.bash/**/aliases/ -name '*.sh' -not -path '*/internal/*' | \
-  grep -E "/($(perl -le 'print join "|",@ARGV' "${DOTBASHCFG_ENABLED_FEATURES[@]}"))/")
-source_ordered_scripts $(find ~/.bash/ -type f -path '*/completions/*' -name "*.sh")
-source_ordered_scripts $(xargs -I % echo "$HOME/.bash/internal/aliases/%.sh" < ~/.bash/internal/order/latest-scripts.txt)
+{
+  # - Internal scripts to be sourced in earliest order
+  xargs -I % echo "$HOME/.bash/internal/aliases/%.sh" < ~/.bash/internal/order/earliest-scripts.txt
+  # - Internal scripts without specific ordering for sourcing
+  find ~/.bash/internal/aliases/ -name '*.sh' | grep -vF \
+    -f ~/.bash/internal/order/earliest-scripts.txt -f ~/.bash/internal/order/latest-scripts.txt
+  # - Feature-specific scripts, to be sourced when the associated feature is enabled
+  find ~/.bash/**/aliases/ -name '*.sh' -not -path '*/internal/*' | \
+    grep -E "/($(perl -le 'print join "|",@ARGV' "${DOTBASHCFG_ENABLED_FEATURES[@]}"))/"
+  # - Shell completion scripts
+  find ~/.bash/ -type f -path '*/completions/*' -name "*.sh"
+  # - Internal scripts to be sourced after all others
+  xargs -I % echo "$HOME/.bash/internal/aliases/%.sh" < ~/.bash/internal/order/latest-scripts.txt
+} \
+  | source_ordered_scripts
 
 # Allow users to define supplementary aliases within ~/.bash_aliases file or ~/.bash_aliases.d directory
 # These are evaluated as overriding scripts (i.e. once all other scripts have been processed)
