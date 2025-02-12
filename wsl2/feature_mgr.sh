@@ -31,7 +31,7 @@ install_wsl() {
   fi
   
   # Copy Powershell scripts into a Windows-located directory
-  wsl_scripts_dir="$DOTBASHCFG_TOOLS_DIR/wsl/scripts"
+  wsl_scripts_dir="$DOTFILES_TOOLS_DIR/wsl/scripts"
   mkdir -p "$wsl_scripts_dir"
   cp -v "$FEATURE_ROOT"/tasks/*.ps1 "$wsl_scripts_dir"/
 

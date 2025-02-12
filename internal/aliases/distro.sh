@@ -3,11 +3,9 @@
 # vim: set ft=bash
 
 # shellcheck disable=SC2034
-# SC2034: This script is meant to be sourced through .bashrc. Thus, there is no
+# SC2034: This script is meant to be sourced through .<SHELL>rc. Thus, there is no
 #   need to export any global variable (except for Terminator Windows shortcut,
 #   as explained below).
-
-source ~/.dotbashcfg
 
 # Read /proc/version, once and for all (due to performance issues on WSL 1)
 PROC_VERSION=$(cat /proc/version)
@@ -66,7 +64,7 @@ case $(get_distro_type) in
     drive_mount_root=/cygdrive
     # shellcheck disable=SC2139
     # SC2139: Ok to expand when defined, not when used
-    alias cygwin_setup="$DOTBASHCFG_TOOLS_DIR/cygwin64/setup-x86_64.exe"
+    alias cygwin_setup="$DOTFILES_TOOLS_DIR/cygwin64/setup-x86_64.exe"
     ;;
   wsl)
     win_os=true
@@ -91,7 +89,7 @@ esac
 
 if [ "$win_os" = true ]; then
   WIN_HOSTS="/c/Windows/System32/drivers/etc/hosts"
-  export WIN_HOME="/c/Users/$DOTBASHCFG_WIN_USER"
+  export WIN_HOME="/c/Users/$DOTFILES_WIN_USER"
   WIN_DOWNLOADS="$WIN_HOME/Downloads"
   WIN_DESKTOP="$WIN_HOME/Desktop"
 

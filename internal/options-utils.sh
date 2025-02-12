@@ -1,62 +1,60 @@
 #!/bin/bash
 
-if [ -z "$DOTBASH_CFG_DIR" ]; then DOTBASH_CFG_DIR=$HOME/.bash; fi
-
 # shellcheck source=aliases/colors.sh
-source "$DOTBASH_CFG_DIR/internal/aliases/colors.sh"
+source "$DOTFILES_DIR/internal/aliases/colors.sh"
 
 available_features() {
-  find "$DOTBASH_CFG_DIR" -maxdepth 2 -name feature_mgr.sh -printf "%h, " | \
-    sed -e "s#$DOTBASH_CFG_DIR/##g" -e 's#, $##g'
+  find "$DOTFILES_DIR" -maxdepth 2 -name feature_mgr.sh -printf "%h, " | \
+    sed -e "s#$DOTFILES_DIR/##g" -e 's#, $##g'
 }
 
-declare -A DOTBASHCFG_SHORT_OPTS
-declare -A DOTBASHCFG_LONG_OPTS
-declare -A DOTBASHCFG_EXTRA_OPTS
-declare -A DOTBASHCFG_ARG_NAMES
-declare -A DOTBASHCFG_DESCS
-declare -A DOTBASHCFG_VALUES
+declare -A DOTFILES_SHORT_OPTS
+declare -A DOTFILES_LONG_OPTS
+declare -A DOTFILES_EXTRA_OPTS
+declare -A DOTFILES_ARG_NAMES
+declare -A DOTFILES_DESCS
+declare -A DOTFILES_VALUES
 
-DOTBASHCFG_SHORT_OPTS[user_display_name]="-n"
-DOTBASHCFG_LONG_OPTS[user_display_name]="--display-name"
-DOTBASHCFG_ARG_NAMES[user_display_name]="<login>"
-DOTBASHCFG_DESCS[user_display_name]="Display name (first & last name) "\
+DOTFILES_SHORT_OPTS[user_display_name]="-n"
+DOTFILES_LONG_OPTS[user_display_name]="--display-name"
+DOTFILES_ARG_NAMES[user_display_name]="<login>"
+DOTFILES_DESCS[user_display_name]="Display name (first & last name) "\
 "to consider for the current user (used for \"git\" feature)."
 
-DOTBASHCFG_SHORT_OPTS[user_mail]="-m"
-DOTBASHCFG_LONG_OPTS[user_mail]="--mail"
-DOTBASHCFG_ARG_NAMES[user_mail]="<mail-address>"
-DOTBASHCFG_DESCS[user_mail]="Mail address to consider for the current "\
+DOTFILES_SHORT_OPTS[user_mail]="-m"
+DOTFILES_LONG_OPTS[user_mail]="--mail"
+DOTFILES_ARG_NAMES[user_mail]="<mail-address>"
+DOTFILES_DESCS[user_mail]="Mail address to consider for the current "\
 "user (used for \"git\" feature)."
 
-DOTBASHCFG_SHORT_OPTS[tools_dir]="-t"
-DOTBASHCFG_LONG_OPTS[tools_dir]="--tools"
-DOTBASHCFG_ARG_NAMES[tools_dir]="<tools-dir>"
-DOTBASHCFG_DESCS[tools_dir]="Path where any 3rd party tool required "\
+DOTFILES_SHORT_OPTS[tools_dir]="-t"
+DOTFILES_LONG_OPTS[tools_dir]="--tools"
+DOTFILES_ARG_NAMES[tools_dir]="<tools-dir>"
+DOTFILES_DESCS[tools_dir]="Path where any 3rd party tool required "\
 "by Dotbashconfig will be installed."
 
-DOTBASHCFG_SHORT_OPTS[with_features]="-f"
-DOTBASHCFG_LONG_OPTS[with_features]="--with-features"
-DOTBASHCFG_EXTRA_OPTS[with_features]="--with-<feature-name>-feature"
-DOTBASHCFG_ARG_NAMES[with_features]="<feature-1>,...,<feature-n>"
-DOTBASHCFG_DESCS[with_features]='Automatically install only a '\
+DOTFILES_SHORT_OPTS[with_features]="-f"
+DOTFILES_LONG_OPTS[with_features]="--with-features"
+DOTFILES_EXTRA_OPTS[with_features]="--with-<feature-name>-feature"
+DOTFILES_ARG_NAMES[with_features]="<feature-1>,...,<feature-n>"
+DOTFILES_DESCS[with_features]='Automatically install only a '\
 'subset of the dotbashconfig features (identified by their "feature-name"). '\
 $'Here is the list of those features:\n'\
 "$(available_features)"
 
-DOTBASHCFG_SHORT_OPTS[all_features]="-y"
-DOTBASHCFG_LONG_OPTS[all_features]="--all-features"
-DOTBASHCFG_DESCS[all_features]='Automatically accept the '\
+DOTFILES_SHORT_OPTS[all_features]="-y"
+DOTFILES_LONG_OPTS[all_features]="--all-features"
+DOTFILES_DESCS[all_features]='Automatically accept the '\
 'installation of every dotbashconfig features.'
 
-DOTBASHCFG_SHORT_OPTS[skip_install]="-s"
-DOTBASHCFG_LONG_OPTS[skip_install]="--skip-installation"
-DOTBASHCFG_DESCS[skip_install]='Skip the installation of every '\
+DOTFILES_SHORT_OPTS[skip_install]="-s"
+DOTFILES_LONG_OPTS[skip_install]="--skip-installation"
+DOTFILES_DESCS[skip_install]='Skip the installation of every '\
 'dotbashconfig features (i.e. only bashrc environment will be configured).'
 
-DOTBASHCFG_SHORT_OPTS[help]="-h"
-DOTBASHCFG_LONG_OPTS[help]="--help"
-DOTBASHCFG_DESCS[help]='Displays this message.'
+DOTFILES_SHORT_OPTS[help]="-h"
+DOTFILES_LONG_OPTS[help]="--help"
+DOTFILES_DESCS[help]='Displays this message.'
 
 usage() {
   usage_str="
@@ -64,12 +62,12 @@ usage() {
   where available options are:
 "
 
-  for opt in "${!DOTBASHCFG_SHORT_OPTS[@]}"; do
-    short_opt="${DOTBASHCFG_SHORT_OPTS[$opt]}"
-    long_opt="${DOTBASHCFG_LONG_OPTS[$opt]}"
-    extra_opt="${DOTBASHCFG_EXTRA_OPTS[$opt]}"
-    arg_name="${DOTBASHCFG_ARG_NAMES[$opt]}"
-    description="${DOTBASHCFG_DESCS[$opt]}"
+  for opt in "${!DOTFILES_SHORT_OPTS[@]}"; do
+    short_opt="${DOTFILES_SHORT_OPTS[$opt]}"
+    long_opt="${DOTFILES_LONG_OPTS[$opt]}"
+    extra_opt="${DOTFILES_EXTRA_OPTS[$opt]}"
+    arg_name="${DOTFILES_ARG_NAMES[$opt]}"
+    description="${DOTFILES_DESCS[$opt]}"
 
     if [ -z "$arg_name" ]; then
       usage_str+=$'\n  '"$short_opt|$long_opt"
@@ -89,12 +87,12 @@ usage() {
 parse_opts() {
   while [ $# -ne 0 ]; do
     if m="$(match_regular "$1")"; then
-      if [ -z "${DOTBASHCFG_ARG_NAMES[$m]}" ]; then
-	DOTBASHCFG_VALUES[$m]=true
+      if [ -z "${DOTFILES_ARG_NAMES[$m]}" ]; then
+	DOTFILES_VALUES[$m]=true
       elif [ -z "$2" ]; then
-	usage_error "Missing argument ${DOTBASHCFG_ARG_NAMES[$m]} for option $1"
+	usage_error "Missing argument ${DOTFILES_ARG_NAMES[$m]} for option $1"
       else
-	DOTBASHCFG_VALUES[$m]="$2"
+	DOTFILES_VALUES[$m]="$2"
 	shift
       fi
       shift
@@ -102,7 +100,7 @@ parse_opts() {
     elif m="$(match_extra "$1")"; then
       key="$(echo "$m" | cut -d' ' -f1)"
       value="$(echo "$m" | cut -d' ' -f2)"
-      DOTBASHCFG_VALUES[$key]="$value"
+      DOTFILES_VALUES[$key]="$value"
       shift
 
     else
@@ -112,19 +110,19 @@ parse_opts() {
 }
 
 match_regular() {
-  for e in "${!DOTBASHCFG_SHORT_OPTS[@]}"; do
-    [ "$1" == "${DOTBASHCFG_SHORT_OPTS[$e]}" ] && echo "$e" && return 0
+  for e in "${!DOTFILES_SHORT_OPTS[@]}"; do
+    [ "$1" == "${DOTFILES_SHORT_OPTS[$e]}" ] && echo "$e" && return 0
   done
-  for e in "${!DOTBASHCFG_LONG_OPTS[@]}"; do
-    [ "$1" == "${DOTBASHCFG_LONG_OPTS[$e]}" ] && echo "$e" && return 0
+  for e in "${!DOTFILES_LONG_OPTS[@]}"; do
+    [ "$1" == "${DOTFILES_LONG_OPTS[$e]}" ] && echo "$e" && return 0
   done
   return 1
 }
 
 match_extra() {
-  for e in "${!DOTBASHCFG_EXTRA_OPTS[@]}"; do
-    regex="$(echo "${DOTBASHCFG_EXTRA_OPTS[$e]}" | sed 's,<.\+>,.*,g')"
-    regex_extract="$(echo "${DOTBASHCFG_EXTRA_OPTS[$e]}" | sed 's,<.\+>,\\(.*\\),g')"
+  for e in "${!DOTFILES_EXTRA_OPTS[@]}"; do
+    regex="$(echo "${DOTFILES_EXTRA_OPTS[$e]}" | sed 's,<.\+>,.*,g')"
+    regex_extract="$(echo "${DOTFILES_EXTRA_OPTS[$e]}" | sed 's,<.\+>,\\(.*\\),g')"
     [[ "$1" =~ $regex ]] && echo "$e $(expr "$1" : $regex_extract)" && return 0
   done
 }

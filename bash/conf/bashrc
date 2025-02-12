@@ -1,0 +1,2 @@
+# vim: set ft=bash
+source "$(dirname "$(dirname "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")")")/internal/shrc.sh"

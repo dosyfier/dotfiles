@@ -2,8 +2,8 @@
 
 # Environnement variables used to replace the user-dependent "core"
 # settings from .gitconfig
-export GIT_AUTHOR_NAME="$DOTBASHCFG_USER_DISPLAY_NAME"
-export GIT_AUTHOR_EMAIL="$DOTBASHCFG_USER_MAIL"
+export GIT_AUTHOR_NAME="$DOTFILES_USER_DISPLAY_NAME"
+export GIT_AUTHOR_EMAIL="$DOTFILES_USER_MAIL"
 export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
 export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 
@@ -89,18 +89,18 @@ alias git_ls='find $(git ls-files) $(git ls-files --others --exclude-standard) -
 alias gl=git_ls
 alias gg="git_ls | xargs grep --color -n"
 
-# If a bash prompt is defined by a theme external to dotbashconfig (e.g. Bash-It's Powerline),
+# If a bash prompt is defined by a theme external to dotfiles (e.g. Bash-It's Powerline),
 # then what's left of this alias script is to be ignored (since it focuses on adding git status
 # info to the prompt)
-if [ "$DOTBASHCFG_ENABLE_EXTERNAL_PROMPT" = true ]; then
+if [ "$DOTFILES_ENABLE_EXTERNAL_PROMPT" = true ]; then
   return
 fi
 
-# Using this function forces to reset the DOTBASHCFG_LAST_PWD var
+# Using this function forces to reset the DOTFILES_LAST_PWD var
 # before each time git gets called. Otherwise, when switching branch
 # without changing cwd (which happens quite often), git prompt would
 # not be updated...
-alias git="unset DOTBASHCFG_LAST_PWD; git"
+alias git="unset DOTFILES_LAST_PWD; git"
 
 # Trigger this function on each new prompt entry to re-calculate
 # Git branch state for the current working directory
@@ -108,23 +108,23 @@ git_prompt_command() {
   # shellcheck disable=SC2155 
   # Return code isn't used here
   local new_pwd="$(pwd)"
-  if [ "$new_pwd" != "$DOTBASHCFG_LAST_PWD" ]; then
+  if [ "$new_pwd" != "$DOTFILES_LAST_PWD" ]; then
     if git rev-parse --is-inside-work-tree 2>/dev/null 1>&2; then
       # shellcheck disable=SC2034 
-      # Variable DOTBASHCFG_GIT_BRANCH_STATE is used in EXTRA_PS1
-      DOTBASHCFG_GIT_BRANCH_STATE="$(git_branch_state 2>/dev/null | sed 's/\(.\+\)/\(\1\)/')"
+      # Variable DOTFILES_GIT_BRANCH_STATE is used in EXTRA_PS1
+      DOTFILES_GIT_BRANCH_STATE="$(git_branch_state 2>/dev/null | sed 's/\(.\+\)/\(\1\)/')"
     else
-      unset DOTBASHCFG_GIT_BRANCH_STATE
+      unset DOTFILES_GIT_BRANCH_STATE
     fi
   fi
-  DOTBASHCFG_LAST_PWD="$new_pwd"
+  DOTFILES_LAST_PWD="$new_pwd"
 }
 
 PROMPT_COMMAND="git_prompt_command; $PROMPT_COMMAND"
 
-# Set EXTRA_PS1 variable (used by dotbashconfig's bash_prompt.sh script)
+# Set EXTRA_PS1 variable (used by dotfiles's bash_prompt.sh script)
 # to display the current git branch state (branch name or tag or commit ID)
 # shellcheck disable=SC2016 disable=SC2034
 # (EXTRA_PS1 is a contribution to PS1, used by another script)
-EXTRA_PS1='$(command -v git > /dev/null && echo "$DOTBASHCFG_GIT_BRANCH_STATE" )'
+EXTRA_PS1='$(command -v git > /dev/null && echo "$DOTFILES_GIT_BRANCH_STATE" )'
 

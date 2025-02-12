@@ -11,12 +11,14 @@ get_dependencies() {
 
 install_common() {
   # shellcheck source=../git/aliases/git.sh
-  source "$DOTBASH_CFG_ROOT/git/aliases/git.sh"
+  source "$DOTFILES_DIR/git/aliases/git.sh"
 
   _install_or_update_git_repo "https://github.com/Bash-it/bash-it.git" \
     "/opt/bash-it"
   _install_or_update_git_repo "https://github.com/romkatv/gitstatus.git" \
     "/opt/gitstatus"
+
+  sed -ri 's/^(export DOTFILES_ENABLE_EXTERNAL_PROMPT=).*$/\1true/' "$DOTFILES_ENV_FILE"
 }
 
 _install_or_update_git_repo() {

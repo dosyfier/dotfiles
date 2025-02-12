@@ -11,5 +11,5 @@ run_docker_wsl1() {
 
 alias dk="docker"
 alias dk_run_blank="docker run -ti --rm \
--v ~/.bash/docker/conf/run-in-preferred-shell.sh:/usr/local/bin/run-in-preferred-shell:ro \
+-v $DOTFILES_DIR/docker/conf/run-in-preferred-shell.sh:/usr/local/bin/run-in-preferred-shell:ro \
 --entrypoint run-in-preferred-shell"

@@ -1,31 +1,31 @@
 # Chocolatey related shell aliases
 
-DOTBASHCFG_CHOCO_CONFIG_DIR=~/.bash/chocolatey/conf
-DOTBASHCFG_CHOCO_CONFIG_DEFAULT="$(cat $DOTBASHCFG_CHOCO_CONFIG_DIR/default-config.txt)"
+DOTFILES_CHOCO_CONFIG_DIR="$DOTFILES_DIR/chocolatey/conf"
+DOTFILES_CHOCO_CONFIG_DEFAULT="$(cat $DOTFILES_CHOCO_CONFIG_DIR/default-config.txt)"
 
-_dotbashcfg_choco_inst_usage() {
-  available_types="$(find "$DOTBASHCFG_CHOCO_CONFIG_DIR" -name "packages-*.config" | \
+_dotfiles_choco_inst_usage() {
+  available_types="$(find "$DOTFILES_CHOCO_CONFIG_DIR" -name "packages-*.config" | \
     sed 's/^.*-\([a-z]\+\)\..*$/\1/' | paste -sd ',' - | sed 's/,/, /g')"
-  echo "Usage: dotbashcfg_choco_inst [TYPE]"
+  echo "Usage: dotfiles_choco_inst [TYPE]"
   echo "where TYPE may be: $available_types"
-  echo "(default: $DOTBASHCFG_CHOCO_CONFIG_DEFAULT)"
+  echo "(default: $DOTFILES_CHOCO_CONFIG_DEFAULT)"
   printf "\n"
 }
 
-dotbashcfg_choco_inst() {
+dotfiles_choco_inst() {
   if [ $# -eq 1 ] && [[ "$1" =~ ^(-h|--help|-?)$ ]]; then
-    _dotbashcfg_choco_inst_usage
+    _dotfiles_choco_inst_usage
     return
   elif [ $# -gt 1 ]; then
-    _dotbashcfg_choco_inst_usage
+    _dotfiles_choco_inst_usage
     return 1
   fi
 
-  type="${1:-$DOTBASHCFG_CHOCO_CONFIG_DEFAULT}"
-  choco install "$(wslpath -w "$DOTBASHCFG_CHOCO_CONFIG_DIR/packages-${type}.config")"
+  type="${1:-$DOTFILES_CHOCO_CONFIG_DEFAULT}"
+  choco install "$(wslpath -w "$DOTFILES_CHOCO_CONFIG_DIR/packages-${type}.config")"
 }
 
-dotbashcfg_choco_up() {
+dotfiles_choco_up() {
   if [ $# -eq 1 ] && [[ "$1" =~ ^(-h|--help|-?)$ ]]; then
     echo "Upgrades all Chocolatey packages installed (lit.: choco upgrade all)"
     printf "\n"

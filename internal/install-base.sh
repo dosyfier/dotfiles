@@ -2,13 +2,14 @@
 # shellcheck disable=SC1090
 # SC1090: This script sources scripts with variable file names
 
-# This is a base script meant to be sourced by any dotbashconfig feature
+# This is a base script meant to be sourced by any dotfiles feature
 # installation script.
 
 
-DOTBASH_CFG_ROOT="$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
-DOTBASH_CFG_INTERNAL_ROOT="$DOTBASH_CFG_ROOT/internal"
-DOTBASH_CFG_FEATURE=$(basename "$(readlink -f "$(dirname "$0")")")
+DOTFILES_ENV_FILE=$HOME/.dotfiles.env
+DOTFILES_DIR="$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
+DOTFILES_INTERNAL_ROOT="$DOTFILES_DIR/internal"
+DOTFILES_FEATURE=$(basename "$(readlink -f "$(dirname "$0")")")
 
 if [ "${DEBUG:-false}" = true ]; then
   set -x
@@ -32,14 +33,14 @@ EOF
 }
 
 _init_env() {
-  if [ -f "$HOME/.dotbashcfg" ]; then
-    source "$HOME/.dotbashcfg"
+  if [ -f "$DOTFILES_ENV_FILE" ]; then
+    source "$DOTFILES_ENV_FILE"
   else
-    echo "Unable to install the $DOTBASH_CFG_FEATURE feature. Missing config file $HOME/.dotbashcfg"
+    echo "Unable to install the $DOTFILES_FEATURE feature. Missing config file $DOTFILES_ENV_FILE"
     exit 2
   fi
-  source "$DOTBASH_CFG_INTERNAL_ROOT/common-utils.sh"
-  source "$DOTBASH_CFG_INTERNAL_ROOT/aliases/distro.sh"
+  source "$DOTFILES_INTERNAL_ROOT/common-utils.sh"
+  source "$DOTFILES_INTERNAL_ROOT/aliases/distro.sh"
 }
 
 get_dependencies() {
@@ -72,9 +73,9 @@ install() {
   elif type "install_common" 1>/dev/null 2>&1; then
     run_install "install_common" "$distro"
   elif [ -n "$distro" ]; then
-    echo "Nothing to install for this distro for the $DOTBASH_CFG_FEATURE feature."
+    echo "Nothing to install for this distro for the $DOTFILES_FEATURE feature."
   else
-    echo "Unknown distro, cannot install packages for the $DOTBASH_CFG_FEATURE feature..." >&2
+    echo "Unknown distro, cannot install packages for the $DOTFILES_FEATURE feature..." >&2
     return 1
   fi
 }
@@ -83,16 +84,16 @@ run_install() {
   install_function="$1"
   distro="$2"
 
-  if [ -f "$DOTBASH_CFG_INTERNAL_ROOT/providers/${distro}.sh" ]; then
-    source "$DOTBASH_CFG_INTERNAL_ROOT/providers/${distro}.sh"
+  if [ -f "$DOTFILES_INTERNAL_ROOT/providers/${distro}.sh" ]; then
+    source "$DOTFILES_INTERNAL_ROOT/providers/${distro}.sh"
   fi
   
   # Because of set -e done in each feature_mgr.sh script, the `install_function` must be called from
   # an "if" block, so that we can display an indicative message in case of an installation failure
   if "${install_function}"; then
-    echo "Feature $DOTBASH_CFG_FEATURE successfully installed."
+    echo "Feature $DOTFILES_FEATURE successfully installed."
   else
-    echo "Feature $DOTBASH_CFG_FEATURE could not be installed (see above)."
+    echo "Feature $DOTFILES_FEATURE could not be installed (see above)."
     return 2
   fi
 }

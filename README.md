@@ -1,11 +1,11 @@
-# dotbashconfig
+# dotfiles
 
 [![Code Climate][code-climate-badge]][code-climate]
 [![License][license-badge]][license]
 
-My centralized and portable bash configuration.
+My centralized and portable dotfiles.
 
-[code-climate-badge]: https://codeclimate.com/github/dosyfier/dotbashconfig/badges/gpa.svg
-[code-climate]: https://codeclimate.com/github/dosyfier/dotbashconfig
-[license-badge]: https://img.shields.io/github/license/dosyfier/dotbashconfig.svg
-[license]: https://github.com/dosyfier/dotbashconfig/blob/master/LICENSE
+[code-climate-badge]: https://codeclimate.com/github/dosyfier/dotfiles/badges/gpa.svg
+[code-climate]: https://codeclimate.com/github/dosyfier/dotfiles
+[license-badge]: https://img.shields.io/github/license/dosyfier/dotfiles.svg
+[license]: https://github.com/dosyfier/dotfiles/blob/master/LICENSE

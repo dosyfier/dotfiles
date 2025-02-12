@@ -18,6 +18,8 @@ install_common() {
     "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
   ln -vs "$FEATURE_ROOT"/conf/zshrc "$HOME"/.zshrc
   ln -vs "$FEATURE_ROOT"/conf/p10k.zsh "$HOME"/.p10k.zsh
+
+  sed -ri 's/^(export DOTFILES_ENABLE_EXTERNAL_PROMPT=).*$/\1true/' "$DOTFILES_ENV_FILE"
 }
 
 get_resources() {

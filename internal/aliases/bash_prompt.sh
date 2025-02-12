@@ -24,7 +24,7 @@ esac
 
 # If a bash prompt is defined by a theme external to dotbashconfig (e.g. Bash-It's Powerline),
 # then this alias script is ignored
-if [ "$DOTBASHCFG_ENABLE_EXTERNAL_PROMPT" = true ]; then
+if [ "$DOTFILES_ENABLE_EXTERNAL_PROMPT" = true ]; then
   return
 fi
 

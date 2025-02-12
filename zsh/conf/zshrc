@@ -86,7 +86,7 @@ plugins=(docker gitfast)
 zstyle ':completion:*:*:docker:*' option-stacking yes
 zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
-source ~/.bashrc
+source ~/.dotfiles/internal/shrc.sh
 
 source $ZSH/oh-my-zsh.sh
 
@@ -141,4 +141,4 @@ bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
 
 # Customize ZSH autocomplete
-source ~/.bash/zsh/conf/zsh-completion.zsh
+source ~/.dotfiles/zsh/conf/zsh-completion.zsh

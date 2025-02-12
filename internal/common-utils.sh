@@ -1,10 +1,8 @@
 #!/bin/bash
 
-if [ -z "$DOTBASH_CFG_DIR" ]; then DOTBASH_CFG_DIR=$HOME/.bash; fi
-
-# Run the provided command & arguments into dotbashconfig project's directory
+# Run the provided command & arguments into dotfiles project's directory
 run_in_project() {
-  pushd "$DOTBASH_CFG_DIR" >/dev/null || exit 1
+  pushd "$DOTFILES_DIR" >/dev/null || exit 1
   trap "popd > /dev/null" EXIT
   # shellcheck disable=SC2068
   # Array expansion is intended this way

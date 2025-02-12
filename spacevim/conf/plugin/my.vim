@@ -50,7 +50,7 @@ set ignorecase
 set smartcase
 
 " Shortcut to open the current file into firefox
-nnoremap <F12>f :exe ':silent !source ~/.bash/internal/aliases/distro.sh; if command -v wslpath > /dev/null; then firefox "file:///$(wslpath -m "%")"; else firefox "file:///%"; fi'<CR>
+nnoremap <F12>f :exe ':silent !source ~/.dotfiles.env; source $DOTFILES_DIR/internal/aliases/distro.sh; if command -v wslpath > /dev/null; then firefox "file:///$(wslpath -m "%")"; else firefox "file:///%"; fi'<CR>
 
 " If buffer modified, update any 'Last modified: ' in the first 20 lines.
 " 'Last modified: Fri 04 Mar 2022 12:18:12 AM CET

@@ -12,7 +12,8 @@ vim.keymap.set('v', '<C-r>', '"hy:%s/<C-r>h/<C-r>h/gc<left><left><left>')
 
 -- Shortcut to open the current file into firefox
 vim.keymap.set('n', '<F12>f', ":exe ':silent !" ..
-  "source ~/.bash/internal/aliases/distro.sh; " ..
+  "source ~/.dotfiles.env; " ..
+  "source $DOTFILES_DIR/internal/aliases/distro.sh; " ..
   "if command -v wslpath > /dev/null; " ..
   "then firefox \"file:///$(wslpath -m \"%\")\"; " ..
   "else firefox \"file:///%\"; " ..

@@ -1,6 +1,6 @@
-# vim: set filetype=gitconfig:
+# vim: set filetype=gitconfig
 ; The user section is defined dynamically via git env variables.
-; See the aliases file for dotbashcfg "git" feature.
+; See the aliases file for dotfiles "git" feature.
 [credential]
 	helper = store
 [core]
