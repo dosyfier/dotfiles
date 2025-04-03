@@ -5,15 +5,16 @@
 # This is a base script meant to be sourced by any dotfiles feature
 # installation script.
 
+set -euo pipefail
+
+if [ "${DEBUG:-false}" = true ]; then
+  set -x
+fi
 
 DOTFILES_ENV_FILE=$HOME/.dotfiles.env
 DOTFILES_DIR="$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
 DOTFILES_INTERNAL_ROOT="$DOTFILES_DIR/internal"
 DOTFILES_FEATURE=$(basename "$(readlink -f "$(dirname "$0")")")
-
-if [ "${DEBUG:-false}" = true ]; then
-  set -x
-fi
 
 usage() {
   cat <<EOF

@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 

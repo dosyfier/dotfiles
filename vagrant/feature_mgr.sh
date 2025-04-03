@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"

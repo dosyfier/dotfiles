@@ -155,8 +155,9 @@ install_features() {
     "Ok to install?"; then
     # ... then proceed with the actual installation
     for feature in $(echo "${features_to_install[*]}" | uniq_occurrences); do
-      install_feature "$feature"
-      [ $? -ne 0 ] && features_in_error+=("$feature")
+      if ! install_feature "$feature"; then
+        features_in_error+=("$feature")
+      fi
     done
     if [ -n "${features_in_error[0]}" ]; then
       printf "\nWARN: Some features could not be installed (see logs above):\n"

@@ -4,9 +4,7 @@
 run_in_project() {
   pushd "$DOTFILES_DIR" >/dev/null || exit 1
   trap "popd > /dev/null" EXIT
-  # shellcheck disable=SC2068
-  # Array expansion is intended this way
-  $@
+  "$@"
 }
 
 # Ask the user for the deletion of the file or directory provided as argument:

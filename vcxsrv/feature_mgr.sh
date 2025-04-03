@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # shellcheck source=../internal/install-base.sh
 FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
