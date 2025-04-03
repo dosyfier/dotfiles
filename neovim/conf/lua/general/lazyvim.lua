@@ -34,6 +34,8 @@ vim.g.autoformat = false
 -- Necessary for the xmledit plugin
 -- (otherwise, the default '>' key mapping isn't working)
 vim.g.xml_tag_completion_map = "<C-e>"
+-- Lets xmledit work with TreeSitter active (in which case traditional syntax groups are emptied)
+vim.g.xml_tag_syntax_prefixes = "html\\|xml\\|docbk\\|"
 
 -- Correct syntax highlight for Jinja2 template files
 vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
