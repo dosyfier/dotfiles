@@ -45,4 +45,12 @@ return {
 
   -- Highlight and search for todo comments (TODO, FIXME, ...)
   "folke/todo-comments.nvim",
+
+  -- Simple tools to help developers working YAML in Neovim
+  {
+    "cuducos/yaml.nvim",
+    opts = {
+      ft = { "yaml", "yaml.ansible" }
+    }
+  }
 }

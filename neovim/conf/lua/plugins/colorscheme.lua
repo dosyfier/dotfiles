@@ -79,6 +79,7 @@ return {
 
         -- Treesitter
         hl["@keyword.import"] = { fg = c.lightgreen, bold = true }
+        hl["@property.yaml"] = { link = "Identifier" }
 
         -- LSP
         hl["@lsp.type.keyword"] = { fg = c.green, bold = true }
