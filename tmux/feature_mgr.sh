@@ -26,10 +26,18 @@ _install() {
     rm -f "$tmux_config_file" # in case the link is broken...
     ln -s "$FEATURE_ROOT"/conf/tmux.conf "$tmux_config_file"
   fi
+
+  # Install TPM (Tmux Plugin Manager)
+  if [ -d "$HOME/.tmux/plugins/tpm" ]; then
+    git -C "$HOME/.tmux/plugins/tpm" pull
+  else
+    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+  fi
 }
 
 get_resources() {
-  _get_installed_resource "$HOME/.tmux.conf" "$HOME/.tmux-sessions.properties"
+  _get_installed_resource "$HOME/.tmux.conf" "$HOME/.tmux-sessions.properties" \
+    "$HOME/.tmux/plugins"
 }
 
 main "$@"
