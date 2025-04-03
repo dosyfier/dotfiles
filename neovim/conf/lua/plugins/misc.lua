@@ -20,14 +20,7 @@ return {
   "sukima/xmledit",
 
   -- TreeSitter integration (incremental parser)
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = {
-      -- Not doing great, e.g. with Ansible...
-      highlight = { enable = false },
-      indent = { enable = false }
-    }
-  },
+  "nvim-treesitter/nvim-treesitter",
   "nvim-treesitter/playground",
 
   -- Great Tim Pope's plugins

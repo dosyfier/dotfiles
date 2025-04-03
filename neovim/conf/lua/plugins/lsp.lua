@@ -1,3 +1,16 @@
+-- Event handler related to LSP language detection
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    -- Get the detaching client
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    -- Disable Treesitter for Ansible files
+    if client ~= nil and client.name == 'ansiblels' then
+      vim.cmd('TSDisable highlight')
+      vim.cmd('TSDisable indent')
+    end
+  end
+})
+
 return {
   -- Linting plugin
   { "mfussenegger/nvim-lint" },
@@ -51,7 +64,9 @@ return {
         virtual_text = {
           source = "always",
           format = function(diagnostic)
-            if diagnostic.user_data.lsp.code == nil then
+            if diagnostic.user_data == nil or
+              diagnostic.user_data.lsp == nil or
+              diagnostic.user_data.lsp.code == nil then
               return diagnostic.message
             else
               return string.format("[%s] %s", diagnostic.user_data.lsp.code, diagnostic.message)
