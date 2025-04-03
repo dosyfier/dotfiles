@@ -3,6 +3,8 @@
 # shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"
 
+FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
+
 NEOVIM_VERSION=0.11.0
 NEOVIM_ARCHIVE_NAME=nvim-linux-x86_64.tar.gz
 NEOVIM_DOWNLOAD_URL=https://github.com/neovim/neovim/releases/download/v$NEOVIM_VERSION/$NEOVIM_ARCHIVE_NAME
