@@ -33,6 +33,12 @@ _install() {
   else
     git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
   fi
+
+  # Install Tmux Powerline config
+  tmux_powerline_cfg_install_dir="${XDG_CONFIG_HOME:-$HOME/.config}/tmux-powerline"
+  if ! [ -e "$tmux_powerline_cfg_install_dir" ]; then
+    ln -s "$FEATURE_ROOT/conf/tmux-powerline" "$tmux_powerline_cfg_install_dir"
+  fi
 }
 
 get_resources() {
