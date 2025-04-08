@@ -36,7 +36,7 @@ return {
         nginx_language_server = {},
         perlnavigator = {},
         pyright = {},
-        -- TODO: https://github.com/palantir/python-language-server
+        pylsp = {},
         rubocop = {},
         yamlls = {
           settings = {
