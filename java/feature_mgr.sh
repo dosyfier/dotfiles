@@ -31,6 +31,7 @@ install_common() {
   else
     echo "Installing Java..."
     source "$FEATURE_ROOT/aliases/java.sh"
+    load_jenv
     jenv install "$JAVA_VERSION"
   fi
 
