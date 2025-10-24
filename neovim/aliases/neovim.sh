@@ -7,6 +7,11 @@ if [[ ":$PATH:" != *":$NEOVIM_HOME/bin:"* ]]; then
   export PATH="$NEOVIM_HOME/bin:$PATH"
 fi
 
-if ! [ "$(readlink -f "$(which vi)")" = "$(readlink -f "$(which nvim)")" ]; then
-  alias vi=nvim
-fi
+for vi_alias in vi vim; do
+  if ! [ "$(readlink -f "$(which "$vi_alias" 2>/dev/null)")" = "$(readlink -f "$(which nvim)")" ]; then
+    # shellcheck disable=SC2139 # Expansion is intended when defined
+    alias "$vi_alias=nvim"
+  fi
+done
+
+alias vig='vi +G +only'
