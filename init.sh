@@ -219,7 +219,7 @@ install_feature() {
   currently_enabled_features=($(awk \
     '/export DOTFILES_ENABLED_FEATURES=\(/{flag=1; next} /\)/{flag=0} flag' "$DOTFILES_ENV_FILE"))
   # - erase the current list from the env file
-  sed -ri '/^export DOTFILES_ENABLED_FEATURES=(/,/^)$/d' "$DOTFILES_ENV_FILE"
+  sed -ri '/^export DOTFILES_ENABLED_FEATURES=\(/,/^\)$/d' "$DOTFILES_ENV_FILE"
   # - and rewrite it
   currently_enabled_features+=("$feature")
   echo "export DOTFILES_ENABLED_FEATURES=($(echo "${currently_enabled_features[*]}" | \
