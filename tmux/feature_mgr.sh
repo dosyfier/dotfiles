@@ -6,8 +6,8 @@ FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 source "$(dirname "$0")/../internal/install-base.sh"
 
 install_common() {
-  # Install tmux itself
-  install_packages tmux
+  # Install tmux itself (and "entr" command, which TPM depends on)
+  install_packages tmux entr
 
   # Install its configuration file
   tmux_config_file="$HOME/.tmux.conf"
