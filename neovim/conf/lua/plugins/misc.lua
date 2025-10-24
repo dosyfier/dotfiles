@@ -21,7 +21,6 @@ return {
 
   -- TreeSitter integration (incremental parser)
   "nvim-treesitter/nvim-treesitter",
-  "nvim-treesitter/playground",
 
   -- Great Tim Pope's plugins
   "tpope/vim-sleuth",
