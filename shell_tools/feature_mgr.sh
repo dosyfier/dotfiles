@@ -20,7 +20,7 @@ install_wsl() {
 }
 
 _install() {
-  install_packages rsync tmux tree
+  install_packages rsync tmux tree xclip
 }
 
 main "$@"
