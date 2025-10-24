@@ -82,6 +82,7 @@ case $(get_distro_type) in
     fi
     ;;
   *)
+    win_os=false
     ;;
 esac
 
