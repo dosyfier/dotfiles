@@ -1,6 +1,8 @@
 #!/bin/bash
 
-PYTHON_VERSION="3.11.0"
+FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
+
+PYTHON_VERSION="3.11.14"
 
 # shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"
@@ -13,12 +15,18 @@ get_dependencies() {
 
 install_common() {
   # Install PyEnv
-  curl https://pyenv.run | bash
+  curl -sSfL https://pyenv.run | bash
+
+  # Load PyEnv
+  source "$(dirname "$0")/aliases/pyenv.sh"
+  load_py
 
   # Setup a Python Virtualenv
   if ! pyenv virtualenvs --bare | grep -q '^default$'; then
-    "$HOME/.pyenv/bin/pyenv" virtualenv "$PYTHON_VERSION" "default"
+    pyenv install "$PYTHON_VERSION"
+    pyenv virtualenv "$PYTHON_VERSION" "default"
   fi
+  pyenv activate default
 
   # Install Pylint
   pip install pylint
