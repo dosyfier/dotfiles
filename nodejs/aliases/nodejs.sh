@@ -1,3 +1,7 @@
-# This allows global package installation in a
-# user-specific (not system-wide) context
-export NPM_CONFIG_PREFIX=$HOME/.local
+# Node JS shell aliases
+
+load_nvm() {
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+}
