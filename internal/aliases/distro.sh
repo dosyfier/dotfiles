@@ -11,10 +11,8 @@
 PROC_VERSION=$(cat /proc/version)
 
 get_distro_type() {
-  if [ -f /etc/centos-release ]; then
-    echo "centos"
-  elif [ -f /etc/redhat-release ]; then
-    echo "redhat"
+  if [ -f /etc/centos-release ] || [ -f /etc/redhat-release ] || [ -f /etc/fedora-release ]; then
+    echo "rhel"
   else
     case "$PROC_VERSION" in
       MINGW*)

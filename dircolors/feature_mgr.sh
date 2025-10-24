@@ -4,23 +4,9 @@
 FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 source "$(dirname "$0")/../internal/install-base.sh"
 
-install_redhat() {
+install_common() {
   install_packages coreutils
   _configure
-}
-
-install_centos() {
-  install_packages coreutils
-  _configure
-}
-
-install_ubuntu() {
-  install_packages coreutils
-  _configure
-}
-
-install_wsl() {
-  install_ubuntu
 }
 
 _configure() {

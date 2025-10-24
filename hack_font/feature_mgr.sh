@@ -7,12 +7,12 @@ HACK_LATEST_VERSION=v3.2.1
 HACK_ARCHIVE_NAME=Hack.tar.xz
 HACK_DOWNLOAD_URL=https://github.com/ryanoasis/nerd-fonts/releases/download/$HACK_LATEST_VERSION/$HACK_ARCHIVE_NAME
 
-install_centos() {
+install_common() {
   _install
 }
 
-install_ubuntu() {
-  _install
+install_rhel() {
+  _install xz
 }
 
 install_wsl() {
@@ -21,7 +21,7 @@ install_wsl() {
 }
 
 _install() {
-  install_packages xz-utils
+  install_packages "${1:-xz-utils}"
   rm -rf "$HOME"/.local/share/fonts/Hack/
   mkdir -p "$HOME"/.local/share/fonts/Hack/
   curl -sSfL "$HACK_DOWNLOAD_URL" | tar -xJ -C "$HOME"/.local/share/fonts/Hack/

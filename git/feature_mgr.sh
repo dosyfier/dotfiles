@@ -4,34 +4,22 @@
 source "$(dirname "$0")/../internal/install-base.sh"
 
 FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
-GIT_SCL_VERSION=2.18
 
-install_centos() {
-  if ! _is_scl_or_upper_installed; then
-    install_repo centos-release-scl epel-release
-    _install_rh_git
+install_rhel() {
+  version_of_git_in_distrib="$(dnf repoquery git --qf "%{version}" -q)"
+  if ! _is_current_git_more_recent_than "$version_of_git_in_distrib"; then
+    install_packages git
   fi
   _configure
-}
-
-install_redhat() {
-  if ! _is_scl_or_upper_installed; then
-    install_repo rhel-server-rhscl-7-rpms
-    _install_rh_git
-  fi
-  _configure
-}
-
-_install_rh_git() {
-  install_packages rh-git${GIT_SCL_VERSION//\./}
-
-  # Enable installed software collections
-  scl enable rh-git${GIT_SCL_VERSION//\./} bash
 }
 
 install_ubuntu() {
-  install_repo git-core/ppa
-  install_packages git gitk
+  version_of_git_in_distrib="$(apt-cache show git | grep Version | \
+    sed -r 's/.*: [0-9]:([0-9\.]+).*/\1/' | sort | tail -n1)"
+  if ! _is_current_git_more_recent_than "$version_of_git_in_distrib"; then
+    install_repo git-core/ppa
+    install_packages git gitk
+  fi
   _configure
 }
 
@@ -43,10 +31,10 @@ _format_version_for_cmp() {
   echo "$1" | sed 's|\.| |g' | xargs printf "%02d.%02d" 
 }
 
-_is_scl_or_upper_installed() {
+_is_current_git_more_recent_than() {
   installed_git_version=$(git --version 2> /dev/null | awk '{ print $NF }')
   [ -n "$installed_git_version" ] && \
-    [[ "$(_format_version_for_cmp "$installed_git_version")" > "$(_format_version_for_cmp "$GIT_SCL_VERSION")" ]]
+    [[ "$(_format_version_for_cmp "$installed_git_version")" > "$(_format_version_for_cmp "$1")" ]]
 }
 
 _configure() {
