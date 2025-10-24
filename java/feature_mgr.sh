@@ -6,7 +6,7 @@ FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 source "$(dirname "$0")/../internal/install-base.sh"
 
 JAVA_VERSION="21.0.3+9"
-MVN_VERSION="3.9.6"
+MVN_VERSION="3.9.11"
 # shellcheck disable=SC2016 # Expansion is intended later on (with an "eval echo <...>" cmd)
 MVN_DOWNLOAD_URL_PATTERN='https://dlcdn.apache.org/maven/maven-${mvn_version_maj}\
 /${MVN_VERSION}/binaries/apache-maven-${MVN_VERSION}-bin.tar.gz'
