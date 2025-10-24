@@ -7,15 +7,7 @@ GO_VERSION=1.22.3
 GO_ARCHIVE_NAME=go${GO_VERSION}.linux-amd64.tar.gz
 GO_DOWNLOAD_URL=https://go.dev/dl/$GO_ARCHIVE_NAME
 
-install_ubuntu() {
-  _install
-}
-
-install_wsl() {
-  _install
-}
-
-_install() {
+install_common() {
   remove_or_abort /opt/go sudo
   sudo bash -c "curl -L '$GO_DOWNLOAD_URL' | tar -C /opt -xz"
 }

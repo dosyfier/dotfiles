@@ -29,6 +29,16 @@ _finalize() {
   sudo usermod -aG docker "$USER"
 }
 
+install_rhel() {
+  # Set up the repository
+  if [ -f /etc/fedora-release ]; then dist_folder=fedora; else dist_folder=redhat; fi
+  install_repo "https://download.docker.com/linux/$dist_folder/docker-ce.repo"
+
+  # Install Docker Engine
+  install_packages docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  _finalize
+}
+
 install_ubuntu() {
   _cleanup_ubuntu
 
