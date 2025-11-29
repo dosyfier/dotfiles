@@ -28,9 +28,9 @@
 	rebase = true
 [alias]
 	# add
-	a = !sh -c 'git add "${@:-.}"' -
-	aa = !sh -c 'git add -A "${@:-.}"' -
-	au = !sh -c 'git add -u "${@:-.}"' -
+	a = !sh -c 'cd "${GIT_PREFIX:-.}" && git add "${@:-.}"' -
+	aa = !sh -c 'cd "${GIT_PREFIX:-.}" && git add -A "${@:-.}"' -
+	au = !sh -c 'cd "${GIT_PREFIX:-.}" && git add -u "${@:-.}"' -
 	# blame
 	bl = blame
 	# branch
@@ -52,12 +52,12 @@
 	# commit
 	c = commit
 	cm = commit -m
-	aac = !git add -A . && git commit
-	aacf = !git add -A . && git commit --amend --no-edit
-	aacm = !git add -A . && git commit -m
+	aac = !git add -A "${GIT_PREFIX:-.}" && git commit
+	aacf = !git add -A "${GIT_PREFIX:-.}" && git commit --amend --no-edit
+	aacm = !git add -A "${GIT_PREFIX:-.}" && git commit -m
 	ac = "!bash -c 'ac() { git add \"$@\" && git commit; }; ac \"$@\"' -- "
-	acf = "!bash -c 'acf() { git add \"$@\" && git commit --amend --no-edit; }; acf \"$@\"' -- "
-	acm = "!bash -c 'acm() { git add \"${@:1:$#-1}\" && git commit -m \"${@: -1}\"; }; acm \"$@\"' -- "
+	acf = "!bash -c 'acf() { cd \"${GIT_PREFIX:-.}\" && git add \"$@\" && git commit --amend --no-edit; }; acf \"$@\"' -- "
+	acm = "!bash -c 'acm() { cd \"${GIT_PREFIX:-.}\" && git add \"${@:1:$#-1}\" && git commit -m \"${@: -1}\"; }; acm \"$@\"' -- "
 	amend = commit --amend
 	amendm = commit --amend -m
 	amendf = commit --amend --no-edit
