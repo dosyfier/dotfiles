@@ -13,7 +13,7 @@ current_shell() {
   elif [ -v shell ]; then
     echo "$shell"
   elif [ -v SHELL ]; then
-    echo "$SHELL"
+    echo "$(basename "$SHELL")"
   else
     echo "Unknown shell" >&2
     exit 1
