@@ -77,8 +77,9 @@ init() {
   fi
 
   # Erase existing shell rc file, and warn the user about it first
-  local real_rc_file="$DOTFILES_DIR/$SHELL/conf/${SHELL}rc"
-  local link_rc_file="$HOME/.${SHELL}rc"
+  local shell_bin_file="$(basename "$SHELL")"
+  local real_rc_file="$DOTFILES_DIR/$shell_bin_file/conf/${shell_bin_file}rc"
+  local link_rc_file="$HOME/.${shell_bin_file}rc"
   echo "Init $link_rc_file..."
   if ! [ -e "$link_rc_file" ] || ! [ -L "$link_rc_file" ] || \
         ! [ "$real_rc_file" = "$(readlink -f "$link_rc_file")" ]; then
