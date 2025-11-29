@@ -100,7 +100,7 @@ run_install() {
 }
 
 update() {
-  return 0
+  install
 }
 
 main() {
