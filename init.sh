@@ -213,6 +213,8 @@ install_feature() {
 
   echo "Installing / Configuring $feature feature..."
   run_in_project "$feature/feature_mgr.sh" install
+  # Force breaking out if installation fails, since "install_feature" is called from an "if" construct
+  rc=$?; if [ $rc -ne 0 ]; then return $rc; fi
 
   # Update dotfiles env config, in order to permanently active
   # the feature just installed:
