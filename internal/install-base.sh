@@ -91,7 +91,10 @@ run_install() {
   
   # Because of set -e done in each feature_mgr.sh script, the `install_function` must be called from
   # an "if" block, so that we can display an indicative message in case of an installation failure
-  if "${install_function}"; then
+  # Note: Putting ${install_function} in an if block prevents the set -e option from working as expected.
+  # Hence the use of a subshell construct
+  set +eu; ( set -euo pipefail; "${install_function}"; ); rc=$?; set -eu
+  if [ $rc -eq 0 ]; then
     echo "Feature $DOTFILES_FEATURE successfully installed."
   else
     echo "Feature $DOTFILES_FEATURE could not be installed (see above)."
