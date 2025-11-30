@@ -59,3 +59,5 @@ alias alert='notify-send --urgency=low '\
 if [ -d "$HOME/.local/bin" ] && [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
   PATH="$HOME/.local/bin:$PATH"
 fi
+
+alias cl=clear
