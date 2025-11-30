@@ -84,6 +84,17 @@ git_ls_big_files() {
   unset tree_filter_cmd size_filter_cmd
 }
 
+# Find git repositories under a provided root directory, with either staged or non-staged modifications
+git_find_dirty_repositories() {
+  for git_dir in $(find "${1:-.}" -name .git); do
+    git_root="$(dirname "$git_dir")"
+    if ! git -C "$git_root" diff-index --quiet HEAD -- &>/dev/null; then
+      echo ">>> Repository: $git_root"
+      git -C "$git_root" status
+    fi
+  done
+}
+
 # Grep files within a git repository, without looking into the .git directory (which may take some time...)
 alias g=git
 alias git_ls='find $(git ls-files) $(git ls-files --others --exclude-standard) -not -type l'
@@ -128,4 +139,3 @@ PROMPT_COMMAND="git_prompt_command; $PROMPT_COMMAND"
 # shellcheck disable=SC2016 disable=SC2034
 # (EXTRA_PS1 is a contribution to PS1, used by another script)
 EXTRA_PS1='$(command -v git > /dev/null && echo "$DOTFILES_GIT_BRANCH_STATE" )'
-
