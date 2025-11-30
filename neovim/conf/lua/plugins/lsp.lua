@@ -5,8 +5,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     -- Disable Treesitter for Ansible files
     if client ~= nil and client.name == 'ansiblels' then
-      vim.cmd('TSDisable highlight')
-      vim.cmd('TSDisable indent')
+      vim.treesitter.stop()
     end
   end
 })
