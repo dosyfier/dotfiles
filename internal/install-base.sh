@@ -110,11 +110,11 @@ main() {
   while [ $# -ne 0 ] && [[ "$1" =~ ^- ]]; do
     case "$1" in
       "-h"|"-?"|"--help")
-	usage; exit 0
-	;;
+        usage; exit 0
+        ;;
       *)
-	usage; exit 1
-	;;
+        usage; exit 1
+        ;;
     esac
     shift
   done
