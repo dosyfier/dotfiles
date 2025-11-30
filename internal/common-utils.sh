@@ -3,7 +3,7 @@
 # Run the provided command & arguments into dotfiles project's directory
 run_in_project() {
   pushd "$DOTFILES_DIR" >/dev/null || exit 1
-  trap "popd > /dev/null" EXIT
+  trap "if [ \$(dirs -p | wc -l) -gt 1 ]; then popd > /dev/null; fi" EXIT RETURN
   "$@"
 }
 
