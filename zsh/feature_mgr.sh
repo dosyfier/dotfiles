@@ -13,11 +13,13 @@ get_dependencies() {
 
 install_common() {
   install_packages zsh
+  export RUNZSH=no                   # Prevents the installer from running zsh after installation
+  export OVERWRITE_CONFIRMATION=no   # No confirmation asked before overwriting any existing .zshrc
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git \
     "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
-  ln -vs "$FEATURE_ROOT"/conf/zshrc "$HOME"/.zshrc
-  ln -vs "$FEATURE_ROOT"/conf/p10k.zsh "$HOME"/.p10k.zsh
+  ln -vsfn "$FEATURE_ROOT"/conf/zshrc "$HOME"/.zshrc
+  ln -vsfn "$FEATURE_ROOT"/conf/p10k.zsh "$HOME"/.p10k.zsh
 
   sed -ri 's/^(export DOTFILES_ENABLE_EXTERNAL_PROMPT=).*$/\1true/' "$DOTFILES_ENV_FILE"
 }
