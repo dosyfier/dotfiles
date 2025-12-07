@@ -6,7 +6,7 @@ source "$(dirname "$0")/../internal/install-base.sh"
 
 shall_be_installed_by_default() {
   # No need to install an additional X-server when WSLg is activated
-  is_wslg_active
+  [ "$win_os" = true ] && is_wslg_active
 }
 
 install_wsl() {
