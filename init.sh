@@ -99,16 +99,15 @@ init() {
 # vim: set ft=bash
 
 export DOTFILES_DIR="$DOTFILES_DIR"
-export DOTFILES_WIN_USER="$(if command -v cmd.exe &>/dev/null; then
-    cmd.exe /C "echo %USERNAME%" 2>/dev/null | sed 's/[[:space:]]*$//'
-  else
-    echo "$USER"
-  fi)"
 export DOTFILES_TOOLS_DIR="$DOTFILES_TOOLS_DIR"
 export DOTFILES_USER_DISPLAY_NAME="$DOTFILES_USER_DISPLAY_NAME"
 export DOTFILES_USER_MAIL="$DOTFILES_USER_MAIL"
 export DOTFILES_ENABLE_EXTERNAL_PROMPT=false
 EOC
+  if command -v cmd.exe &>/dev/null; then
+    win_user="$(cmd.exe /C "echo %USERNAME%" 2>/dev/null | sed 's/[[:space:]]*$//')"
+    echo "export DOTFILES_WIN_USER=\"$win_user\"" >> "$DOTFILES_ENV_FILE"
+  fi
 
   # Source the bashrc script
   # shellcheck source=bash/conf/bashrc
