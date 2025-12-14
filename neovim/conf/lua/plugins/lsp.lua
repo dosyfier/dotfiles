@@ -39,6 +39,7 @@ return {
         docker_compose_language_service = {},
         dockerls = {},
         gitlab_ci_ls = {},
+        gopls = {},
         groovyls = {},
         helm_ls = {
           yamlls = { path = "yaml-language-server" }
