@@ -15,3 +15,6 @@ for vi_alias in vi vim; do
 done
 
 alias vig='vi +G +only'
+
+# Use NeoVim as standard editor, e.g. for tools like `systemctl edit`
+export EDITOR=nvim
