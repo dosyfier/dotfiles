@@ -32,7 +32,6 @@ acknowledge_opts() {
 
   DOTFILES_USER_DISPLAY_NAME=${DOTFILES_VALUES[user_display_name]:-$DOTFILES_USER_DISPLAY_NAME}
   DOTFILES_USER_MAIL=${DOTFILES_VALUES[user_mail]:-$DOTFILES_USER_MAIL}
-  DOTFILES_TOOLS_DIR=${DOTFILES_VALUES[tools_dir]:-$DOTFILES_TOOLS_DIR}
 
   # Check exclusive options: with_features, all_features and skip_install
   nb_exclusive_opts="$(echo "${DOTFILES_VALUES[with_features]}" \
@@ -64,6 +63,23 @@ acknowledge_opts() {
   elif [ -n "${DOTFILES_VALUES[skip_install]}" ]; then
     SKIP_FEATURES_INSTALLATION=true
   fi
+
+  # Treat special defaults
+  DOTFILES_GLOBAL_INSTALL=${DOTFILES_VALUES[global_install]:-$DOTFILES_GLOBAL_INSTALL}
+  if [ -z "${DOTFILES_GLOBAL_INSTALL:-}" ]; then
+    DOTFILES_GLOBAL_INSTALL="$(if sudo --validate --non-interactive &> /dev/null;
+      then echo -n true; else echo -n false; fi)"
+  fi
+  DOTFILES_LOCAL_DIR=${DOTFILES_VALUES[local_dir]:-$DOTFILES_LOCAL_DIR}
+  if [ -z "${DOTFILES_LOCAL_DIR:-}" ]; then
+    DOTFILES_LOCAL_DIR="$(if [ "$DOTFILES_GLOBAL_INSTALL" = true ]; then
+      echo -n /usr/local;
+    elif command -v cmd.exe &>/dev/null; then
+      echo -n "$HOME/tools";
+    else
+      echo -n "$HOME/.local";
+    fi)"
+  fi
 }
 
 # Initializes dotfiles configuration
@@ -87,9 +103,10 @@ init() {
     ln -s "$real_rc_file" "$link_rc_file"
   fi
 
-  # Create the data and tools directories if they don't exist
-  if ! [ -d "$DOTFILES_TOOLS_DIR" ]; then
-    mkdir -p "$DOTFILES_TOOLS_DIR"
+  # Create the local soft install directory if it doesn't already exist
+  if ! [ -d "$DOTFILES_LOCAL_DIR" ]; then
+    run_lenient_sudo mkdir -p "$DOTFILES_LOCAL_DIR"
+    run_lenient_sudo chown -R "$(id -u):$(id -g)" "$DOTFILES_LOCAL_DIR"
   fi
 
   # Create an env file holding defined DOTFILES_* variables
@@ -99,7 +116,8 @@ init() {
 # vim: set ft=bash
 
 export DOTFILES_DIR="$DOTFILES_DIR"
-export DOTFILES_TOOLS_DIR="$DOTFILES_TOOLS_DIR"
+export DOTFILES_GLOBAL_INSTALL="$DOTFILES_GLOBAL_INSTALL"
+export DOTFILES_LOCAL_DIR="$DOTFILES_LOCAL_DIR"
 export DOTFILES_USER_DISPLAY_NAME="$DOTFILES_USER_DISPLAY_NAME"
 export DOTFILES_USER_MAIL="$DOTFILES_USER_MAIL"
 export DOTFILES_ENABLE_EXTERNAL_PROMPT=false
@@ -224,9 +242,6 @@ if [ -f "$DOTFILES_ENV_FILE" ]; then
   # shellcheck disable=SC1090
   # SC1090: the sourced file is built by this script
   source "$DOTFILES_ENV_FILE"
-else
-  DOTFILES_WIN_USER=$USER
-  DOTFILES_TOOLS_DIR=~/tools
 fi
 
 # Parse program options

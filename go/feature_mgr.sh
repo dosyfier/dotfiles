@@ -7,9 +7,13 @@ GO_VERSION=1.25.3
 GO_ARCHIVE_NAME=go${GO_VERSION}.linux-amd64.tar.gz
 GO_DOWNLOAD_URL=https://go.dev/dl/$GO_ARCHIVE_NAME
 
+# shellcheck source=aliases/go.sh
+source "$(dirname "$0")/aliases/go.sh"
+
 install_common() {
-  remove_or_abort "$DOTFILES_TOOLS_DIR/go" sudo
-  sudo bash -c "curl -sSfL '$GO_DOWNLOAD_URL' | tar -C '$DOTFILES_TOOLS_DIR' -xz"
+  reset_dir_with_parent "$GO_HOME"
+  run_lenient_sudo bash -c "curl -sSfL '$GO_DOWNLOAD_URL' | \
+tar --strip-components=1 -C '$(dirname "$GO_HOME")' -xz"
 }
 
 main "$@"

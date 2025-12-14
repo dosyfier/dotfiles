@@ -27,30 +27,39 @@ DOTFILES_ARG_NAMES[user_mail]="<mail-address>"
 DOTFILES_DESCS[user_mail]="Mail address to consider for the current "\
 "user (used for \"git\" feature)."
 
-DOTFILES_SHORT_OPTS[tools_dir]="-t"
-DOTFILES_LONG_OPTS[tools_dir]="--tools"
-DOTFILES_ARG_NAMES[tools_dir]="<tools-dir>"
-DOTFILES_DESCS[tools_dir]="Path where any 3rd party tool required "\
-"by Dotbashconfig will be installed."
+DOTFILES_SHORT_OPTS[global_install]="-g"
+DOTFILES_LONG_OPTS[global_install]="--global-install"
+DOTFILES_DESCS[global_install]="Switch installation into global mode, attempting "\
+"to install any dotfiles tooling at global scope, by default under /usr/local "\
+"(requires sudo privileges).
+Turned off by default, unless the current user disposes of nopasswd sudo privileges."
+
+DOTFILES_SHORT_OPTS[local_dir]="-l"
+DOTFILES_LONG_OPTS[local_dir]="--local-dir"
+DOTFILES_ARG_NAMES[local_dir]="<local-dir>"
+DOTFILES_DESCS[local_dir]="Path where any 3rd party tool required by dotfiles "\
+"will be installed.
+By default, it will be valued to /usr/local if the current user "\
+"disposes of nopasswd sudo privileges, or to ~/.local otherwise."
 
 DOTFILES_SHORT_OPTS[with_features]="-f"
 DOTFILES_LONG_OPTS[with_features]="--with-features"
 DOTFILES_EXTRA_OPTS[with_features]="--with-<feature-name>-feature"
 DOTFILES_ARG_NAMES[with_features]="<feature-1>,...,<feature-n>"
 DOTFILES_DESCS[with_features]='Automatically install only a '\
-'subset of the dotbashconfig features (identified by their "feature-name"). '\
+'subset of the dotfiles features (identified by their "feature-name"). '\
 $'Here is the list of those features:\n'\
 "$(available_features)"
 
 DOTFILES_SHORT_OPTS[all_features]="-y"
 DOTFILES_LONG_OPTS[all_features]="--all-features"
 DOTFILES_DESCS[all_features]='Automatically accept the '\
-'installation of every dotbashconfig features.'
+'installation of every dotfiles features.'
 
 DOTFILES_SHORT_OPTS[skip_install]="-s"
 DOTFILES_LONG_OPTS[skip_install]="--skip-installation"
 DOTFILES_DESCS[skip_install]='Skip the installation of every '\
-'dotbashconfig features (i.e. only bashrc environment will be configured).'
+'dotfiles features (i.e. only bashrc environment will be configured).'
 
 DOTFILES_SHORT_OPTS[help]="-h"
 DOTFILES_LONG_OPTS[help]="--help"

@@ -62,7 +62,7 @@ case $(get_distro_type) in
     drive_mount_root=/cygdrive
     # shellcheck disable=SC2139
     # SC2139: Ok to expand when defined, not when used
-    alias cygwin_setup="$DOTFILES_TOOLS_DIR/cygwin64/setup-x86_64.exe"
+    alias cygwin_setup="$DOTFILES_LOCAL_DIR/cygwin64/setup-x86_64.exe"
     ;;
   wsl)
     win_os=true

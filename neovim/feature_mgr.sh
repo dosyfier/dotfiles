@@ -13,6 +13,9 @@ FZF_VERSION=0.66.0
 FZF_ARCHIVE_NAME=fzf-$FZF_VERSION-linux_amd64.tar.gz
 FZF_DOWNLOAD_URL=https://github.com/junegunn/fzf/releases/download/v$FZF_VERSION/$FZF_ARCHIVE_NAME
 
+# shellcheck source=aliases/neovim.sh
+source "$(dirname "$0")/aliases/neovim.sh"
+
 get_dependencies() {
   if ! command -v git > /dev/null 2>&1; then
     echo git
@@ -23,8 +26,13 @@ get_dependencies() {
 }
 
 _download_and_install() {
-  sudo bash -c "curl -sSfL '$NEOVIM_DOWNLOAD_URL' | tar -C $DOTFILES_TOOLS_DIR -xz"
-  sudo bash -c "curl -sSfL '$FZF_DOWNLOAD_URL' | tar -C /usr/local/bin -xz"
+  reset_dir_with_parent "$NEOVIM_HOME"
+  run_lenient_sudo bash -c "curl -sSfL '$NEOVIM_DOWNLOAD_URL' | \
+tar --strip-components=1 -C '$NEOVIM_HOME' -xz"
+
+  fzf_bin_dir="$DOTFILES_LOCAL_DIR/bin"
+  ensure_dir_exists "$fzf_bin_dir"
+  run_lenient_sudo bash -c "curl -sSfL '$FZF_DOWNLOAD_URL' | tar -C '$fzf_bin_dir' -xz"
 }
 
 install_common() {
@@ -41,6 +49,7 @@ update() {
     echo "Neovim is up-to-date (version: $NEOVIM_VERSION). Skipping."
   else
     _download_and_install
+    echo "Done! Neovim has been successfully updated to $NEOVIM_VERSION version."
   fi
 }
 

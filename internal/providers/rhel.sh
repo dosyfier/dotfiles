@@ -17,9 +17,17 @@ install_repo() {
 }
 
 install_packages() {
-  if command -v rpm-ostree &>/dev/null; then
-    sudo rpm-ostree install "$@"
-  else
-    sudo dnf install -y "$@"
+  packs_not_yet_installed=()
+  for pack in "$@"; do
+    if ! rpm -qi "$pack" &> /dev/null; then
+      packs_not_yet_installed+=($pack)
+    fi
+  done
+  if [ "${#packs_not_yet_installed[@]}" -gt 0 ]; then
+    if command -v rpm-ostree &>/dev/null; then
+      sudo rpm-ostree install "${packs_not_yet_installed[@]}"
+    else
+      sudo dnf install -y "${packs_not_yet_installed[@]}"
+    fi
   fi
 }

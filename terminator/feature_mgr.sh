@@ -62,12 +62,9 @@ _setup_windows_launcher() {
     sudo ln -s /mnt/c/Windows/Fonts /usr/local/share/fonts/windows
   fi
 
-  # Copying terminator config files (launch script, icon, ...) under $DOTFILES_TOOLS_DIR
-  if ! [ -d "$DOTFILES_TOOLS_DIR" ]; then
-    (>&2 echo "Directory $DOTFILES_TOOLS_DIR does not exist. Aborting terminator feature installation.")
-    return 1
-  fi
-  terminator_quick_launch_dir="$DOTFILES_TOOLS_DIR"/terminator/quick_launch
+  # Copying terminator config files (launch script, icon, ...) under $DOTFILES_LOCAL_DIR
+  terminator_quick_launch_dir="$DOTFILES_LOCAL_DIR"/terminator/quick_launch
+  reset_dir_with_parent "$terminator_quick_launch_dir"
   echo "Installing terminator launch configuration under $terminator_quick_launch_dir..."
   mkdir -p "$terminator_quick_launch_dir"
   rm -rf "${terminator_quick_launch_dir:?}"/*

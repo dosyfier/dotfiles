@@ -11,5 +11,6 @@ install_repo() {
 }
 
 install_packages() {
+  # TODO: Skip package install if they are already present
   sudo apt-get install -y "$@"
 }

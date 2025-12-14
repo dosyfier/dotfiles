@@ -12,10 +12,9 @@ run_in_project() {
 # - Otherwise, exit in error.
 remove_or_abort() {
   path_to_remove="$1"
-  rm_cmd_wrapper="${2:-}"
   if [ -e "$path_to_remove" ]; then
     if ok_to "Existing $path_to_remove detected..." "Override?"; then
-      $rm_cmd_wrapper rm -rf "$path_to_remove"
+      run_lenient_sudo rm -rf "$path_to_remove"
     else
       return 2
     fi
@@ -56,3 +55,44 @@ without_excluded() {
   done
 }
 
+# Runs a given COTS installation or configuration command (provided as a list of arguments), and
+# make use of sudo elevation **only when necessary**.
+# Basically, sudo rights are considered as required here only if the targeted dir is outside current
+# user's home, within a dir this user hasn't direct access permissions.
+run_lenient_sudo() {
+  if [ "${DOTFILES_GLOBAL_INSTALL:-}" != true ]; then
+    # If dotfiles installation is user specific, there should be no reason to run
+    # a sudo command to install a soft under a $HOME sub-directory.
+    "$@"; return
+  fi
+  echo -n "Attempting to run following cmd with sudo: "
+  printf '"%s" ' "$@"
+  echo
+  set +euo pipefail
+  sudo "$@"
+  rc=$?; set -euo pipefail
+  if [ $rc -ne 0 ]; then
+    echo "Trying to run without sudo instead."
+    "$@"
+  fi
+}
+
+# Entirely reset (empty and recreate) a given directory
+# $1 - The directory to reset
+reset_dir_with_parent() {
+  dir_to_reset="$1"
+
+  remove_or_abort "$dir_to_reset"
+  ensure_dir_exists "$dir_to_reset"
+}
+
+# Make sure a given directory exists, and create it otherwise
+# $1 - The directory existence of which shall be ensured
+ensure_dir_exists() {
+  dir_to_ensure="$1"
+
+  if ! [ -d "$dir_to_ensure" ]; then
+    run_lenient_sudo bash -c "mkdir -p '$dir_to_ensure'"
+    run_lenient_sudo bash -c "chown -R '$(id -u):$(id -g)' '$dir_to_ensure'"
+  fi
+}
