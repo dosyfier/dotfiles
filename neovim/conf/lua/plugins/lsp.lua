@@ -14,6 +14,18 @@ return {
   -- Linting plugin
   { "mfussenegger/nvim-lint" },
 
+  -- Supplemental package needed to let Helm LSP work
+  {
+    "qvalentin/helm-ls.nvim",
+    ft = "helm",
+    opts = {
+      -- enable the replacement of templates with virtual text of their current values
+      conceal_templates = { enabled = true },
+      -- enable hints for indent and nindent functions
+      indent_hints = { enabled = true }
+    }
+  },
+
   -- LSP (Language Server Protocol) support
   {
     "neovim/nvim-lspconfig",
@@ -28,7 +40,9 @@ return {
         dockerls = {},
         gitlab_ci_ls = {},
         groovyls = {},
-        helm_ls = {},
+        helm_ls = {
+          yamlls = { path = "yaml-language-server" }
+        },
         java_language_server = {},
         jinja_lsp = {},
         jqls = {},
