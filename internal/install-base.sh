@@ -106,6 +106,20 @@ update() {
   install
 }
 
+_add_feature_to_dotfiles_enabled_ones() {
+  # Update dotfiles env config, in order to permanently active
+  # the feature just installed:
+  # - read currently enabled features
+  currently_enabled_features=($(awk \
+    '/export DOTFILES_ENABLED_FEATURES=\(/{flag=1; next} /\)/{flag=0} flag' "$DOTFILES_ENV_FILE"))
+  # - erase the current list from the env file
+  sed -ri '/^export DOTFILES_ENABLED_FEATURES=\(/,/^\)$/d' "$DOTFILES_ENV_FILE"
+  # - and rewrite it
+  currently_enabled_features+=("$DOTFILES_FEATURE")
+  echo "export DOTFILES_ENABLED_FEATURES=($(echo "${currently_enabled_features[*]}" | \
+    uniq_occurrences))" >> "$DOTFILES_ENV_FILE"
+}
+
 main() {
   while [ $# -ne 0 ] && [[ "$1" =~ ^- ]]; do
     case "$1" in
@@ -124,6 +138,7 @@ main() {
   elif [ "$1" = "install" ]; then
     _init_env
     install
+    _add_feature_to_dotfiles_enabled_ones
   elif [ "$1" = "get-dependencies" ]; then
     _init_env
     get_dependencies

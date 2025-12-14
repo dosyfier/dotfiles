@@ -214,18 +214,6 @@ install_feature() {
   run_in_project "$feature/feature_mgr.sh" install
   # Force breaking out if installation fails, since "install_feature" is called from an "if" construct
   rc=$?; if [ $rc -ne 0 ]; then return $rc; fi
-
-  # Update dotfiles env config, in order to permanently active
-  # the feature just installed:
-  # - read currently enabled features
-  currently_enabled_features=($(awk \
-    '/export DOTFILES_ENABLED_FEATURES=\(/{flag=1; next} /\)/{flag=0} flag' "$DOTFILES_ENV_FILE"))
-  # - erase the current list from the env file
-  sed -ri '/^export DOTFILES_ENABLED_FEATURES=\(/,/^\)$/d' "$DOTFILES_ENV_FILE"
-  # - and rewrite it
-  currently_enabled_features+=("$feature")
-  echo "export DOTFILES_ENABLED_FEATURES=($(echo "${currently_enabled_features[*]}" | \
-    uniq_occurrences))" >> "$DOTFILES_ENV_FILE"
 }
 
 
