@@ -14,8 +14,15 @@ get_dependencies() {
 }
 
 install_common() {
+  # Install GCC (needed to compile Python)
+  # TODO: Only valid for Fedora 22+. Do it for others! See: https://github.com/pyenv/pyenv/wiki#suggested-build-environment
+  install_packages make gcc patch zlib-devel bzip2 bzip2-devel readline-devel \
+    sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel libuuid-devel gdbm-libs libnsl2
+
   # Install PyEnv
-  curl -sSfL https://pyenv.run | bash
+  if ! [ -d "$HOME/.pyenv" ]; then
+    curl -sSfL https://pyenv.run | bash
+  fi
 
   # Load PyEnv
   source "$(dirname "$0")/aliases/pyenv.sh"
