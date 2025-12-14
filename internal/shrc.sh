@@ -71,7 +71,7 @@ fi
 # Allow users to define supplementary aliases within ~/.shell_aliases file or ~/.shell_aliases.d directory
 # These are evaluated as overriding scripts (i.e. once all other scripts have been processed)
 if [ -d ~/.shell_aliases.d/ ]; then
-  for script in ~/.shell_aliases.d/*; do source "$script"; done
+  for script in ~/.shell_aliases.d/*.*sh; do source "$script"; done
 fi
 if [ -f ~/.shell_aliases ]; then
   source ~/.shell_aliases
