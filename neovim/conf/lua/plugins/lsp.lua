@@ -53,6 +53,7 @@ return {
         pyright = {},
         pylsp = {},
         rubocop = {},
+        rust_analyzer = {},
         yamlls = {
           settings = {
             yaml = {
