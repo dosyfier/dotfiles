@@ -46,6 +46,7 @@ return {
         java_language_server = {},
         jinja_lsp = {},
         jqls = {},
+        jsonls = {},
         nginx_language_server = {},
         perlnavigator = {},
         pyright = {},

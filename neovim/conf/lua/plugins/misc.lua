@@ -64,5 +64,14 @@ return {
       { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
       { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
     },
+  },
+
+  -- Display a JSON-path to access the value under the cursor
+  {
+    "phelipetls/jsonpath.nvim",
+    opts = { show_on_winbar = true },
+    config = function()
+      vim.opt_local.winbar = "%{%v:lua.require'jsonpath'.get()%}"
+    end
   }
 }
