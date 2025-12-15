@@ -11,6 +11,9 @@ get_dependencies() {
   if ! command -v git &>/dev/null; then
     echo git
   fi
+  if ! command -v rustc &>/dev/null; then
+    echo rust
+  fi
 }
 
 install_common() {
@@ -20,9 +23,19 @@ install_common() {
 }
 
 _install_build_dependencies() {
-  install_packages curl libssl-dev libreadline-dev zlib1g-dev \
-    autoconf bison build-essential libyaml-dev libreadline-dev \
-    libncurses5-dev libffi-dev libgdbm-dev
+  # Ref: https://github.com/rbenv/ruby-build/wiki#suggested-build-environment
+  case $(get_distro_type) in
+    ubuntu)
+      install_packages curl build-essential autoconf \
+        libssl-dev libyaml-dev zlib1g-dev libffi-dev libgdbm-dev;;
+    rhel)
+      install_packages curl make autoconf gcc patch bzip2 \
+        openssl-devel libyaml-devel libffi-devel readline zlib-devel gdbm \
+        ncurses-devel tar perl-FindBin;;
+    *)
+      echo "ERROR: Unsupported OS distrib for Ruby compilation." >&2
+      return 1;;
+  esac
 }
 
 _install_ruby() {
