@@ -1,6 +1,8 @@
 #!/bin/bash
 
-RUBY_VERSION="3.1.0"
+FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
+
+RUBY_VERSION="3.4.7"
 
 # shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"
