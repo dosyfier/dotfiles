@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Ruby shell aliases
 
 load_rb() {

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 _DOTFILESMGR_USAGE="
 Usage: dotfilesmgr <backup|restore|update|help> [<backup_file>]
 

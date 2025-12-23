@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Distro-related shell aliases
 
 # vim: set ft=bash

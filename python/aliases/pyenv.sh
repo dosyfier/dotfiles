@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Python shell aliases
 
 DEFAULT_PYENV_VERSION=default

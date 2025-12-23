@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Miscellaneous aliases
 
 BACKUP_SUFFIX=.bak
@@ -44,11 +46,11 @@ unbak() {
 return_pipestatus() {
   # N.B. This must be the very first statement, so that we can handle zsh case.
   # In zsh, pipestatus array is reset as soon as a new shell statement is issued.
-  pipestatus_dump=(${pipestatus[@]:-${PIPESTATUS[@]}})
+  pipestatus_dump=("${pipestatus[@]:-${PIPESTATUS[@]}}")
   index="$1"
   if [ "$CURRENT_SHELL" = "zsh" ]; then
-    return ${pipestatus_dump[$((index+1))]}
+    return "${pipestatus_dump[$((index+1))]}"
   else
-    return ${pipestatus_dump[$index]}
+    return "${pipestatus_dump[$index]}"
   fi
 }

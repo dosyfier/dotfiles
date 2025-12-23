@@ -6,7 +6,7 @@ source "$(dirname "$0")/../internal/install-base.sh"
 
 shall_be_installed_by_default() {
   # No need to install an additional X-server when WSLg is activated
-  [ "$win_os" = true ] && is_wslg_active
+  [ "${win_os:-}" = true ] && is_wslg_active
 }
 
 install_wsl() {
@@ -18,13 +18,12 @@ install_wsl() {
   else
     installer_temp_loc="$WIN_HOME/Downloads/vcxsrv-installer.exe"
     if ! [ -f "$installer_temp_loc" ]; then
-      curl -L https://sourceforge.net/projects/vcxsrv/files/latest/download -o "$installer_temp_loc"
+      curl -sSfL https://sourceforge.net/projects/vcxsrv/files/latest/download -o "$installer_temp_loc"
     fi
     # shellcheck disable=2064
     #   Expanding now rather than when signalled is intended
-    trap "rm -f $installer_temp_loc" EXIT
-    pushd "$(dirname "$installer_temp_loc")" > /dev/null
-    trap 'popd > /dev/null' EXIT
+    trap "rm -f $installer_temp_loc" EXIT RETURN
+    pushd "$(dirname "$installer_temp_loc")" > /dev/null || return 1
     echo "Running VcXsrv installer ($installer_temp_loc)..."
     ./"$(basename "$installer_temp_loc")" /S
   fi

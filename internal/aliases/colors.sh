@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Colors-related shell aliases
 
 # shellcheck disable=SC2034

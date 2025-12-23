@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Umask settings
 
 # By default, we want umask to get set. This sets it for non-login shell.

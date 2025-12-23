@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # SpaceVim related shell aliases
 
 _SPACEVIM_USAGE="

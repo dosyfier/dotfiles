@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Java shell aliases
 
 load_jenv() {

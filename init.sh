@@ -93,7 +93,8 @@ init() {
   fi
 
   # Erase existing shell rc file, and warn the user about it first
-  local shell_bin_file="$(basename "$SHELL")"
+  local shell_bin_file
+  shell_bin_file="$(basename "$SHELL")"
   local real_rc_file="$DOTFILES_DIR/$shell_bin_file/conf/${shell_bin_file}rc"
   local link_rc_file="$HOME/.${shell_bin_file}rc"
   echo "Init $link_rc_file..."
@@ -258,6 +259,7 @@ if ! [ "$SKIP_FEATURES_INSTALLATION" = true ]; then
 fi
 
 # Done!
+# shellcheck disable=SC2181 # Easier to read with $? in this case
 if [ $? -eq 0 ]; then
   echo "Done! Enjoy bashing ;-)"
 fi

@@ -36,7 +36,7 @@ update() {
 
   gitstatus_build_info_file="$HOME/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/build.info"
   echo "Reading $gitstatus_build_info_file..."
-  # shellcheck source=$HOME/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/build.info"
+  # shellcheck disable=SC1090 # No constant path can be given for this file
   source "$gitstatus_build_info_file"
   if [ -z "$gitstatus_version" ]; then
     echo "No gitstatus_version found in $gitstatus_build_info_file. Aborting" >&2

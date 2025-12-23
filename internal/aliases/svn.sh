@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # SVN related shell aliases
 
 # shellcheck disable=SC2034

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Default configuration file for tmux-powerline.
 # Modeline {
 #	 vi: foldmarker={,} foldmethod=marker foldlevel=0 tabstop=4 filetype=sh
@@ -51,10 +53,10 @@
 	export TMUX_POWERLINE_SEG_AIR_JSON="jq"
 	# Your location
 	# Latitude and Longitude:
-	TMUX_POWERLINE_SEG_AIR_LAT=""
-	TMUX_POWERLINE_SEG_AIR_LON=""
+	export TMUX_POWERLINE_SEG_AIR_LAT=""
+	export TMUX_POWERLINE_SEG_AIR_LON=""
 	# Your Open Weather API Key:
-	TMUX_POWERLINE_SEG_AIR_OPEN_WEATHER_API_KEY=""
+	export TMUX_POWERLINE_SEG_AIR_OPEN_WEATHER_API_KEY=""
 # }
 
 # battery.sh {
@@ -419,8 +421,8 @@
 	export TMUX_POWERLINE_SEG_WEATHER_JSON="jq"
 	# Your location
 	# Latitude and Longtitude for use with yr.no
-	TMUX_POWERLINE_SEG_WEATHER_LAT=""
-	TMUX_POWERLINE_SEG_WEATHER_LON=""
+	export TMUX_POWERLINE_SEG_WEATHER_LAT=""
+	export TMUX_POWERLINE_SEG_WEATHER_LON=""
 # }
 
 # xkb_layout.sh {

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Go related aliases
 
 GO_HOME="$DOTFILES_LOCAL_DIR/standalone/go"

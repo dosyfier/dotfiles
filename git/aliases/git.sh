@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Git related aliases
 
 # Environnement variables used to replace the user-dependent "core"
@@ -86,13 +88,13 @@ git_ls_big_files() {
 
 # Find git repositories under a provided root directory, with either staged or non-staged modifications
 git_find_dirty_repositories() {
-  for git_dir in $(find "${1:-.}" -name .git); do
+  while read -r git_dir; do
     git_root="$(dirname "$git_dir")"
     if ! git -C "$git_root" diff-index --quiet HEAD -- &>/dev/null; then
       echo ">>> Repository: $git_root"
       git -C "$git_root" status
     fi
-  done
+  done < <(find "${1:-.}" -name .git)
 }
 
 # Grep files within a git repository, without looking into the .git directory (which may take some time...)

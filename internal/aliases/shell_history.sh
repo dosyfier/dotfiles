@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Shell history related settings
 
 # Shortcut for "history" command

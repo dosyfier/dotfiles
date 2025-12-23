@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Files-related shell aliases
 
 # Converts some file's encoding from US-ASCII to UTF-8.

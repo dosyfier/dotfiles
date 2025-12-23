@@ -1,7 +1,10 @@
+#!/bin/bash
+
 # Chocolatey related shell aliases
 
 DOTFILES_CHOCO_CONFIG_DIR="$DOTFILES_DIR/chocolatey/conf"
-DOTFILES_CHOCO_CONFIG_DEFAULT="$(cat $DOTFILES_CHOCO_CONFIG_DIR/default-config.txt)"
+DOTFILES_CHOCO_CONFIG_DEFAULT="$(grep -ohE '[^[:space:]]+' \
+  "$DOTFILES_CHOCO_CONFIG_DIR/default-config.txt")"
 
 _dotfiles_choco_inst_usage() {
   available_types="$(find "$DOTFILES_CHOCO_CONFIG_DIR" -name "packages-*.config" | \

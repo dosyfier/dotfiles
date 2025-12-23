@@ -1,5 +1,6 @@
+#!/bin/bash
+
 # Tmux shell aliases
-# vim: set ft=bash
 
 alias tm=tmux
 

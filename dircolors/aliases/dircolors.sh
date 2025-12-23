@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Dircolors related shell aliases
 
 if command -v dircolors > /dev/null; then

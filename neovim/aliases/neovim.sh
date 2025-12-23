@@ -1,5 +1,6 @@
+#!/bin/bash
+
 # NeoVim related aliases
-# vim: set ft=bash
 
 NEOVIM_HOME="$DOTFILES_LOCAL_DIR/standalone/nvim-linux-x86_64"
 
