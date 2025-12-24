@@ -5,6 +5,15 @@ vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
   },
   command = "set filetype=yaml.ansible"
 })
+
+-- Correct syntax highlight for Jinja2 template files
+vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
+  pattern = {"*.jinja", "*.j2"},
+  callback = function()
+    vim.opt.filetype = "jinja2"
+  end,
+})
+
 vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
   pattern = {
     ".gitlab-ci.{yml,yaml}",
