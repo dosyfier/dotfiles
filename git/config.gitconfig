@@ -56,9 +56,9 @@
 	aac = !git add -A "${GIT_PREFIX:-.}" && git commit
 	aacf = !git add -A "${GIT_PREFIX:-.}" && git commit --amend --no-edit
 	aacm = !git add -A "${GIT_PREFIX:-.}" && git commit -m
-	ac = "!bash -c 'ac() { git add \"$@\" && git commit; }; ac \"$@\"' -- "
-	acf = "!bash -c 'acf() { cd \"${GIT_PREFIX:-.}\" && git add \"$@\" && git commit --amend --no-edit; }; acf \"$@\"' -- "
-	acm = "!bash -c 'acm() { cd \"${GIT_PREFIX:-.}\" && git add \"${@:1:$#-1}\" && git commit -m \"${@: -1}\"; }; acm \"$@\"' -- "
+	ac = "!ac() { : git add; git add \"$@\" && git commit; }; ac"
+	acf = "!acf() { : git add; cd \"${GIT_PREFIX:-.}\" && git add \"$@\" && git commit --amend --no-edit; }; acf"
+	acm = "!acm() { : git add; cd \"${GIT_PREFIX:-.}\" && git add \"${@:1:$#-1}\" && git commit -m \"${@: -1}\"; }; acm"
 	amend = commit --amend
 	amendm = commit --amend -m
 	amendf = commit --amend --no-edit
