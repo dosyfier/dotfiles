@@ -3,8 +3,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(args)
     -- Get the detaching client
     local client = vim.lsp.get_client_by_id(args.data.client_id)
-    -- Disable Treesitter for Ansible files
-    if client ~= nil and client.name == 'ansiblels' then
+    -- Disable Treesitter for Ansible & Jinja2 files
+    if client ~= nil and (client.name == "ansiblels" or client.name == "jinja_lsp") then
       vim.treesitter.stop()
     end
   end
@@ -45,7 +45,10 @@ return {
           yamlls = { path = "yaml-language-server" }
         },
         java_language_server = {},
-        jinja_lsp = {},
+        jinja_lsp = {
+          -- Jinja LSP server isn't automatically started for Jinja2 filetypes: these have to be listed explicitly
+          filetypes = { 'jinja', 'jinja2', 'json.jinja2', 'logstash.jinja2', 'xml.jinja2', 'yaml.jinja2' }
+        },
         jqls = {},
         jsonls = {},
         nginx_language_server = {},
@@ -90,6 +93,6 @@ return {
           end
         }
       }
-    },
-  },
+    }
+  }
 }
