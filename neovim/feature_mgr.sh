@@ -17,6 +17,10 @@ RG_VERSION=15.1.0
 RG_DOWNLOAD_URL=https://github.com/BurntSushi/ripgrep/releases/download/$RG_VERSION/\
 ripgrep-$RG_VERSION-x86_64-unknown-linux-musl.tar.gz
 
+VALE_VERSION=3.13.1
+VALE_DOWNLOAD_URL=https://github.com/errata-ai/vale/releases/download/v$VALE_VERSION/\
+vale_${VALE_VERSION}_Linux_64-bit.tar.gz
+
 
 # shellcheck source=aliases/neovim.sh
 source "$(dirname "$0")/aliases/neovim.sh"
@@ -41,6 +45,7 @@ tar --strip-components=1 -C '$NEOVIM_HOME' -xz"
   run_lenient_sudo bash -c "curl -sSfL '$FZF_DOWNLOAD_URL' | tar -C '$local_bin_dir' -xz"
   run_lenient_sudo bash -c "curl -sSfL '$RG_DOWNLOAD_URL' | \
 tar -C '$local_bin_dir' -xz --strip-components=1 ripgrep-$RG_VERSION-x86_64-unknown-linux-musl/rg"
+  run_lenient_sudo bash -c "curl -sSfL '$VALE_DOWNLOAD_URL' | tar -C '$local_bin_dir' -xz vale"
 }
 
 install_common() {
