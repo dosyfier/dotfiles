@@ -6,12 +6,17 @@ source "$(dirname "$0")/../internal/install-base.sh"
 FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 
 NEOVIM_VERSION=0.11.5
-NEOVIM_ARCHIVE_NAME=nvim-linux-x86_64.tar.gz
-NEOVIM_DOWNLOAD_URL=https://github.com/neovim/neovim/releases/download/v$NEOVIM_VERSION/$NEOVIM_ARCHIVE_NAME
+NEOVIM_DOWNLOAD_URL=https://github.com/neovim/neovim/releases/download/v$NEOVIM_VERSION/\
+nvim-linux-x86_64.tar.gz
 
 FZF_VERSION=0.67.0
-FZF_ARCHIVE_NAME=fzf-$FZF_VERSION-linux_amd64.tar.gz
-FZF_DOWNLOAD_URL=https://github.com/junegunn/fzf/releases/download/v$FZF_VERSION/$FZF_ARCHIVE_NAME
+FZF_DOWNLOAD_URL=https://github.com/junegunn/fzf/releases/download/v$FZF_VERSION/\
+fzf-$FZF_VERSION-linux_amd64.tar.gz
+
+RG_VERSION=15.1.0
+RG_DOWNLOAD_URL=https://github.com/BurntSushi/ripgrep/releases/download/$RG_VERSION/\
+ripgrep-$RG_VERSION-x86_64-unknown-linux-musl.tar.gz
+
 
 # shellcheck source=aliases/neovim.sh
 source "$(dirname "$0")/aliases/neovim.sh"
@@ -30,9 +35,12 @@ _download_and_install() {
   run_lenient_sudo bash -c "curl -sSfL '$NEOVIM_DOWNLOAD_URL' | \
 tar --strip-components=1 -C '$NEOVIM_HOME' -xz"
 
-  fzf_bin_dir="$DOTFILES_LOCAL_DIR/bin"
-  ensure_dir_exists "$fzf_bin_dir"
-  run_lenient_sudo bash -c "curl -sSfL '$FZF_DOWNLOAD_URL' | tar -C '$fzf_bin_dir' -xz"
+  local_bin_dir="$DOTFILES_LOCAL_DIR/bin"
+  ensure_dir_exists "$local_bin_dir"
+
+  run_lenient_sudo bash -c "curl -sSfL '$FZF_DOWNLOAD_URL' | tar -C '$local_bin_dir' -xz"
+  run_lenient_sudo bash -c "curl -sSfL '$RG_DOWNLOAD_URL' | \
+tar -C '$local_bin_dir' -xz --strip-components=1 ripgrep-$RG_VERSION-x86_64-unknown-linux-musl/rg"
 }
 
 install_common() {
