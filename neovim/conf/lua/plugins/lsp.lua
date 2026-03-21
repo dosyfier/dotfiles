@@ -12,7 +12,48 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 return {
   -- Linting plugin
-  { "mfussenegger/nvim-lint" },
+  {
+    "mfussenegger/nvim-lint",
+    opts = {
+      linters_by_ft = {
+        jinja2 = {'j2lint'}
+      },
+      linters = {
+        j2lint = {
+          cmd = 'j2lint',
+          args = {
+            '--ignore', 'jinja-statements-indentation',
+            '--stdin', '--json',
+          },
+          stream = 'stdout',
+          ignore_exitcode = true,
+          parser = function(output, bufnr)
+            local j2lint_to_nvim_diag_severities = {
+              HIGH = vim.diagnostic.severity.ERROR,
+              MEDIUM = vim.diagnostic.severity.WARN,
+              LOW = vim.diagnostic.severity.INFO,
+            }
+            local decoded = vim.json.decode(output) or {}
+            local diagnostics = {}
+            for _, decoded_diagnostics in pairs(decoded) do
+              for _, decoded_diagnostic in pairs(decoded_diagnostics) do
+                table.insert(diagnostics, {
+                  bufnr = bufnr,
+                  source = 'j2lint',
+                  message = decoded_diagnostic.message,
+                  lnum = decoded_diagnostic.line_number - 1,
+                  col = 0,
+                  severity = j2lint_to_nvim_diag_severities[decoded_diagnostic.severity],
+                  code = decoded_diagnostic.id
+                })
+              end
+            end
+            return diagnostics
+          end
+        }
+      }
+    }
+  },
 
   -- Supplemental package needed to let Helm LSP work
   {
