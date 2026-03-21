@@ -15,6 +15,7 @@ for vi_alias in vi vim; do
   fi
 done
 
+alias vid='vi +DiffviewOpen +only'
 alias vig='vi +G +only'
 
 # Use NeoVim as standard editor, e.g. for tools like `systemctl edit`
