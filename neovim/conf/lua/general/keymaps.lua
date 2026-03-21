@@ -18,3 +18,9 @@ vim.keymap.set('n', '<F12>f', ":exe ':silent !" ..
   "then firefox \"file:///$(wslpath -m \"%\")\"; " ..
   "else firefox \"file:///%\"; " ..
   "fi'<CR>")
+
+-- Copy the full path of the currently opened file to the clipboard
+vim.keymap.set('n', '<Leader>p', ':let @+=expand("%")<CR>')
+
+-- Use <ESC> instead of <Ctrl-\><Ctrl-n> to escape terminal panel
+vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
