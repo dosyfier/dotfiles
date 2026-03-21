@@ -69,6 +69,7 @@
 	dc = d --cached
 	dn = d --name-only
 	dcn = dc --name-only
+	do = "!sh -c 'git d `git show-upstream`'"
 	dt = difftool
 	dtc = dt --cached
 	dtd = dt --dir-diff --tool=diffview.nvim
@@ -114,6 +115,8 @@
 	rbim = rbm --interactive
 	rbo = rb --onto
 	rbs = rb --skip
+	# reflog
+	rl = reflog
 	# reset
 	rewind = reset --soft HEAD^${1}
 	unstage = reset HEAD
@@ -122,6 +125,7 @@
 	show-upstream = rev-parse --abbrev-ref --symbolic-full-name @{u}
 	# show
 	sh = show
+	shl = shn --pretty=
 	shn = show --name-only
 	shp = show -p
 	# stash
@@ -132,7 +136,17 @@
 	sthd = stash drop
 	sthl = stash list
 	sthp = stash pop
-	sths = stash show -p
+	sthph = stash push
+	sths = stash show
+	sthsp = sths -p
 	# status
 	s = status -u -s
 	st = status
+	# submodule
+	sm = submodule
+	smu = sm update
+	smur = smu --remote
+	smui = smu --init
+	sm-reset = smui
+	# tag
+	tl = tag -l
