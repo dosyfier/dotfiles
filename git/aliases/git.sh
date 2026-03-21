@@ -101,7 +101,7 @@ git_find_dirty_repositories() {
 alias g=git
 alias git_ls='find $(git ls-files) $(git ls-files --others --exclude-standard) -not -type l'
 alias gl=git_ls
-alias gg="git_ls | xargs grep --color -n"
+alias gg="git_ls | xargs grep --color -rn"
 
 # If a bash prompt is defined by a theme external to dotfiles (e.g. Bash-It's Powerline),
 # then what's left of this alias script is to be ignored (since it focuses on adding git status
