@@ -29,6 +29,9 @@ return {
   -- Logstash syntax highlight
   "robbles/logstash.vim",
 
+  -- Fluentd syntax highlight
+  "itkq/fluentd-vim",
+
   -- Ansible syntax highlight
   "pearofducks/ansible-vim",
 
