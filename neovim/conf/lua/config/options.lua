@@ -42,3 +42,6 @@ end
 -- Enable termguicolors, especially to let bufferline.nvim plugin work
 -- ("as it reads the hex "gui" color values of various highlight groups")
 vim.opt.termguicolors = true
+
+-- Double vi history capacity
+vim.opt.history = 1000
