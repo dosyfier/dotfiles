@@ -72,13 +72,13 @@ acknowledge_opts() {
   fi
   DOTFILES_LOCAL_DIR=${DOTFILES_VALUES[local_dir]:-$DOTFILES_LOCAL_DIR}
   if [ -z "${DOTFILES_LOCAL_DIR:-}" ]; then
-    DOTFILES_LOCAL_DIR="$(if [ "$DOTFILES_GLOBAL_INSTALL" = true ]; then
-      echo -n /usr/local;
-    elif command -v cmd.exe &>/dev/null; then
-      echo -n "$HOME/tools";
-    else
-      echo -n "$HOME/.local";
-    fi)"
+    DOTFILES_LOCAL_DIR="$(if [ "$DOTFILES_GLOBAL_INSTALL" = true ];
+      then echo -n /usr/local; else echo -n "$HOME/.local"; fi)"
+  fi
+  DOTFILES_OPT_DIR=${DOTFILES_VALUES[opt_dir]:-$DOTFILES_OPT_DIR}
+  if [ -z "${DOTFILES_OPT_DIR:-}" ]; then
+    DOTFILES_OPT_DIR="$(if [ "$DOTFILES_GLOBAL_INSTALL" = true ];
+      then echo -n /opt; else echo -n "$HOME/.local/standalone"; fi)"
   fi
 }
 
@@ -105,10 +105,12 @@ init() {
   fi
 
   # Create the local soft install directory if it doesn't already exist
-  if ! [ -d "$DOTFILES_LOCAL_DIR" ]; then
-    run_lenient_sudo mkdir -p "$DOTFILES_LOCAL_DIR"
-    run_lenient_sudo chown -R "$(id -u):$(id -g)" "$DOTFILES_LOCAL_DIR"
-  fi
+  for dot_dir in "$DOTFILES_LOCAL_DIR" "$DOTFILES_OPT_DIR"; do
+    if ! [ -d "$dot_dir" ]; then
+      run_lenient_sudo mkdir -p "$dot_dir"
+      run_lenient_sudo chown -R "$(id -u):$(id -g)" "$dot_dir"
+    fi
+  done
 
   # Create an env file holding defined DOTFILES_* variables
   echo "Backup dotfiles env configuration into $DOTFILES_ENV_FILE..."
@@ -119,6 +121,7 @@ init() {
 export DOTFILES_DIR="$DOTFILES_DIR"
 export DOTFILES_GLOBAL_INSTALL="$DOTFILES_GLOBAL_INSTALL"
 export DOTFILES_LOCAL_DIR="$DOTFILES_LOCAL_DIR"
+export DOTFILES_OPT_DIR="$DOTFILES_OPT_DIR"
 export DOTFILES_USER_DISPLAY_NAME="$DOTFILES_USER_DISPLAY_NAME"
 export DOTFILES_USER_MAIL="$DOTFILES_USER_MAIL"
 export DOTFILES_ENABLE_EXTERNAL_PROMPT=false

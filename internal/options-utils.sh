@@ -37,10 +37,18 @@ Turned off by default, unless the current user disposes of nopasswd sudo privile
 DOTFILES_SHORT_OPTS[local_dir]="-l"
 DOTFILES_LONG_OPTS[local_dir]="--local-dir"
 DOTFILES_ARG_NAMES[local_dir]="<local-dir>"
-DOTFILES_DESCS[local_dir]="Path where any 3rd party tool required by dotfiles "\
-"will be installed.
-By default, it will be valued to /usr/local if the current user "\
+DOTFILES_DESCS[local_dir]="Path where any 3rd party binaries or configuration files "\
+"required by dotfiles will be installed.
+By default, it will be set to /usr/local if the current user "\
 "disposes of nopasswd sudo privileges, or to ~/.local otherwise."
+
+DOTFILES_SHORT_OPTS[opt_dir]="-o"
+DOTFILES_LONG_OPTS[opt_dir]="--opt-dir"
+DOTFILES_ARG_NAMES[opt_dir]="<opt-dir>"
+DOTFILES_DESCS[opt_dir]="Path where any 3rd party standalone tool required by "\
+"dotfiles will be installed.
+By default, it will be set to /opt if the current user "\
+"disposes of nopasswd sudo privileges, or to ~/.local/standalone otherwise."
 
 DOTFILES_SHORT_OPTS[with_features]="-f"
 DOTFILES_LONG_OPTS[with_features]="--with-features"

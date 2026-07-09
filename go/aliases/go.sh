@@ -2,7 +2,7 @@
 
 # Go related aliases
 
-GO_HOME="$DOTFILES_LOCAL_DIR/standalone/go"
+GO_HOME="$DOTFILES_OPT_DIR/go"
 
 if [[ ":$PATH:" != *":$GO_HOME/bin:"* ]]; then
   export PATH="$GO_HOME/bin:$PATH"

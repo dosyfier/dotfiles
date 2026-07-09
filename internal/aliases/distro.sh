@@ -90,6 +90,7 @@ if [ "$win_os" = true ]; then
   export WIN_HOME="/c/Users/$DOTFILES_WIN_USER"
   WIN_DOWNLOADS="$WIN_HOME/Downloads"
   WIN_DESKTOP="$WIN_HOME/Desktop"
+  WIN_TOOLS="$WIN_HOME/AppData/Local/dotfiles-tools"
 
   explorer() {
     # 2>/dev/null on "tr" command to avoid warnings about trailing '\' that

@@ -63,7 +63,7 @@ _setup_windows_launcher() {
   fi
 
   # Copying terminator config files (launch script, icon, ...) under $DOTFILES_LOCAL_DIR
-  terminator_quick_launch_dir="$DOTFILES_LOCAL_DIR"/terminator/quick_launch
+  terminator_quick_launch_dir="$WIN_TOOLS/terminator/quick_launch"
   reset_dir_with_parent "$terminator_quick_launch_dir"
   echo "Installing terminator launch configuration under $terminator_quick_launch_dir..."
   mkdir -p "$terminator_quick_launch_dir"
