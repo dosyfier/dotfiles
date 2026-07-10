@@ -9,3 +9,9 @@ load_nvm() {
   # shellcheck disable=SC1091 # Source can't be followed
   [ -s "$NVM_DIR/bash_completion" ] && [ "$CURRENT_SHELL" = bash ] && \. "$NVM_DIR/bash_completion"
 }
+
+# This allows global package installation in a user-specific OR system-wide context,
+# depending on current environment setting
+if ! command -v nvm > /dev/null; then
+  export NPM_CONFIG_PREFIX="$DOTFILES_LOCAL_DIR"
+fi
