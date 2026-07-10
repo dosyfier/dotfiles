@@ -58,7 +58,7 @@
 	aacm = !git add -A "${GIT_PREFIX:-.}" && git commit -m
 	ac = "!ac() { : git add ; git add \"$@\" && git commit; }; ac"
 	acf = "!acf() { : git add ; cd \"${GIT_PREFIX:-.}\" && git add \"$@\" && git commit --amend --no-edit; }; acf"
-	acm = "!acm() { : git add ; cd \"${GIT_PREFIX:-.}\" && git add \"${@:1:$#-1}\" && git commit -m \"${@: -1}\"; }; acm"
+	acm = "!acm() { : git add ; cd \"${GIT_PREFIX:-.}\" && git add \"${@:1:$# -1}\" && git commit -m \"${@: -1}\"; }; acm"
 	amend = commit --amend
 	amendm = commit --amend -m
 	amendf = commit --amend --no-edit
@@ -76,7 +76,7 @@
 	dtdc = dtc --dir-diff --tool=diffview.nvim
 	oldest-ancestor = !zsh -c 'diff --old-line-format='' --new-line-format='' <(git rev-list --first-parent "${1:-develop}") <(git rev-list --first-parent "${2:-HEAD}") | head -1' -
 	branchdiff = '!sh -c "git diff `git oldest-ancestor`.."'
-        # fetch
+	# fetch
 	fp = fetch -p origin
 	# grep
 	gr = grep -Ii
