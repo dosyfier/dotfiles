@@ -124,7 +124,10 @@ export DOTFILES_LOCAL_DIR="$DOTFILES_LOCAL_DIR"
 export DOTFILES_OPT_DIR="$DOTFILES_OPT_DIR"
 export DOTFILES_USER_DISPLAY_NAME="$DOTFILES_USER_DISPLAY_NAME"
 export DOTFILES_USER_MAIL="$DOTFILES_USER_MAIL"
-export DOTFILES_ENABLE_EXTERNAL_PROMPT=false
+export DOTFILES_ENABLE_EXTERNAL_PROMPT="${DOTFILES_ENABLE_EXTERNAL_PROMPT:-false}"
+export DOTFILES_ENABLED_FEATURES=(
+$(if [ -v DOTFILES_ENABLED_FEATURES ]; then printf "  %s\n" "${DOTFILES_ENABLED_FEATURES[@]}"; fi)
+)
 EOC
   if command -v cmd.exe &>/dev/null; then
     win_user="$(cmd.exe /C "echo %USERNAME%" 2>/dev/null | sed 's/[[:space:]]*$//')"
