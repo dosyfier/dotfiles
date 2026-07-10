@@ -5,11 +5,11 @@ source "$(dirname "$0")/../internal/install-base.sh"
 
 FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 
-NEOVIM_VERSION=0.11.5
+NEOVIM_VERSION=0.12.4
 NEOVIM_DOWNLOAD_URL=https://github.com/neovim/neovim/releases/download/v$NEOVIM_VERSION/\
 nvim-linux-x86_64.tar.gz
 
-FZF_VERSION=0.67.0
+FZF_VERSION=0.74.0
 FZF_DOWNLOAD_URL=https://github.com/junegunn/fzf/releases/download/v$FZF_VERSION/\
 fzf-$FZF_VERSION-linux_amd64.tar.gz
 

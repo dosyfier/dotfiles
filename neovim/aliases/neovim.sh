@@ -2,7 +2,7 @@
 
 # NeoVim related aliases
 
-NEOVIM_HOME="$DOTFILES_OPT_DIR/nvim-linux-x86_64"
+NEOVIM_HOME="$DOTFILES_OPT_DIR/nvim"
 
 if [[ ":$PATH:" != *":$NEOVIM_HOME/bin:"* ]]; then
   export PATH="$NEOVIM_HOME/bin:$PATH"
