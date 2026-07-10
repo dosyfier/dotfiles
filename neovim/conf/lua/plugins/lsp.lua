@@ -85,7 +85,6 @@ return {
         helm_ls = {
           yamlls = { path = "yaml-language-server" }
         },
-        java_language_server = {},
         jinja_lsp = {
           -- Jinja LSP server isn't automatically started for Jinja2 filetypes: these have to be listed explicitly
           filetypes = { 'jinja', 'jinja2', 'json.jinja2', 'logstash.jinja2', 'xml.jinja2', 'yaml.jinja2' }
