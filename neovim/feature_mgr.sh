@@ -6,20 +6,20 @@ source "$(dirname "$0")/../internal/install-base.sh"
 FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 
 NEOVIM_VERSION=0.12.4
-NEOVIM_DOWNLOAD_URL=https://github.com/neovim/neovim/releases/download/v$NEOVIM_VERSION/\
-nvim-linux-x86_64.tar.gz
+NEOVIM_DOWNLOAD_URL="${GITHUB_PROXY_URL:-https://github.com}/neovim/neovim/releases/download/v$NEOVIM_VERSION/\
+nvim-linux-x86_64.tar.gz"
 
 FZF_VERSION=0.74.0
-FZF_DOWNLOAD_URL=https://github.com/junegunn/fzf/releases/download/v$FZF_VERSION/\
-fzf-$FZF_VERSION-linux_amd64.tar.gz
+FZF_DOWNLOAD_URL="${GITHUB_PROXY_URL:-https://github.com}/junegunn/fzf/releases/download/v$FZF_VERSION/\
+fzf-$FZF_VERSION-linux_amd64.tar.gz"
 
 RG_VERSION=15.1.0
-RG_DOWNLOAD_URL=https://github.com/BurntSushi/ripgrep/releases/download/$RG_VERSION/\
-ripgrep-$RG_VERSION-x86_64-unknown-linux-musl.tar.gz
+RG_DOWNLOAD_URL="${GITHUB_PROXY_URL:-https://github.com}/BurntSushi/ripgrep/releases/download/$RG_VERSION/\
+ripgrep-$RG_VERSION-x86_64-unknown-linux-musl.tar.gz"
 
 VALE_VERSION=3.13.1
-VALE_DOWNLOAD_URL=https://github.com/errata-ai/vale/releases/download/v$VALE_VERSION/\
-vale_${VALE_VERSION}_Linux_64-bit.tar.gz
+VALE_DOWNLOAD_URL="${GITHUB_PROXY_URL:-https://github.com}/errata-ai/vale/releases/download/v$VALE_VERSION/\
+vale_${VALE_VERSION}_Linux_64-bit.tar.gz"
 
 
 # shellcheck source=aliases/neovim.sh
@@ -36,16 +36,16 @@ get_dependencies() {
 
 _download_and_install() {
   reset_dir_with_parent "$NEOVIM_HOME"
-  run_lenient_sudo bash -c "curl -sSfL '$NEOVIM_DOWNLOAD_URL' | \
+  run_lenient_sudo bash -c "curl -sSfL --netrc '$NEOVIM_DOWNLOAD_URL' | \
 tar --strip-components=1 -C '$NEOVIM_HOME' -xz"
 
   local_bin_dir="$DOTFILES_LOCAL_DIR/bin"
   ensure_dir_exists "$local_bin_dir"
 
-  run_lenient_sudo bash -c "curl -sSfL '$FZF_DOWNLOAD_URL' | tar -C '$local_bin_dir' -xz"
-  run_lenient_sudo bash -c "curl -sSfL '$RG_DOWNLOAD_URL' | \
+  run_lenient_sudo bash -c "curl -sSfL --netrc '$FZF_DOWNLOAD_URL' | tar -C '$local_bin_dir' -xz"
+  run_lenient_sudo bash -c "curl -sSfL --netrc '$RG_DOWNLOAD_URL' | \
 tar -C '$local_bin_dir' -xz --strip-components=1 ripgrep-$RG_VERSION-x86_64-unknown-linux-musl/rg"
-  run_lenient_sudo bash -c "curl -sSfL '$VALE_DOWNLOAD_URL' | tar -C '$local_bin_dir' -xz vale"
+  run_lenient_sudo bash -c "curl -sSfL --netrc '$VALE_DOWNLOAD_URL' | tar -C '$local_bin_dir' -xz vale"
 }
 
 install_common() {
