@@ -3,7 +3,7 @@
 # shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"
 
-HACK_LATEST_VERSION=v3.2.1
+HACK_LATEST_VERSION=v3.5.1
 HACK_ARCHIVE_NAME=Hack.tar.xz
 HACK_DOWNLOAD_URL=https://github.com/ryanoasis/nerd-fonts/releases/download/$HACK_LATEST_VERSION/$HACK_ARCHIVE_NAME
 
