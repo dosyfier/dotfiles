@@ -5,7 +5,8 @@ source "$(dirname "$0")/../internal/install-base.sh"
 
 HACK_LATEST_VERSION=v3.5.1
 HACK_ARCHIVE_NAME=Hack.tar.xz
-HACK_DOWNLOAD_URL=https://github.com/ryanoasis/nerd-fonts/releases/download/$HACK_LATEST_VERSION/$HACK_ARCHIVE_NAME
+HACK_DOWNLOAD_URL="${GITHUB_PROXY_URL:-https://github.com}/ryanoasis/nerd-fonts/releases/download\
+/$HACK_LATEST_VERSION/$HACK_ARCHIVE_NAME"
 
 HACK_INSTALL_DIR="$DOTFILES_LOCAL_DIR/share/fonts/Hack"
 
@@ -25,7 +26,7 @@ install_wsl() {
 _install() {
   install_packages "${1:-xz-utils}"
   reset_dir_with_parent "$HACK_INSTALL_DIR"
-  run_lenient_sudo bash -c "curl -sSfL '$HACK_DOWNLOAD_URL' | tar -xJ -C '$HACK_INSTALL_DIR'"
+  run_lenient_sudo bash -c "curl -sSfL --netrc '$HACK_DOWNLOAD_URL' | tar -xJ -C '$HACK_INSTALL_DIR'"
 }
 
 _sync_onto_windows() {
