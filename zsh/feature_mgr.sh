@@ -2,6 +2,9 @@
 
 FEATURE_ROOT="$(readlink -f "$(dirname "$0")")"
 
+OH_MY_ZSH_BRANCH=master
+POWERLEVEL_10K_BRANCH=master
+
 # shellcheck source=../internal/install-base.sh
 source "$(dirname "$0")/../internal/install-base.sh"
 
@@ -13,13 +16,21 @@ get_dependencies() {
 
 install_common() {
   install_packages zsh
-  export RUNZSH=no                   # Prevents the installer from running zsh after installation
-  export OVERWRITE_CONFIRMATION=no   # No confirmation asked before overwriting any existing .zshrc
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-  git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git \
-    "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+
+  if [ -n "${GITHUB_ARTIFACTORY_VCS_URL_PATTERN:-}" ]; then
+    _get_arks_through_artifactory_vcs_api
+  else
+    export RUNZSH=no                   # Prevents the installer from running zsh after installation
+    export OVERWRITE_CONFIRMATION=no   # No confirmation asked before overwriting any existing .zshrc
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    git clone --depth=1 "${GITHUB_PROXY_URL:-https://github.com}/romkatv/powerlevel10k.git" \
+      "$(_get_powerlevel_10k_install_dir)"
+  fi
+
   ln -vsfn "$FEATURE_ROOT"/conf/zshrc "$HOME"/.zshrc
   ln -vsfn "$FEATURE_ROOT"/conf/p10k.zsh "$HOME"/.p10k.zsh
+
+  _install_or_update_gitstatus
 
   sed -ri 's/^(export DOTFILES_ENABLE_EXTERNAL_PROMPT=).*$/\1true/' "$DOTFILES_ENV_FILE"
 }
@@ -31,10 +42,34 @@ get_resources() {
 }
 
 update() {
-  git -C "$HOME"/.oh-my-zsh pull
-  git -C "$HOME"/.oh-my-zsh/custom/themes/powerlevel10k pull
+  if [ -n "${GITHUB_ARTIFACTORY_VCS_URL_PATTERN:-}" ]; then
+    reset_dir_with_parent "$HOME/.oh-my-zsh"
+    _get_arks_through_artifactory_vcs_api
+  else
+    git -C "$HOME"/.oh-my-zsh pull
+    git -C "$HOME"/.oh-my-zsh/custom/themes/powerlevel10k pull
+  fi
+  _install_or_update_gitstatus
+}
 
-  gitstatus_build_info_file="$HOME/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/build.info"
+_get_powerlevel_10k_install_dir() {
+  echo -n "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+}
+
+_get_arks_through_artifactory_vcs_api() {
+  vcs_url_prefix="${GITHUB_ARTIFACTORY_VCS_URL_PATTERN//<GIT_REF>/Branch}"
+  curl -sSfL --netrc "$vcs_url_prefix/ohmyzsh/ohmyzsh/$OH_MY_ZSH_BRANCH?ext=tar.gz" | \
+    tar -xz --strip-components=1 -C ~/.oh-my-zsh
+  powerlevel_10k_install_dir="$(_get_powerlevel_10k_install_dir)"
+  mkdir -p "$powerlevel_10k_install_dir"
+  curl -sSfL --netrc "$vcs_url_prefix/romkatv/powerlevel10k/$POWERLEVEL_10K_BRANCH?ext=tar.gz" | \
+    tar -xz --strip-components=1 -C "$powerlevel_10k_install_dir"
+}
+
+_install_or_update_gitstatus() {
+  gitstatus_dir="$(_get_powerlevel_10k_install_dir)/gitstatus"
+
+  gitstatus_build_info_file="$gitstatus_dir/build.info"
   echo "Reading $gitstatus_build_info_file..."
   # shellcheck disable=SC1090 # No constant path can be given for this file
   source "$gitstatus_build_info_file"
@@ -45,8 +80,10 @@ update() {
     echo "Gitstatus version: $gitstatus_version"
   fi
 
-  curl -sSfL "https://github.com/romkatv/gitstatus/releases/download/${gitstatus_version}/gitstatusd-linux-x86_64.tar.gz" | \
-    tar xzf - -C "$HOME"/.oh-my-zsh/custom/themes/powerlevel10k/gitstatus/usrbin/
+  gitstatusd_ark_url="${GITHUB_PROXY_URL:-https://github.com}/romkatv/gitstatus/releases/download\
+/${gitstatus_version}/gitstatusd-linux-x86_64.tar.gz"
+  curl -sSfL --netrc "$gitstatusd_ark_url" | \
+    tar -xz -C "$gitstatus_dir/usrbin/"
 }
 
 main "$@"
