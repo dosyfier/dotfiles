@@ -134,9 +134,9 @@ EOC
     echo "export DOTFILES_WIN_USER=\"$win_user\"" >> "$DOTFILES_ENV_FILE"
   fi
 
-  # Source the bashrc script
-  # shellcheck source=bash/conf/bashrc
-  source "$real_rc_file"
+  # Source the env file just produced
+  # shellcheck disable=SC1090  # Can't have a constant source for that file
+  source "$DOTFILES_ENV_FILE"
 }
 
 # Locate and execute every dotfiles feature installation script that has
