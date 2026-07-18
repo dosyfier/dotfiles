@@ -11,6 +11,14 @@ install_repo() {
 }
 
 install_packages() {
-  # TODO: Skip package install if they are already present
   sudo apt-get install -y "$@"
+  packs_not_yet_installed=()
+  for pack in "$@"; do
+    if ! dpkg -l "$pack" 2>/dev/null | grep -q '^ii'; then
+      packs_not_yet_installed+=("$pack")
+    fi
+  done
+  if [ "${#packs_not_yet_installed[@]}" -gt 0 ]; then
+    sudo apt-get install -y "${packs_not_yet_installed[@]}"
+  fi
 }
