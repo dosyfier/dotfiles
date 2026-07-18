@@ -69,12 +69,12 @@ _get_arks_through_artifactory_vcs_api() {
 _install_or_update_gitstatus() {
   gitstatus_dir="$(_get_powerlevel_10k_install_dir)/gitstatus"
 
-  gitstatus_build_info_file="$gitstatus_dir/build.info"
-  echo "Reading $gitstatus_build_info_file..."
-  # shellcheck disable=SC1090 # No constant path can be given for this file
-  source "$gitstatus_build_info_file"
+  gitstatus_install_info_file="$gitstatus_dir/install.info"
+  echo "Parsing $gitstatus_install_info_file..."
+  gitstatus_version="$(grep -Po 'uname_s_glob="linux".*uname_m_glob="x86_64".*version="\K[0-9\.v]+' \
+    "$gitstatus_install_info_file")"
   if [ -z "$gitstatus_version" ]; then
-    echo "No gitstatus_version found in $gitstatus_build_info_file. Aborting" >&2
+    echo "No gitstatus_version found in $gitstatus_install_info_file. Aborting" >&2
     return 1
   else
     echo "Gitstatus version: $gitstatus_version"
