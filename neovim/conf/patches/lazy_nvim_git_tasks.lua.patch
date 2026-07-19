@@ -1,0 +1,85 @@
+135d134
+<       "clone",
+139,155c138
+<     if Config.options.git.filter then
+<       args[#args + 1] = "--filter=blob:none"
+<     end
+< 
+<     if self.plugin.submodules ~= false then
+<       args[#args + 1] = "--recurse-submodules"
+<     end
+< 
+<     args[#args + 1] = "--origin=origin"
+< 
+<     -- If git config --global core.autocrlf is true on a Unix/Linux system, then the git clone
+<     -- process will lead to files with CRLF endings. Vi / vim / neovim cannot handle this.
+<     -- Force git to clone with core.autocrlf=false.
+<     args[#args + 1] = "-c"
+<     args[#args + 1] = "core.autocrlf=false"
+< 
+<     args[#args + 1] = "--progress"
+---
+>     table.insert(args, self.plugin.dir)
+158c141
+<       vim.list_extend(args, { "-b", self.plugin.branch })
+---
+>       table.insert(args, self.plugin.branch)
+161,162d143
+<     table.insert(args, self.plugin.dir)
+< 
+170c151
+<     self:spawn("git", {
+---
+>     self:spawn(os.getenv('DOTFILES_DIR') .. "/neovim/bin/download-nvim-plugin.sh", {
+348,356c329,330
+<     local args = {
+<       "checkout",
+<       "--progress",
+<       "--recurse-submodules",
+<     }
+< 
+<     if self.plugin.submodules == false then
+<       table.remove(args, 3)
+<     end
+---
+>     -- Do not attempt a "git checkout", since we're using a detached source repository
+>     -- with a single fake git revision
+358,365c332,340
+<     if lock then
+<       table.insert(args, lock.commit)
+<     elseif target.tag then
+<       table.insert(args, "tags/" .. target.tag)
+<     elseif self.plugin.commit then
+<       table.insert(args, self.plugin.commit)
+<     else
+<       table.insert(args, target.commit)
+---
+>     local new_info = assert(Git.info(self.plugin.dir))
+>     if not self.plugin._.cloned then
+>       self.plugin._.updated = {
+>         from = info.commit,
+>         to = new_info.commit,
+>       }
+>       if self.plugin._.updated.from ~= self.plugin._.updated.to then
+>         self.plugin._.dirty = true
+>       end
+367,385d341
+< 
+<     self:spawn("git", {
+<       args = args,
+<       cwd = self.plugin.dir,
+<       on_exit = function(ok)
+<         if ok then
+<           local new_info = assert(Git.info(self.plugin.dir))
+<           if not self.plugin._.cloned then
+<             self.plugin._.updated = {
+<               from = info.commit,
+<               to = new_info.commit,
+<             }
+<             if self.plugin._.updated.from ~= self.plugin._.updated.to then
+<               self.plugin._.dirty = true
+<             end
+<           end
+<         end
+<       end,
+<     })

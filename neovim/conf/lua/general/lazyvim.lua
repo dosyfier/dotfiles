@@ -13,19 +13,21 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Add lazy.nvim and expected plugins
-require("lazy").setup({
-  spec = {
-    -- add LazyVim and import its plugins
-    { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-    -- import any extras modules here
-    -- { import = "lazyvim.plugins.extras.lang.ansible" },
-    -- { import = "lazyvim.plugins.extras.lang.typescript" },
-    -- { import = "lazyvim.plugins.extras.lang.json" },
-    -- { import = "lazyvim.plugins.extras.ui.mini-animate" },
-    -- import/override with your plugins
-    { import = "plugins" },
-  },
-})
+local lazy_spec = {
+  -- add LazyVim and import its plugins
+  { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+  -- import any extras modules here
+  -- { import = "lazyvim.plugins.extras.lang.ansible" },
+  -- { import = "lazyvim.plugins.extras.lang.typescript" },
+  -- { import = "lazyvim.plugins.extras.lang.json" },
+  -- { import = "lazyvim.plugins.extras.ui.mini-animate" },
+  -- import/override with your plugins
+  { import = "plugins" },
+}
+if os.getenv('GITHUB_PROXY_URL') ~= nil or os.getenv('GITHUB_ARTIFACTORY_VCS_PROXY_URL_PATTERN') ~= nil then
+  table.insert(lazy_spec, { import = "proxy" })
+end
+require("lazy").setup({ spec = lazy_spec })
 
 -- Configure LazyVim and plugins installed by it
 
