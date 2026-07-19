@@ -13,16 +13,16 @@ return {
                   enabled = true,
                   description = { enabled = true }
                 }
-            --     configuration = {
-            --       runtimes = {
-            --         {
-            --           name = "JavaSE-23",
-            --           path = "/usr/local/sdkman/candidates/java/23-tem",
-            --         },
-            --       },
-            --     },
+                --     configuration = {
+                --       runtimes = {
+                --         {
+                --           name = "JavaSE-23",
+                --           path = "/usr/local/sdkman/candidates/java/23-tem",
+                --         },
+                --       },
+                --     },
               },
-             },
+            },
           },
         },
         setup = {

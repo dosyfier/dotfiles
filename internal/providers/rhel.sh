@@ -20,7 +20,7 @@ install_packages() {
   packs_not_yet_installed=()
   for pack in "$@"; do
     if ! rpm -qi "$pack" &> /dev/null; then
-      packs_not_yet_installed+=($pack)
+      packs_not_yet_installed+=("$pack")
     fi
   done
   if [ "${#packs_not_yet_installed[@]}" -gt 0 ]; then
